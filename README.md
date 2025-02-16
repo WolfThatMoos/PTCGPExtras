@@ -1,5 +1,5 @@
 # PTCGPExtras
-Additional functionality to [Arturo's PTCGP bo](https://github.com/Arturo-1212/PTCGPB)
+Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
 ## Update and FAQS:
 
