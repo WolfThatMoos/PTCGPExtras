@@ -55,7 +55,7 @@ See above to understand why I have to gather the screenshots myself unfortunatel
 This may change in the future if there's enough demand for users to create needles themselves. Just understand creating the needles is simple, not easy. _And very tedious_. 
 
 ### How do needles get created? What makes it different than Arturo's or other ones I've seen?
-The needle image I use is not created from using Arturo's Screenshot() function. Instead I use a function that dumps the raw pixel value data directly into RAM. It uses a multidimensional array containing specific capture coordinates to create a "fingerprint" of the card.  
+The needle image I use is created by dumping the raw pixel value data directly into RAM. It uses a multidimensional array containing specific capture coordinates to create a "fingerprint" of a card.  
 The fingerprint is unique not only to the card, but to the card's specific slot (1-5).  
 The fingerprint is then stitched together with 4 more fingerprints, creating a single hand print. _(The same card type for the remaining slots, ultimately creating one needle image file with the data in it representing that card type, in all card slots.)_  
 
