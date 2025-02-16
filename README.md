@@ -41,6 +41,13 @@ Here's the major reasons:
 > [!TIP]
 > There is a special "GodPack" value as an alternative to the points system, where it will ensure that each card in the pack is 1 star or greater
 
+### How do I get a specific card?
+Open and edit Pokedex.csv (locationed in [Bot folder] --> [Scripts]  
+Excel: Go through the list or search for your desired specific card (Ctrl+f). On the cell beside it in column B, put the desirability value to something high like 7, for example.  
+Notepad: Find the specific card in the list and add a comma after it, then a high desirability value such as 7.  
+Save the file.  
+In the PTCGP GUI, change the Minimum Pack Value to 7.  
+
 ### Does this work on all packs? Specific packs?
 Currently this will only support the Palkia pack. <br><br> 
   
