@@ -35,6 +35,7 @@ Here's the major reasons:
       - EX : 1 Points
       - 2 Star : 2 Points
       - 2 Star Rainbow : 3 Points
+      - Immsersive/Crown Rares: -99 Points (If Skip is enabled in GUI)
       - Everything else: 0 Points  <br/><br/>
     - Opening a pack with a defined minimum pack value of 5, for example, with a pack whose total pack value is 4, will not save the pack, but instead continue rerolling.
 
