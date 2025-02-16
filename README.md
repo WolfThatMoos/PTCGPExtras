@@ -1,5 +1,5 @@
 # PTCGPExtras
-Additional functionality to Arturo's PTCGP bot
+Additional functionality to [Arturo's PTCGP bo](https://github.com/Arturo-1212/PTCGPB)
 
 ## Update and FAQS:
 
@@ -9,6 +9,9 @@ Additional functionality to Arturo's PTCGP bot
 
 ### How do I use this?
 Everything will be updated shortly, I am just trying to get it to the first alpha testing and wanted to put something up to start. Unlike many other alterations, my code is not a simple replacement of 1.ahk, instead it is a library of functions that will be added in the "Include" directory. These new functions will then be called in an updated 1.ahk file. 
+
+### Why aren't you forking Arturo's bot?
+I believe the functionality I'm contributing doesn't align with the majority of the user base demand nor Arturo's direction / intended use. It's for a niche subset of users that want specific cards from their wonderpick.
 
 ### What makes yours different / why would I use yours?
 There's a lot, but here are the major two:
