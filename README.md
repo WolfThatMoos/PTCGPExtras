@@ -3,7 +3,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 
 ## Update and FAQS:
 
-### TLDR: What does this do
+### What is this / what does it do?
 - Identifies what each card is after a pack opening
 - Uses a points system to determine if a pack is valuable and should be saved (based on user settings)
 
