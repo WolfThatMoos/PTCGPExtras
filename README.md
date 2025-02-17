@@ -58,6 +58,39 @@ Currently this will only support the Palkia pack. <br><br>
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
+### Current state of Palkia Pack | 92.54% Complete |
+<details open>
+	
+<summary>Missing Cards List</summary>
+
+| Card  | Slots Missing |
+| ------------- | ------------- |
+| Cresselia | 4 |
+| Cresselia_1Star | 4 |
+| Cynthia_2Star | 1, 3 |
+| Cyrus_2Star | 1, 2, 4 |
+| DialgaEX_CrownRare | 1, 2, 3, 4 |
+| Giratina_1Star | 4 |
+| Glameow_1Star | 1 |
+| InfernapeEX | 1 |
+| InfernapeEX_2Star | 1, 2, 3, 4 |
+| InfernapeEX_RR_2Star | 3, 4 |
+| LickilickyEX_2Star | 1, 2, 3, 4 |
+| LickilickyEX_RR_2Star | 3 |
+| Manaphy_1Star | 4 |
+| Mars_2Star | 3, 4 |
+| Mespirit | 3 |
+| MismagiusEX_2Star | 2, 3 |
+| MismagiusEX_RR_2Star | 3, 4 |
+| PalkiaEX_2Star | 1, 2, 3, 4 |
+| PalkiaEX_CrownRare | 1, 2 |
+| Regigigas | 4 |
+| Rhyperior | 3 |
+| Rhyperior_1Star | 3 |
+| WeavileEX_2Star | 1 |
+| WeavileEX_RR_2Star | 1, 2, 3, 4 |
+</details>
+
 ### Can I contribute? Screenshots or something?
 See above to understand why I have to gather the screenshots myself unfortunately.  
 This may change in the future if there's enough demand for users to create needles themselves. Just understand creating the needles is simple, not easy. _And very tedious_. 
