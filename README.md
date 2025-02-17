@@ -2,6 +2,7 @@
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
 ## Todo:
+- Updating support for 6.3.6
 - Complete needle extraction for Palkia pack
 - Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode
 - Update Settings.ini to support Minimum Pack Points / New Godpack Mode
