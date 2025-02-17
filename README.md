@@ -67,7 +67,7 @@ Currently this will only support the Palkia pack. <br><br>
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
-### Current state of Palkia Pack | 93.65% Complete |
+### Current state of Palkia Pack | 93.94% Complete |
 <details open>
 	
 <summary>Missing Cards List</summary>
@@ -91,7 +91,6 @@ Currently this will only support the Palkia pack. <br><br>
 | PalkiaEX_CrownRare | 1, 2 |
 | Rhyperior | 3 |
 | Rhyperior_1Star | 3 |
-| WeavileEX_2Star | 1 |
 | WeavileEX_RR_2Star | 1, 2, 3, 4 |
 </details>
 
