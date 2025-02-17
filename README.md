@@ -74,7 +74,7 @@ Currently this will only support the Palkia pack. <br><br>
 
 | Card  | Slots Missing |
 | ------------- | ------------- |
-| Cynthia_2Star | 1, 3 |
+| Cynthia_2Star | 3 |
 | Cyrus_2Star | 2 |
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
 | Giratina_1Star | 4 |
