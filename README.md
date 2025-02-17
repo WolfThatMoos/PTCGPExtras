@@ -80,7 +80,7 @@ Currently this will only support the Palkia pack. <br><br>
 | Giratina_1Star | 4 |
 | Glameow_1Star | 1 |
 | InfernapeEX_2Star | 1, 2, 3, 4 |
-| InfernapeEX_RR_2Star | 3, 4 |
+| InfernapeEX_RR_2Star | 3 |
 | LickilickyEX_2Star | 1, 2, 3 |
 | LickilickyEX_RR_2Star | 3, 4 |
 | Manaphy_1Star | 4 |
