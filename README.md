@@ -53,12 +53,12 @@ In the PTCGP GUI, change the Minimum Pack Value to 7.
 Currently this will only support the Palkia pack. <br><br> 
   
 > [!NOTE]  
-> I'm nearly 100% finished with the Palkia pack, and will be starting Dialga soon.  
+> I'm close to being finished with the Palkia pack, and will be starting Dialga soon.  
 > Future releases will definitely include all packs.  
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
-### Current state of Palkia Pack | 92.54% Complete |
+### Current state of Palkia Pack | 92.69% Complete |
 <details open>
 	
 <summary>Missing Cards List</summary>
@@ -66,7 +66,6 @@ Currently this will only support the Palkia pack. <br><br>
 | Card  | Slots Missing |
 | ------------- | ------------- |
 | Cresselia | 4 |
-| Cresselia_1Star | 4 |
 | Cynthia_2Star | 1, 3 |
 | Cyrus_2Star | 1, 2, 4 |
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
