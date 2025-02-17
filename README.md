@@ -71,7 +71,6 @@ Currently this will only support the Palkia pack. <br><br>
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
 | Giratina_1Star | 4 |
 | Glameow_1Star | 1 |
-| InfernapeEX | 1 |
 | InfernapeEX_2Star | 1, 2, 3, 4 |
 | InfernapeEX_RR_2Star | 3, 4 |
 | LickilickyEX_2Star | 1, 2, 3 |
