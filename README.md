@@ -1,6 +1,15 @@
 # PTCGPExtras
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
+## Todo:
+- Complete needle extraction for Palkia pack
+- Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode
+- Update Settings.ini to support Minimum Pack Points / New Godpack Mode
+- Update 1.ahk
+	- To support new logging system (packs.txt)
+ 	- To support user feedback via CustomMsg()
+  	- Cleanup
+
 ## Update and FAQS:
 
 ### What is this / what does it do?
@@ -58,16 +67,15 @@ Currently this will only support the Palkia pack. <br><br>
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
-### Current state of Palkia Pack | 92.69% Complete |
+### Current state of Palkia Pack | 93.65% Complete |
 <details open>
 	
 <summary>Missing Cards List</summary>
 
 | Card  | Slots Missing |
 | ------------- | ------------- |
-| Cresselia | 4 |
 | Cynthia_2Star | 1, 3 |
-| Cyrus_2Star | 1, 2, 4 |
+| Cyrus_2Star | 2 |
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
 | Giratina_1Star | 4 |
 | Glameow_1Star | 1 |
@@ -77,12 +85,10 @@ Currently this will only support the Palkia pack. <br><br>
 | LickilickyEX_RR_2Star | 3, 4 |
 | Manaphy_1Star | 4 |
 | Mars_2Star | 3, 4 |
-| Mespirit | 3 |
 | MismagiusEX_2Star | 2, 3 |
 | MismagiusEX_RR_2Star | 3, 4 |
 | PalkiaEX_2Star | 1, 2, 3, 4 |
 | PalkiaEX_CrownRare | 1, 2 |
-| Regigigas | 4 |
 | Rhyperior | 3 |
 | Rhyperior_1Star | 3 |
 | WeavileEX_2Star | 1 |
