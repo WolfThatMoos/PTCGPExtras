@@ -2,7 +2,7 @@
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
 ## Todo:
-- Updating support for 6.3.6
+- ~~Updating support for 6.3.6~~
 - Complete needle extraction for Palkia pack
 - Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode
 - Update Settings.ini to support Minimum Pack Points / New Godpack Mode
@@ -68,7 +68,7 @@ Currently this will only support the Palkia pack. <br><br>
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
-### Current state of Palkia Pack | 93.94% Complete |
+### Current state of Palkia Pack | 94.28% Complete |
 <details open>
 	
 <summary>Missing Cards List</summary>
@@ -76,7 +76,6 @@ Currently this will only support the Palkia pack. <br><br>
 | Card  | Slots Missing |
 | ------------- | ------------- |
 | Cynthia_2Star | 3 |
-| Cyrus_2Star | 2 |
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
 | Giratina_1Star | 4 |
 | Glameow_1Star | 1 |
