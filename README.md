@@ -82,7 +82,7 @@ Currently this will only support the Palkia pack. <br><br>
 | LickilickyEX_RR_2Star | 4 |
 | MismagiusEX_2Star | 2 |
 | MismagiusEX_RR_2Star | 3 |
-| PalkiaEX_2Star | 1, 2, 3, 4 |
+| PalkiaEX_2Star | 2, 3, 4 |
 | PalkiaEX_CrownRare | 1, 2 |
 | Rhyperior_1Star | 3 |
 | WeavileEX_RR_2Star | 1, 3, 4 |
