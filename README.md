@@ -81,7 +81,7 @@ Currently this will only support the Palkia pack. <br><br>
 | InfernapeEX_RR_2Star | 3 |
 | LickilickyEX_2Star | 1, 2, 3 |
 | LickilickyEX_RR_2Star | 4 |
-| Mars_2Star | 3, 4 |
+| Mars_2Star | 4 |
 | MismagiusEX_2Star | 2 |
 | MismagiusEX_RR_2Star | 3, 4 |
 | PalkiaEX_2Star | 1, 2, 3, 4 |
