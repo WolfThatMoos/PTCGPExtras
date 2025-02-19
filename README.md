@@ -7,7 +7,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode
 - Update Settings.ini to support Minimum Pack Points / New Godpack Mode
 - Update 1.ahk
-	- To support new logging system (packs.txt)
+	- ~~To support new logging system (packs.txt)~~
  	- To support user feedback via CustomMsg()
   	- Cleanup
 
