@@ -75,7 +75,6 @@ Currently this will only support the Palkia pack. <br><br>
 
 | Card  | Slots Missing |
 | ------------- | ------------- |
-| Cynthia_2Star | 3 |
 | DialgaEX_CrownRare | 1, 2, 3, 4 |
 | InfernapeEX_2Star | 2, 3, 4 |
 | InfernapeEX_RR_2Star | 3 |
