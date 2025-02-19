@@ -85,7 +85,7 @@ Currently this will only support the Palkia pack. <br><br>
 | PalkiaEX_2Star | 2, 3, 4 |
 | PalkiaEX_CrownRare | 1, 2 |
 | Rhyperior_1Star | 3 |
-| WeavileEX_RR_2Star | 1, 3, 4 |
+| WeavileEX_RR_2Star | 1, 4 |
 </details>
 
 ### Can I contribute? Screenshots or something?
