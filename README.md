@@ -68,7 +68,7 @@ Currently this will only support the Palkia pack. <br><br>
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
 
-### Current state of Palkia Pack | 95.55% Complete |
+### Current state of Palkia Pack | 96.03% Complete |
 <details open>
 	
 <summary>Missing Cards List</summary>
@@ -80,7 +80,6 @@ Currently this will only support the Palkia pack. <br><br>
 | InfernapeEX_RR_2Star | 3 |
 | LickilickyEX_2Star | 1, 2, 3 |
 | LickilickyEX_RR_2Star | 4 |
-| Mars_2Star | 4 |
 | MismagiusEX_2Star | 2 |
 | MismagiusEX_RR_2Star | 3, 4 |
 | PalkiaEX_2Star | 1, 2, 3, 4 |
