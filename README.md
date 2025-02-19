@@ -1,6 +1,10 @@
 # PTCGPExtras
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
+> [!WARNING]
+> I've uploaded files to start testing this and to get helpers going, but please note!  
+> **This is not ready for public release and will not work yet.**
+
 ## Todo:
 - ~~Updating support for 6.3.6~~
 - Complete needle extraction for Palkia pack
