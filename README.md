@@ -102,9 +102,8 @@ The fingerprint is then stitched together with 4 more fingerprints, creating a s
 ### How do I install?
 The goal of this project is to create a plugin for the bot, so that updates are simple (and syncs easily with updates to Arturo's bot).  <br><br>
 For now, installation works like this:  
-- Download MooExtras.ahk and 1.ahk
-- Move MooExtras.ahk to [Bot's Main Folder] --> [Scripts] --> [Include]
-- Replace 1.ahk in [Bot's Main Folder] --> [Scripts]
+- Download and extract the repo. Copy entire Scripts folder into the main PTCGPB's main folder, overwriting all files.  
+- Run 1.ahk (Program can't be called from PTCGPB.ahk, otherwise the update will overwrite the 1.ahk file). Stay tuned for a patcher program.
 
 > [!IMPORTANT]  
 > I'll be creating a separate file called Install.ahk that automatically updates 1.ahk's functionality and moves files accordingly, for a simple installation. Later it will have checks to fetch the latest version.
