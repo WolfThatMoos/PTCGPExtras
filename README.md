@@ -78,8 +78,8 @@ Currently this will only support the Palkia pack. <br><br>
 
 | Card  | Slots Missing |
 | ------------- | ------------- |
-| DialgaEX_CrownRare | 1, 2, 3, 4 |
-| InfernapeEX_2Star | 2, 3, 4 |
+| DialgaEX_CrownRare | 1, 2, 4 |
+| InfernapeEX_2Star | 3, 4 |
 | InfernapeEX_RR_2Star | 3 |
 | LickilickyEX_2Star | 1, 2 |
 | MismagiusEX_2Star | 2 |
