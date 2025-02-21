@@ -7,7 +7,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 
 ## Todo:
 - ~~Updating support for 6.3.6~~
-- Complete needle extraction for Palkia pack
+- ~~Complete needle extraction for Palkia pack~~
 - Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode and a quick launch button for editing the Pokedex
 - Update Settings.ini to support Minimum Pack Points / New Godpack Mode
 - ~~Update 1.ahk~~
@@ -47,7 +47,7 @@ Here's the major reasons:
       - 1 Star : 1 Points
       - EX : 1 Points
       - 2 Star : 2 Points
-      - 2 Star Rainbow : 3 Points
+      - 2 Star Rainbow : 2 Points
       - Immsersive/Crown Rares: -99 Points (If Skip is enabled in GUI)
       - Everything else: 0 Points  <br/><br/>
     - Opening a pack with a defined minimum pack value of 5, for example, with a pack whose total pack value is 4, will not save the pack, but instead continue rerolling.
@@ -65,22 +65,10 @@ In the PTCGP GUI, change the Minimum Pack Value to 7.
 ### Does this work on all packs? Specific packs?
 Currently this will only support the Palkia pack. <br><br> 
   
-> [!NOTE]  
-> I'm close to being finished with the Palkia pack, and will be starting Dialga soon.  
+> [!NOTE]    
 > Future releases will definitely include all packs.  
 > However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
 > Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
-
-### Current state of Palkia Pack | 99.67% Complete |
-<details open>
-	
-<summary>Missing Cards List</summary>
-
-| Card  | Slots Missing |
-| ------------- | ------------- |
-| DialgaEX_CrownRare | 1, 4 |
-| PalkiaEX_CrownRare | 2 |
-</details>
 
 ### Can I contribute? Screenshots or something?
 See above to understand why I have to gather the screenshots myself unfortunately.  
