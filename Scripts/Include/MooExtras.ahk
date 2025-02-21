@@ -1,4 +1,11 @@
-﻿; MooExtras standard library v0.05 by Wolfeh 02/19/25
+﻿; MooExtras standard library v0.06 by Wolfeh 02/21/25
+
+; PTCGPB.ahk (Custom)
+; Scripts --> 1.ahk 
+;         --> Scale125 --> Next1.png
+;         --> Include --> MooExtras.ahk
+;         --> Pokedex --> Pokedex.csv
+;                     --> Needles --> *.png
 
 global bDEBUG := 1
 global needleDir := NeedleDIRCheck()
@@ -137,35 +144,29 @@ CompareBlocks(pSearchBlock, pNeedleBlock) {
 
     ; Ensure both bitmaps have the same dimensions
     if (w1 != w2 || h1 != h2) {
-        ; MsgBox, 0, Note - CompareBlocks, bitmaps are not the same size!
         return false
     }
-        
 
     ; Lock bits for both bitmaps. This dumps the pixel block into memory to directly access the raw pixel values (faster than looping Gdip_GetPixel())
     Stride1 := 0, Scan01 := 0, BitmapData1 := 0
     Stride2 := 0, Scan02 := 0, BitmapData2 := 0
 
     if (Gdip_LockBits(pSearchBlock, 0, 0, w1, h1, Stride1, Scan01, BitmapData1, 3, 0x26200a)) {
-        ; MsgBox, 0, Note - CompareBlocks, Locking failed for pSearchBlock
-        return false  ; Assume non-match if locking failed
+        return false
     }
-    
     if (Gdip_LockBits(pNeedleBlock, 0, 0, w2, h2, Stride2, Scan02, BitmapData2, 3, 0x26200a)) {
         Gdip_UnlockBits(pSearchBlock, BitmapData1)
-        ; MsgBox, 0, Note - CompareBlocks, Locking failed for pNeedleBlock
-        return false  ; Assume non-match if locking failed
+        return false
     }
 
-    ; Compare pixel data
-    if (Stride1 != Stride2) {  ; Stride mismatch means different bitmaps
+    if (Stride1 != Stride2) {
         Gdip_UnlockBits(pSearchBlock, BitmapData1)
         Gdip_UnlockBits(pNeedleBlock, BitmapData2)
-        ; MsgBox, 0, Note - CompareBlocks, Stride mismatch!
         return false
     }
 
     ; Loop through each pixel and compare ARGB values
+    iPixelCount := 0
     Loop, % h1 {
         yOffset := (A_Index - 1) * Stride1
         Loop, % w1 {
@@ -173,16 +174,22 @@ CompareBlocks(pSearchBlock, pNeedleBlock) {
             color1 := NumGet(Scan01 + index, 0, "UInt")
             color2 := NumGet(Scan02 + index, 0, "UInt")
 
-            if (color1 != color2) {
-                Gdip_UnlockBits(pSearchBlock, BitmapData1)
-                Gdip_UnlockBits(pNeedleBlock, BitmapData2)
-                ; MsgBox, 0, Note - CompareBlocks, Pixels don't match! `n Color 1: %color1% `n Color 2: %color2%
-                return false  ; Return true if they differ
+            ; Check: If pixels don't match, return false
+            a1 := (color1 >> 24) & 0xFF, r1 := (color1 >> 16) & 0xFF, g1 := (color1 >> 8) & 0xFF, b1 := color1 & 0xFF
+            a2 := (color2 >> 24) & 0xFF, r2 := (color2 >> 16) & 0xFF, g2 := (color2 >> 8) & 0xFF, b2 := color2 & 0xFF
+
+            if (Abs(r1 - r2) > 10 || Abs(g1 - g2) > 10 || Abs(b1 - b2) > 10) {
+                iPixelCount++
+                if (((iPixelCount / (w1 * h1)) * 100) > 15) {
+                    Gdip_UnlockBits(pSearchBlock, BitmapData1)
+                    Gdip_UnlockBits(pNeedleBlock, BitmapData2)
+                    return false
+                }
             }
         }
     }
-    
-    ; Clean up and return
+
+    ; Clean up and return match
     Gdip_UnlockBits(pSearchBlock, BitmapData1)
     Gdip_UnlockBits(pNeedleBlock, BitmapData2)
     return true
@@ -239,7 +246,8 @@ CreatePokedex() {
     Loop, %needleDir%*.png
         needleFiles.Push(A_LoopFileFullPath)  
     If (needleFiles.Length() < 1) {
-        MsgBox, 0, Error - CreatePokedex, Can not find needles directory!
+        MsgBox, 0, Error - CreatePokedex, No needles found in the needles directory!
+        needleFiles.Push("")
     }
 
     ; Delete any existing pokedex to avoid appending
@@ -595,13 +603,18 @@ IdentifyCardInSlot(iCardSlot) {
     Loop, %needleDir%*.png
         needleFiles.Push(A_LoopFileFullPath)
     iTotalNeedles := needleFiles.Length()
-    ; MsgBox, Total Needle Files In %needleDIR%: %iTotalNeedles%
+    If (iTotalNeedles < 1) {
+        MsgBox, 0, Error - IdentifyCardInSlot, No needle files found! `n Total Needle Files In %needleDIR%: %iTotalNeedles%
+    }
 
     ; Load search block
     pSearchBlock := GetSearchBlock(iCardSlot)
     if !pSearchBlock {
         MsgBox, 0, Error - IdentifyCardInSlot, Failed to load pSearchBlock for card slot %iCardSlot%
         return
+    } else {
+        ; Gdip_SaveBitmapToFile(pSearchBlock, "C:\Users\Wolfeh\Downloads\pSearchBlock.png")
+        ; MsgBox, Extracted pSearchBlock
     }
     
     ; Loop through each needle and compare vs current card slot
@@ -618,6 +631,8 @@ IdentifyCardInSlot(iCardSlot) {
         ; Extract needle block from the composite needle
         iNeedleCoords[1] := (iCardSlot - 1) * 20
         pNeedleBlock := Gdip_CloneBitmapArea(pCompositeNeedle, iNeedleCoords[1], iNeedleCoords[2], iNeedleCoords[3], iNeedleCoords[4])
+        ; sNeedleName := GetFileNameWithoutExtension(needlePath)
+        ; Gdip_SaveBitmapToFile(pNeedleBlock, "C:\Users\Wolfeh\Downloads\Temp\" . sNeedleName . ".png")
 
         ; Compare search block with needle block
         if CompareBlocks(pSearchBlock, pNeedleBlock) {
@@ -697,10 +712,12 @@ isCardLoaded(pImage) {
 ; notes						                       
 ;
 NeedleDIRCheck() {
-    needleDir := A_ScriptDir . "\Needles\"
+    needleDir := A_ScriptDir . "\Pokedex\Needles\"
     ; Ensure the Needles directory exists
-    if !FileExist(needleDir)
+    if !FileExist(needleDir) {
         FileCreateDir, %needleDir%
+        Sleep, 100
+    }
     return %needleDir%
 }
 
@@ -715,7 +732,7 @@ NeedleDIRCheck() {
 ; notes						                       
 ;
 PokedexFileCheck() {
-    pokedexFilePath := A_ScriptDir . "\Pokedex.csv"
+    pokedexFilePath := A_ScriptDir . "\Pokedex\Pokedex.csv"
     if !FileExist(pokedexFilePath)
         CreatePokedex()
     return %pokedexFilePath%
