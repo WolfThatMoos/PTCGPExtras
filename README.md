@@ -13,6 +13,9 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Update 1.ahk~~
 	- ~~To support new logging system (packs.txt)~~
   	- ~~Cleanup~~
+ 
+## Bugs:
+- Need to fix screenshots not displaying names correctly
 
 ## Update and FAQS:
 
