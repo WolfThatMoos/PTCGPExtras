@@ -16,7 +16,8 @@ CoordMode, Pixel, Screen
 DllCall("AllocConsole")
 WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
-global iPackCount, bAddFriends, iLastPackScore
+global iPackCount, bAddFriends, iLastPackScore, bSplashStatus
+bSplashStatus := 0
 bAddFriends := 0
 iPackCount := 0
 
@@ -287,11 +288,11 @@ Loop {
 		}
 	}
 	
-	; Renew friendship
 	if (bAddFriends) {
 		friendsAdded := AddFriends(true)
 	}
 
+	MsgBox, About to start Stamina Mission
 	CompleteMission("Stamina")
 
 	SplashStatus("Pack 6")
@@ -1194,7 +1195,11 @@ CreateStatusMessage(Message, GuiName := 50, X := 0, Y := 80) {
 }
 
 SplashStatus(sStatus) {
-	global winTitle
+	global winTitle, bSplashStatus
+
+	if (bSplashStatus = 0) {
+		return
+	}
 
 	switch winTitle
 	{
@@ -2540,6 +2545,8 @@ SelectPack(iStage := 1) {
 			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
 				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
 			} else { ; If it's a different booster, we'll pick that later in Stage 2
+				; First, select the 3rd pack of the current packs
+				FindImageAndClick(233, 400, 264, 428, , "Points", 200, 196)
 				; Click "Select Other Booster Packs" Button
 				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
 				; Click the desired pack
@@ -2578,9 +2585,6 @@ SelectPack(iStage := 1) {
 				CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
 			}
 
-			; Waits until the hourglass pack icon appears on the spend hourglasses panel
-			; Then clicks the OK button to spend the hourglasses and prepares the pack to be opened
-			; FindImageAndClick(60, 440, 90, 480, , "HourglassPack", 195, 460, 500)
 			failSafe := A_TickCount
 			failSafeTime := 0
 			Loop {
@@ -2599,6 +2603,8 @@ SelectPack(iStage := 1) {
 			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
 				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
 			} else { ; If it's a different booster, we'll pick that later in Stage 2
+				; First, select the 3rd pack of the current packs
+				FindImageAndClick(233, 400, 264, 428, , "Points", 200, 196)
 				; Click "Select Other Booster Packs" Button
 				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
 				; Click the desired pack
@@ -2622,9 +2628,6 @@ SelectPack(iStage := 1) {
 			CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
 		}
 
-		; Waits until the hourglass pack icon appears on the spend hourglasses panel
-		; Then clicks the OK button to spend the hourglasses and prepares the pack to be opened
-		; FindImageAndClick(60, 440, 90, 480, , "HourglassPack", 195, 460, 500)
 		failSafe := A_TickCount
 		failSafeTime := 0
 		Loop {
@@ -2995,19 +2998,30 @@ DoWonderPick() {
 
 
 
+
+
+
+
+
+
+
 DidAccountLevel() {
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
 		Delay(1)
-		aLeveledCoords := FindOrLoseImage(30, 500, 52, 516, , "LeveledNotification", 0, failSafeTime)
-		If (aLeveledCoords) {
+		aLeveledCoords := FindOrLoseImage(30, 500, 52, 516, 50, "LeveledNotification", 0, failSafeTime)
+		If (aLeveledCoords)
 			return 1
-		}
-		aNotLeveledCoords := FindOrLoseImage(30, 500, 52, 516, , "NotLeveled", 0, failSafeTime)
-		If (aNotLeveledCoords) {
+		aLeveledCoords := FindOrLoseImage(30, 500, 52, 516, 50, "LeveledNotification2", 0, failSafeTime)
+		If (aLeveledCoords)
+			return 1
+		aNotLeveledCoords := FindOrLoseImage(30, 500, 52, 516, 50, "NotLeveled", 0, failSafeTime)
+		If (aNotLeveledCoords)
 			return 0
-		}
+		aNotLeveledCoords := FindOrLoseImage(30, 500, 52, 516, 50, "NotLeveled2", 0, failSafeTime)
+		If (aNotLeveledCoords)
+			return 0
 		failSafeTime := (A_TickCount - failSafe) // 1000
 	}
 }
