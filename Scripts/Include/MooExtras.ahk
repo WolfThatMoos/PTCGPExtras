@@ -1,11 +1,4 @@
-﻿; MooExtras standard library v0.06 by Wolfeh 02/21/25
-
-; PTCGPB.ahk (Custom)
-; Scripts --> 1.ahk 
-;         --> Scale125 --> Next1.png
-;         --> Include --> MooExtras.ahk
-;         --> Pokedex --> Pokedex.csv
-;                     --> Needles --> *.png
+﻿; MooExtras standard library v0.07 by Wolfeh 02/26/25
 
 global bDEBUG := 1
 global needleDir := NeedleDIRCheck()
