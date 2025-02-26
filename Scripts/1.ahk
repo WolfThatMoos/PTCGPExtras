@@ -16,10 +16,13 @@ CoordMode, Pixel, Screen
 DllCall("AllocConsole")
 WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
-global winTitle, changeDate, failSafe, openPack, Delay, failSafeTime, StartSkipTime, Columns, failSafe, adbPort, scriptName, adbShell, adbPath, GPTest, StatusText, defaultLanguage, setSpeed, jsonFileName, pauseToggle, SelectedMonitorIndex, swipeSpeed, godPack, scaleParam, discordUserId, discordWebhookURL, deleteMethod, packs, FriendID, friendIDs, Instances, username, friendCode, stopToggle, friended, runMain, showStatus, injectMethod, packMethod, loadDir, loadedAccount, nukeAccount, TrainerCheck, FullArtCheck, RainbowCheck, dateChange, foundGP, foundTS, friendsAdded, minStars, PseudoGodPack, Palkia, Dialga, Mew, Pikachu, Charizard, Mewtwo, packArray, CrownCheck, ImmersiveCheck, slowMotion, packCount
+global iPackCount, bAddFriends, iLastPackScore
+bAddFriends := 0
+iPackCount := 0
+
+global winTitle, changeDate, failSafe, openPack, Delay, failSafeTime, StartSkipTime, Columns, failSafe, adbPort, scriptName, adbShell, adbPath, GPTest, StatusText, defaultLanguage, setSpeed, jsonFileName, pauseToggle, SelectedMonitorIndex, swipeSpeed, godPack, scaleParam, discordUserId, discordWebhookURL, deleteMethod, packs, FriendID, friendIDs, Instances, username, friendCode, stopToggle, friended, runMain, showStatus, injectMethod, packMethod, loadDir, loadedAccount, nukeAccount, TrainerCheck, FullArtCheck, RainbowCheck, dateChange, foundGP, foundTS, friendsAdded, minStars, PseudoGodPack, Palkia, Dialga, Mew, Pikachu, Charizard, Mewtwo, packArray, CrownCheck, ImmersiveCheck, slowMotion
 scriptName := StrReplace(A_ScriptName, ".ahk")
 winTitle := scriptName
-packCount := 0
 foundGP := false
 injectMethod := false
 pauseToggle := false
@@ -224,47 +227,151 @@ Loop {
 	Delay(1)
 	packs := 0
 
+	
+	SplashStatus("Doing Tutorial...")
 	if(!injectMethod || !loadedAccount)
 		DoTutorial()
-
+	
+	SplashStatus("Doing Wonderpick...")
 	if(deleteMethod = "5 Pack" || packMethod)
 		if(!loadedAccount)
 			wonderPicked := DoWonderPick()
-
-	; friendsAdded := AddFriends()
-	SelectPack("First")
+	
+	if (bAddFriends) {
+		SplashStatus("Adding Friend - First Time")
+		friendsAdded := AddFriends()
+	}
+	
+	SplashStatus("Pack 1")
+	SelectPack(1)
 	PackOpening()
 
 	if(packMethod) {
-		; friendsAdded := AddFriends(true)
-		SelectPack()
+		if (bAddFriends) {
+			SplashStatus("Post Pack 1 - Renewing Friendship")
+			friendsAdded := AddFriends(true)
+			SelectPack()
+		}
 	}
 
+	SplashStatus("Pack 2")
 	PackOpening()
 
+	SplashStatus("Starting Hourglass...")
 	if(!injectMethod || !loadedAccount) {
-		HourglassOpening() ;deletemethod check in here at the start
+		HourglassOpening()
 	}
 
 	if(wonderPicked) {
-		; friendsAdded := AddFriends(true)
-		SelectPack("HGPack")
+		if (bAddFriends) {
+			SplashStatus("Post Pack 3 - Renewing Friendship")
+			friendsAdded := AddFriends(true)
+		}
+		
+		SplashStatus("Pack 4")
+		SelectPack(2)
 		PackOpening()
+
 		if(packMethod) {
-			; friendsAdded := AddFriends(true)
-			SelectPack("HGPack")
+			if (bAddFriends) {
+				SplashStatus("Post Pack 4 - Renewing Friendship")
+				friendsAdded := AddFriends(true)
+			}
+
+			SplashStatus("Pack 5")
+			SelectPack(2)
 			PackOpening()
 		}
 		else {
 			HourglassOpening(true)
 		}
 	}
+	
+	; Renew friendship
+	if (bAddFriends) {
+		friendsAdded := AddFriends(true)
+	}
 
+	CompleteMission("Stamina")
+
+	SplashStatus("Pack 6")
+	SelectPack(3)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 6 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	SplashStatus("Pack 7")
+	SelectPack(2)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 7 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	CompleteMission("Level3")
+	
+	SplashStatus("Pack 8")
+	SelectPack(3)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 8 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	SplashStatus("Pack 9")
+	SelectPack(2)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 9 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	SplashStatus("Pack 10")
+	SelectPack(2)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 10 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	CompleteMission("50Card")
+
+	SplashStatus("Pack 11")
+	SelectPack(3)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 11 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	SplashStatus("Pack 12")
+	SelectPack(2)
+	PackOpening()
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 12 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	DoFinalLevel()
+
+	SplashStatus("Pack 13")
+	SelectPack(3)
+	PackOpening()
 
 	if(nukeAccount && !injectMethod)
 		menuDelete()
 	else
-		; RemoveFriends(friendsAdded)
+		if (bAddFriends)
+			RemoveFriends(friendsAdded)
 
 	if(injectMethod)
 		loadedAccount := loadAccount()
@@ -805,8 +912,12 @@ LevelUp() {
 		clickButton := FindOrLoseImage(75, 340, 195, 530, 80, "Button", 0, failSafeTime)
 		StringSplit, pos, clickButton, `,  ; Split at ", "
 		adbClick(pos1, pos2)
+		Delay(1)
+		return True
+	} else {
+		Delay(1)
+		return false
 	}
-	Delay(1)
 }
 
 resetWindows(){
@@ -1082,16 +1193,37 @@ CreateStatusMessage(Message, GuiName := 50, X := 0, Y := 80) {
 	}
 }
 
+SplashStatus(sStatus) {
+	global winTitle
+
+	switch winTitle
+	{
+	case 1: 
+		iLocX := (278 * 0)
+	case 2:
+		iLocX := (278 * 1)
+	case 3:
+		iLocX := (278 * 2)
+	case 4:
+		iLocX := (278 * 3)
+	}
+	
+	SplashTextOn, 275, 50, BotStatus, %sStatus%
+	WinMove, BotStatus,, iLocX, 535
+}
+
 CheckPack() {
+	global iPackCount, iPackScore, scriptName, username, friendCode, accountFile
+
 	FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440) ; Used to delay identifying cards until all cards are rendered
-	packCount++
+	iPackCount++
 	Delay(1)
 	aOpenedPack := identifyCards()
 	iPackScore := getPackPoints(aOpenedPack)
-	sPackMessage := "Pack " . packCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
+	sPackMessage := "Pack " . iPackCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
 	LogToFile(sPackMessage, "Packs.txt")
 	; MsgBox, % "Matched Cards: " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5]
-	if (iPackScore < 3) {
+	if (iPackScore < 2) {
 		; MsgBox, The total pack score is: %iPackScore%
 		return
 	} else {
@@ -1158,7 +1290,7 @@ FoundStars(star) {
 	accountFile := saveAccount(star)
 	friendCode := getFriendCode()
 	if(star = "Crown" || star = "Immersive")
-		; RemoveFriends(friendsAdded)
+		RemoveFriends(friendsAdded)
 	logMessage := star . " found by " . username . " (" . friendCode . ") in instance: " . scriptName . " (" . packs . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
 	CreateStatusMessage(logMessage)
 	LogToFile(logMessage, "GPlog.txt")
@@ -1241,7 +1373,7 @@ FindGodPack() {
 			}
 			if(invalidGP) {
 				GodPackFound("Invalid")
-				; RemoveFriends(friendsAdded)
+				RemoveFriends(friendsAdded)
 				gpFound := true
 				break
 			}
@@ -2364,53 +2496,135 @@ DoTutorial() {
 	return true
 }
 
-SelectPack(HG := false) {	
+SelectPack(iStage := 1) {
 	global openPack, packArray
-	packy := 196
 
-	If (HG = "First") {
-		; Check to determine which pack was opened.
-		if(openPack = "Mew") {
-			packx := 80
-		} else if(openPack = "Palkia") {
-			packx := 200
-		} else if(openPack = "Dialga") {
-			packx := 145
-		} else {
-			packx := 200
-		}
+	iPackX := 200
+	iPackY := 196
+	bCurrentBooster = 1
+	
+	; Check to determine which pack to open
+	switch openPack
+	{
+	case "Mew": 
+		iPackX := 80
+		iPackY := 196
+		bCurrentBooster := 1
+	case "Palkia":
+		iPackX := 200
+		iPackY := 196
+		bCurrentBooster := 1
+	case "Dialga":
+		iPackX := 145
+		iPackY := 196
+		bCurrentBooster := 1
+	case "Pikachu":
+		iPackX := 125
+		iPackY := 440
+		bCurrentBooster := 0
+	case "Mewtwo":
+		iPackX := 65
+		iPackY := 440
+		bCurrentBooster := 0
+	case "Charizard":
+		iPackX := 26
+		iPackY := 440
+		bCurrentBooster := 0
+	}
 
-		; Click on the openPack
-		FindImageAndClick(233, 400, 264, 428, , "Points", packx, packy)
-
-		; If the pack is genetic apex, click "select other booster packs"
-		; and then the openPack
-		if(openPack = "Pikachu" || openPack = "Mewtwo" || openPack = "Charizard") {
-			packy := 440
-			if(openPack = "Pikachu"){
-				packx := 125
-			} else if(openPack = "Mewtwo"){
-				packx := 65
-			} else if(openPack = "Charizard"){
-				packx := 26
+	switch iStage
+	{
+		case 1: ; Stage 1: Home Screen with 3 Packs Visible (Mew | Dialga | Palkia)
+			
+			; Get to Stage 2
+			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
+				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
+			} else { ; If it's a different booster, we'll pick that later in Stage 2
+				; Click "Select Other Booster Packs" Button
+				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
+				; Click the desired pack
+				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
 			}
-			FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
-			FindImageAndClick(233, 400, 264, 428, , "Points", packx, packy)
-		}
-	} else if (HG = "Tutorial") {
-		FindImageAndClick(236, 198, 266, 226, , "Hourglass2", 180, 436, 500) ;stop at hourglasses tutorial 2 180 to 203?
-	} else if (HG = "HGPack") {
+
+			; Get To Stage 3
+			failSafe := A_TickCount
+			failSafeTime := 0
+			; Clicks on the pack, then the open button, until the skip button shows in the bottom right
+			Loop {
+				if(FindImageAndClick(233, 486, 272, 519, , "Skip2", 130, 430, , 2))
+					break
+				Delay(1)
+				; adbClick(200, 461)
+				failSafeTime := (A_TickCount - failSafe) // 1000
+				CreateStatusMessage("In failsafe for Skip2. " . failSafeTime "/45 seconds")
+			}
+			
+
+		case 2: ; Stage 2: STS Pack's Screen with 2 Visible Packs (Dialga | Palkia)
+			
+			failSafe := A_TickCount
+			failSafeTime := 0
+			Loop {
+				; Check: Paying for Pack Opening?
+				if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 0, failSafeTime)) {
+					break
+				}
+
+				; Attempt to open pack
+				adbClick(146, 439) ; Clicks "Open a Pack"
+				
+				Delay(1)
+				failSafeTime := (A_TickCount - failSafe) // 1000
+				CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
+			}
+
+			; Waits until the hourglass pack icon appears on the spend hourglasses panel
+			; Then clicks the OK button to spend the hourglasses and prepares the pack to be opened
+			; FindImageAndClick(60, 440, 90, 480, , "HourglassPack", 195, 460, 500)
+			failSafe := A_TickCount
+			failSafeTime := 0
+			Loop {
+				if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 1, failSafeTime)) {
+					break
+				}
+				adbClick(205, 458)
+				Delay(1)
+				failSafeTime := (A_TickCount - failSafe) // 1000
+				CreateStatusMessage("In failsafe for HourglassPack4. " . failSafeTime "/45 seconds")
+			}
+
+		case 3: ; Stage 3: Single Pack Selected with (Open Pack) || (Open 10 Packs | Open a Pack)
+			
+		; Get to Stage 2
+			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
+				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
+			} else { ; If it's a different booster, we'll pick that later in Stage 2
+				; Click "Select Other Booster Packs" Button
+				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
+				; Click the desired pack
+				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
+			}
+
+		; Get to Stage 3
 		failSafe := A_TickCount
 		failSafeTime := 0
 		Loop {
+			; Check: Paying for Pack Opening?
 			if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 0, failSafeTime)) {
 				break
 			}
-			adbClick(146, 439)
+
+			; Attempt to open pack
+			adbClick(146, 439) ; Clicks "Open a Pack"
+			
 			Delay(1)
 			failSafeTime := (A_TickCount - failSafe) // 1000
 			CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
 		}
+
+		; Waits until the hourglass pack icon appears on the spend hourglasses panel
+		; Then clicks the OK button to spend the hourglasses and prepares the pack to be opened
+		; FindImageAndClick(60, 440, 90, 480, , "HourglassPack", 195, 460, 500)
 		failSafe := A_TickCount
 		failSafeTime := 0
 		Loop {
@@ -2421,17 +2635,6 @@ SelectPack(HG := false) {
 			Delay(1)
 			failSafeTime := (A_TickCount - failSafe) // 1000
 			CreateStatusMessage("In failsafe for HourglassPack4. " . failSafeTime "/45 seconds")
-		}
-	} else {
-		failSafe := A_TickCount
-		failSafeTime := 0
-		Loop {
-			if(FindImageAndClick(233, 486, 272, 519, , "Skip2", 130, 430, , 2)) ;click on next until skip button appears
-				break
-			Delay(1)
-			adbClick(200, 461)
-			failSafeTime := (A_TickCount - failSafe) // 1000
-			CreateStatusMessage("In failsafe for Skip2. " . failSafeTime "/45 seconds")
 		}
 	}
 }
@@ -2509,26 +2712,34 @@ PackOpening() {
 HourglassOpening(HG := false) {
 	if(!HG) {
 		Delay(3)
-		adbClick(146, 441) ; 146 440
+		adbClick(146, 441) ; Close pop-up for "If you run out of pack stamina"
 		Delay(3)
-		adbClick(146, 441)
+		adbClick(146, 441) ; "Tap the Open Pack Button" prompt
 		Delay(3)
-		adbClick(146, 441)
+		adbClick(146, 441) ; Tap "Open a Pack" button
 		Delay(3)
-
-		FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5) ;stop at hourglasses tutorial 2
+		
+		; Tap the X button in the center/bottom until premium pass prompt
+		FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5)
 		Delay(1)
 
-		adbClick(203, 436) ; 203 436
+		adbClick(203, 436) ; Close the premium pass prompt
 
+		; Ignore pack opening, and renew friendship
+		SplashStatus("Post Pack 2 - Renewing Friendship")
 		if(packMethod) {
-			AddFriends(true)
-			SelectPack("Tutorial")
+			if (bAddFriends) {
+				friendsAdded := AddFriends(true)
+				SelectPack("Tutorial")
+			}
 		}
 		else {
 			FindImageAndClick(236, 198, 266, 226, , "Hourglass2", 180, 436, 500) ;stop at hourglasses tutorial 2 180 to 203?
 		}
 	}
+
+	SplashStatus("Pack 3")
+
 	if(!packMethod) {
 		failSafe := A_TickCount
 		failSafeTime := 0
@@ -2553,6 +2764,8 @@ HourglassOpening(HG := false) {
 			CreateStatusMessage("In failsafe for HourglassPack2. " . failSafeTime "/45 seconds")
 		}
 	}
+
+	; Everything else below is manually opening the pack that was selected above. idk why it's not calling PackOpening()
 	Loop {
 		adbClick(146, 439)
 		Delay(1)
@@ -2649,7 +2862,8 @@ getFriendCode() {
 		if(failSafeTime > 45)
 			restartGameInstance("Stuck at Home")
 	}
-	friendCode := AddFriends(false, true)
+	if (bAddFriends)
+		friendCode := AddFriends(false, true)
 
 	return friendCode
 }
@@ -2733,6 +2947,7 @@ DoWonderPick() {
 		CreateStatusMessage("In failsafe for Shop. " . failSafeTime "/45 seconds")
 		LogToFile("In failsafe for Shop. " . failSafeTime "/45 seconds")
 	}
+	; Skips through all open cards until it hits the home screen
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
@@ -2747,9 +2962,14 @@ DoWonderPick() {
 		CreateStatusMessage("In failsafe for Shop. " . failSafeTime "/45 seconds")
 		LogToFile("In failsafe for Shop. " . failSafeTime "/45 seconds")
 	}
+	; Waits until "Missions" is visible on the home screen and clicks it
 	FindImageAndClick(2, 85, 34, 120, , "Missions", 261, 478, 500)
 	;FindImageAndClick(130, 170, 170, 205, , "WPMission", 150, 286, 1000)
+
+	; After the first mission is clicked, wait until the popup for the rewards shows, then accept them
 	FindImageAndClick(120, 185, 150, 215, , "FirstMission", 150, 286, 1000)
+	
+	; Close the rewards prompt, and finish on the home screen
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
@@ -2769,6 +2989,178 @@ DoWonderPick() {
 		LogToFile("In failsafe for WonderPick. " . failSafeTime "/45 seconds")
 	}
 	return true
+}
+
+
+
+
+
+DidAccountLevel() {
+	failSafe := A_TickCount
+	failSafeTime := 0
+	Loop {
+		Delay(1)
+		aLeveledCoords := FindOrLoseImage(30, 500, 52, 516, , "LeveledNotification", 0, failSafeTime)
+		If (aLeveledCoords) {
+			return 1
+		}
+		aNotLeveledCoords := FindOrLoseImage(30, 500, 52, 516, , "NotLeveled", 0, failSafeTime)
+		If (aNotLeveledCoords) {
+			return 0
+		}
+		failSafeTime := (A_TickCount - failSafe) // 1000
+	}
+}
+
+SkipLevelUp(bLeveled) {
+	If (bLeveled = 1) {
+		Loop {
+			; Check: Showing Unlock Battles screen?
+			aLockCoords := FindOrLoseImage(120, 185, 150, 245, , "LevelUnlock", 0)
+			if(aLockCoords) {
+				
+				; Click the OK Button to dismiss the Unlocked popup
+				aOKButton := [150, 386], aLevelUnlock := [120, 185, 150, 245], sLevelUnlock := "LevelUnlock"
+				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
+				
+				; Check: Leveled Up screen?
+				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
+				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
+				
+				; Should be on home screen
+				break
+
+			} else { ; No? Try to go to home screen
+				adbClick(40, 516) ; Home Icon
+				Delay(1)
+			}
+		}
+	} else {
+		aHomeIcon := [40, 516], aShopIcon := [191, 393, 211, 411], sShopIcon := "Shop"
+		ClickUntilImageVisible(aHomeIcon, aShopIcon, sShopIcon)
+	}
+}
+
+ClickUntilImageVisible(aClickCoords, aImageCoords, sImageName, iVariation := 0, iDelay := 1) {
+	failSafe := A_TickCount
+	failSafeTime := 0
+	Loop {
+		; Check: Is the image visible?
+		aPOSCoords := FindOrLoseImage(aImageCoords[1], aImageCoords[2], aImageCoords[3], aImageCoords[4], , sImageName, 0, failSafeTime)
+		if(aPOSCoords) {
+			return 1
+		} else {
+			adbClick(aClickCoords[1], aClickCoords[2])
+			Delay(iDelay)
+		}
+		failSafeTime := (A_TickCount - failSafe) // 1000
+	}
+}
+
+ClickUntilImageNotVisible(aClickCoords, aImageCoords, sImageName, iVariation := 0) {
+	failSafe := A_TickCount
+	failSafeTime := 0
+	Loop {
+		; Check: Is the image visible?
+		aPOSCoords := FindOrLoseImage(aImageCoords[1], aImageCoords[2], aImageCoords[3], aImageCoords[4], , sImageName, 0, failSafeTime)
+		if(aPOSCoords) {
+			adbClick(aClickCoords[1], aClickCoords[2])
+			Delay(1)
+		} else {
+			return 1
+		}
+		failSafeTime := (A_TickCount - failSafe) // 1000
+	}
+}
+
+ClickImageWhenVisible(aImageCoords, sImageName, iVariation := 50) {
+	failSafe := A_TickCount
+	failSafeTime := 0
+	Loop {
+		aPOSCoords := FindOrLoseImage(aImageCoords[1], aImageCoords[2], aImageCoords[3], aImageCoords[4], iVariation, sImageName, 0)
+		If (aPOSCoords) {
+			StringSplit, pos, aPOSCoords, `,  ; Split at ", "
+			adbClick(pos1, pos2)
+			return
+		} else {
+			Delay(1)
+		}
+		failSafeTime := (A_TickCount - failSafe) // 1000
+	}
+}
+
+CompleteMission(sMissionName) {
+	; Update user
+	SplashStatus("Doing " . sMissionName . " Mission...")
+
+	; Check: Did account level?
+	bLeveled := DidAccountLevel()
+	SkipLevelUp(bLeveled)
+
+	; Open Missions
+	aMissionsIcon := [261, 478], aBeginnerMissions := [2, 85, 34, 120], sBeginnerMissions := "Missions"
+	ClickUntilImageVisible(aMissionsIcon, aBeginnerMissions, sBeginnerMissions)
+
+	; Select mission
+	switch sMissionName
+	{
+		case "Stamina":
+			aMissionImgCoords := [206, 280, 250, 400], sMissionImgName := "StaminaMission"
+		case "Level3":
+			aMissionImgCoords := [206, 280, 250, 400], sMissionImgName := "LevelMission"
+		case "50Card":
+			aMissionImgCoords := [190, 266, 232, 300], sMissionImgName := "50CardMission"
+	}
+	ClickImageWhenVisible(aMissionImgCoords, sMissionImgName)
+	
+	; Complete the mission
+	aCompleteButton := [141, 444, 176, 452], sCompleteButton := "Button", iVariation := 80
+	ClickImageWhenVisible(aCompleteButton, sCompleteButton, iVariation)
+
+	; Claim the mission reward
+	aOKButton := [141, 365, 176, 374], sOKButton := "Button", iVariation := 80
+	ClickImageWhenVisible(aOKButton, sOKButton, iVariation)
+
+	; Return to home screen (Close missions)
+	aCloseButton := [137, 506], aShopIcon := [191, 393, 211, 411], sShopIcon := "Shop"
+	ClickUntilImageVisible(aCloseButton, aShopIcon, sShopIcon, , 2)
+}
+
+DoFinalLevel() {
+		
+	; Update user
+	SplashStatus("Doing Final Level...")
+
+	; Check: Did account level?
+	bLeveled := DidAccountLevel()
+
+	; Get to the home screen
+	If (bLeveled = 1) {
+		Loop {
+			; Check: Showing Unlock Display Boards screen?
+			aLockCoords := FindOrLoseImage(130, 208, 146, 230, , "Level4Unlock", 0)
+			if(aLockCoords) {
+				
+				; Click the OK Button to dismiss the Unlocked popup
+				aOKButton := [138, 360], aLevelUnlock := [130, 208, 146, 230], sLevelUnlock := "Level4Unlock"
+				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
+				
+				; Check: Leveled Up screen?
+				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
+				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
+				
+				; Should be on home screen
+				break
+
+			} else { ; No? Try to go to home screen
+				adbClick(40, 516) ; Home Icon
+				Delay(1)
+			}
+		}
+	} else {
+		aHomeIcon := [40, 516], aShopIcon := [191, 393, 211, 411], sShopIcon := "Shop"
+		ClickUntilImageVisible(aHomeIcon, aShopIcon, sShopIcon)
+	}
 }
 
 getChangeDateTime() {
