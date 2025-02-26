@@ -17,7 +17,7 @@ DllCall("AllocConsole")
 WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
 global iPackCount, bAddFriends, iLastPackScore, bSplashStatus
-bSplashStatus := 0
+bSplashStatus := 1
 bAddFriends := 0
 iPackCount := 0
 
@@ -292,7 +292,6 @@ Loop {
 		friendsAdded := AddFriends(true)
 	}
 
-	MsgBox, About to start Stamina Mission
 	CompleteMission("Stamina")
 
 	SplashStatus("Pack 6")
