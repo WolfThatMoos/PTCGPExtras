@@ -64,6 +64,7 @@ IniRead, Mew, %A_ScriptDir%\..\Settings.ini, UserSettings, Mew, 0
 IniRead, Pikachu, %A_ScriptDir%\..\Settings.ini, UserSettings, Pikachu, 0
 IniRead, Charizard, %A_ScriptDir%\..\Settings.ini, UserSettings, Charizard, 0
 IniRead, Mewtwo, %A_ScriptDir%\..\Settings.ini, UserSettings, Mewtwo, 0
+IniRead, Arceus, %A_ScriptDir%\..\Settings.ini, UserSettings, Arceus, 0
 IniRead, slowMotion, %A_ScriptDir%\..\Settings.ini, UserSettings, slowMotion, 0
 
 packArray :=[]
@@ -80,6 +81,8 @@ if(Charizard)
 	packArray.push("Charizard")
 if(Mewtwo)
 	packArray.push("Mewtwo")
+if(Arceus)
+	packArray.push("Arceus")
 
 changeDate := getChangeDateTime() ; get server reset time
 
@@ -229,74 +232,75 @@ Loop {
 	packs := 0
 
 	
-	SplashStatus("Doing Tutorial...")
-	if(!injectMethod || !loadedAccount)
+
+
+
+
+
+	if(!injectMethod || !loadedAccount) {
+		SplashStatus("Doing Tutorial...")
 		DoTutorial()
+	}
+		
 	
-	SplashStatus("Doing Wonderpick...")
-	if(deleteMethod = "5 Pack" || packMethod)
-		if(!loadedAccount)
+	if(deleteMethod = "5 Pack" || packMethod) {
+		if(!loadedAccount) {
+			SplashStatus("Doing Wonderpick...")
 			wonderPicked := DoWonderPick()
-	
+		}
+	}
+
+
 	if (bAddFriends) {
 		SplashStatus("Adding Friend - First Time")
 		friendsAdded := AddFriends()
 	}
 	
-	SplashStatus("Pack 1")
-	SelectPack(1)
-	PackOpening()
 
-	if(packMethod) {
-		if (bAddFriends) {
-			SplashStatus("Post Pack 1 - Renewing Friendship")
-			friendsAdded := AddFriends(true)
-			SelectPack()
-		}
+	SplashStatus("Pack 1")
+	SelectPack("HomeFree")
+
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 1 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
 	}
 
 	SplashStatus("Pack 2")
-	PackOpening()
+	SelectPack("Daily")
 
-	SplashStatus("Starting Hourglass...")
+	
 	if(!injectMethod || !loadedAccount) {
+		SplashStatus("Starting Hourglass...")
 		HourglassOpening()
 	}
 
-	if(wonderPicked) {
-		if (bAddFriends) {
-			SplashStatus("Post Pack 3 - Renewing Friendship")
-			friendsAdded := AddFriends(true)
-		}
-		
-		SplashStatus("Pack 4")
-		SelectPack(2)
-		PackOpening()
 
-		if(packMethod) {
-			if (bAddFriends) {
-				SplashStatus("Post Pack 4 - Renewing Friendship")
-				friendsAdded := AddFriends(true)
-			}
-
-			SplashStatus("Pack 5")
-			SelectPack(2)
-			PackOpening()
-		}
-		else {
-			HourglassOpening(true)
-		}
+	if (bAddFriends) {
+		SplashStatus("Post Pack 3 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
 	}
 	
+	SplashStatus("Pack 4")
+	SelectPack("Paid")
+
 	if (bAddFriends) {
+		SplashStatus("Post Pack 4 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+	}
+
+	SplashStatus("Pack 5")
+	SelectPack("Paid")
+
+	if (bAddFriends) {
+		SplashStatus("Post Pack 5 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
 	}
 
 	CompleteMission("Stamina")
 
 	SplashStatus("Pack 6")
-	SelectPack(3)
-	PackOpening()
+	SelectPack("HomePaid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 6 - Renewing Friendship")
@@ -304,8 +308,7 @@ Loop {
 	}
 
 	SplashStatus("Pack 7")
-	SelectPack(2)
-	PackOpening()
+	SelectPack("Paid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 7 - Renewing Friendship")
@@ -315,8 +318,7 @@ Loop {
 	CompleteMission("Level3")
 	
 	SplashStatus("Pack 8")
-	SelectPack(3)
-	PackOpening()
+	SelectPack("HomePaid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 8 - Renewing Friendship")
@@ -324,8 +326,7 @@ Loop {
 	}
 
 	SplashStatus("Pack 9")
-	SelectPack(2)
-	PackOpening()
+	SelectPack("Paid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 9 - Renewing Friendship")
@@ -333,8 +334,7 @@ Loop {
 	}
 
 	SplashStatus("Pack 10")
-	SelectPack(2)
-	PackOpening()
+	SelectPack("Paid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 10 - Renewing Friendship")
@@ -344,8 +344,7 @@ Loop {
 	CompleteMission("50Card")
 
 	SplashStatus("Pack 11")
-	SelectPack(3)
-	PackOpening()
+	SelectPack("HomePaid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 11 - Renewing Friendship")
@@ -353,8 +352,7 @@ Loop {
 	}
 
 	SplashStatus("Pack 12")
-	SelectPack(2)
-	PackOpening()
+	SelectPack("Paid")
 
 	if (bAddFriends) {
 		SplashStatus("Post Pack 12 - Renewing Friendship")
@@ -364,8 +362,9 @@ Loop {
 	DoFinalLevel()
 
 	SplashStatus("Pack 13")
-	SelectPack(3)
-	PackOpening()
+	SelectPack("HomePaid")
+
+
 
 	if(nukeAccount && !injectMethod)
 		menuDelete()
@@ -1217,26 +1216,26 @@ SplashStatus(sStatus) {
 }
 
 CheckPack() {
-	global iPackCount, iPackScore, scriptName, username, friendCode, accountFile
+	; global iPackCount, iPackScore, scriptName, username, friendCode, accountFile
 
-	FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440) ; Used to delay identifying cards until all cards are rendered
-	iPackCount++
-	Delay(1)
-	aOpenedPack := identifyCards()
-	iPackScore := getPackPoints(aOpenedPack)
-	sPackMessage := "Pack " . iPackCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
-	LogToFile(sPackMessage, "Packs.txt")
-	; MsgBox, % "Matched Cards: " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5]
-	if (iPackScore < 2) {
-		; MsgBox, The total pack score is: %iPackScore%
-		return
-	} else {
-		screenShot := Screenshot("DesiredPack")
-		logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . packs . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts folder and continuing..."
-		CreateStatusMessage(logMessage)
-		LogToFile(logMessage, "GPlog.txt")
-		return true
-	}
+	; FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440) ; Used to delay identifying cards until all cards are rendered
+	; iPackCount++
+	; Delay(1)
+	; aOpenedPack := identifyCards()
+	; iPackScore := getPackPoints(aOpenedPack)
+	; sPackMessage := "Pack " . iPackCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
+	; LogToFile(sPackMessage, "Packs.txt")
+	; ; MsgBox, % "Matched Cards: " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5]
+	; if (iPackScore < 2) {
+	; 	; MsgBox, The total pack score is: %iPackScore%
+	; 	return
+	; } else {
+	; 	screenShot := Screenshot("DesiredPack")
+	; 	logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . packs . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts folder and continuing..."
+	; 	CreateStatusMessage(logMessage)
+	; 	LogToFile(logMessage, "GPlog.txt")
+	; 	return true
+	; }
 	
 	; foundGP := false ;check card border to find godpacks
 	; foundTrainer := false
@@ -2500,147 +2499,6 @@ DoTutorial() {
 	return true
 }
 
-SelectPack(iStage := 1) {
-	global openPack, packArray
-
-	iPackX := 200
-	iPackY := 196
-	bCurrentBooster = 1
-	
-	; Check to determine which pack to open
-	switch openPack
-	{
-	case "Mew": 
-		iPackX := 80
-		iPackY := 196
-		bCurrentBooster := 1
-	case "Palkia":
-		iPackX := 200
-		iPackY := 196
-		bCurrentBooster := 1
-	case "Dialga":
-		iPackX := 145
-		iPackY := 196
-		bCurrentBooster := 1
-	case "Pikachu":
-		iPackX := 125
-		iPackY := 440
-		bCurrentBooster := 0
-	case "Mewtwo":
-		iPackX := 65
-		iPackY := 440
-		bCurrentBooster := 0
-	case "Charizard":
-		iPackX := 26
-		iPackY := 440
-		bCurrentBooster := 0
-	}
-
-	switch iStage
-	{
-		case 1: ; Stage 1: Home Screen with 3 Packs Visible (Mew | Dialga | Palkia)
-			
-			; Get to Stage 2
-			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
-				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
-			} else { ; If it's a different booster, we'll pick that later in Stage 2
-				; First, select the 3rd pack of the current packs
-				FindImageAndClick(233, 400, 264, 428, , "Points", 200, 196)
-				; Click "Select Other Booster Packs" Button
-				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
-				; Click the desired pack
-				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
-			}
-
-			; Get To Stage 3
-			failSafe := A_TickCount
-			failSafeTime := 0
-			; Clicks on the pack, then the open button, until the skip button shows in the bottom right
-			Loop {
-				if(FindImageAndClick(233, 486, 272, 519, , "Skip2", 130, 430, , 2))
-					break
-				Delay(1)
-				; adbClick(200, 461)
-				failSafeTime := (A_TickCount - failSafe) // 1000
-				CreateStatusMessage("In failsafe for Skip2. " . failSafeTime "/45 seconds")
-			}
-			
-
-		case 2: ; Stage 2: STS Pack's Screen with 2 Visible Packs (Dialga | Palkia)
-			
-			failSafe := A_TickCount
-			failSafeTime := 0
-			Loop {
-				; Check: Paying for Pack Opening?
-				if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 0, failSafeTime)) {
-					break
-				}
-
-				; Attempt to open pack
-				adbClick(146, 439) ; Clicks "Open a Pack"
-				
-				Delay(1)
-				failSafeTime := (A_TickCount - failSafe) // 1000
-				CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
-			}
-
-			failSafe := A_TickCount
-			failSafeTime := 0
-			Loop {
-				if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 1, failSafeTime)) {
-					break
-				}
-				adbClick(205, 458)
-				Delay(1)
-				failSafeTime := (A_TickCount - failSafe) // 1000
-				CreateStatusMessage("In failsafe for HourglassPack4. " . failSafeTime "/45 seconds")
-			}
-
-		case 3: ; Stage 3: Single Pack Selected with (Open Pack) || (Open 10 Packs | Open a Pack)
-			
-		; Get to Stage 2
-			If (bCurrentBooster = 1) { ; If one of the original boosters, jump straight to it
-				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
-			} else { ; If it's a different booster, we'll pick that later in Stage 2
-				; First, select the 3rd pack of the current packs
-				FindImageAndClick(233, 400, 264, 428, , "Points", 200, 196)
-				; Click "Select Other Booster Packs" Button
-				FindImageAndClick(115, 140, 160, 155, , "SelectExpansion", 245, 475)
-				; Click the desired pack
-				FindImageAndClick(233, 400, 264, 428, , "Points", iPackX, iPackY)
-			}
-
-		; Get to Stage 3
-		failSafe := A_TickCount
-		failSafeTime := 0
-		Loop {
-			; Check: Paying for Pack Opening?
-			if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 0, failSafeTime)) {
-				break
-			}
-
-			; Attempt to open pack
-			adbClick(146, 439) ; Clicks "Open a Pack"
-			
-			Delay(1)
-			failSafeTime := (A_TickCount - failSafe) // 1000
-			CreateStatusMessage("In failsafe for HourglassPack3. " . failSafeTime "/45 seconds")
-		}
-
-		failSafe := A_TickCount
-		failSafeTime := 0
-		Loop {
-			if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 1, failSafeTime)) {
-				break
-			}
-			adbClick(205, 458)
-			Delay(1)
-			failSafeTime := (A_TickCount - failSafe) // 1000
-			CreateStatusMessage("In failsafe for HourglassPack4. " . failSafeTime "/45 seconds")
-		}
-	}
-}
-
 PackOpening() {
 	failSafe := A_TickCount
 	failSafeTime := 0
@@ -2993,15 +2851,155 @@ DoWonderPick() {
 	return true
 }
 
+getChangeDateTime() {
+	; Get system timezone bias and determine local time for 1 AM EST
+
+	; Retrieve timezone information from Windows registry
+	RegRead, TimeBias, HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation, Bias
+	RegRead, DltBias, HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation, ActiveTimeBias
+
+	; Convert registry values to integers
+	Bias := TimeBias + 0
+	DltBias := DltBias + 0
+
+	; Determine if Daylight Saving Time (DST) is active
+	IsDST := (Bias != DltBias) ? 1 : 0
+
+	; EST is UTC-5 (300 minutes offset)
+	EST_Offset := 300
+
+	; Use the correct local offset (DST or Standard)
+	Local_Offset := (IsDST) ? DltBias : Bias
+
+	; Convert 1 AM EST to UTC (UTC = EST + 5 hours)
+	UTC_Time := 1 + EST_Offset / 60  ; 06:00 UTC
+
+	; Convert UTC to local time
+	Local_Time := UTC_Time - (Local_Offset / 60)
+
+	; Round to ensure we get whole numbers
+	Local_Time := Floor(Local_Time)
+
+	; Handle 24-hour wrap-around
+	If (Local_Time < 0)
+		Local_Time += 24
+	Else If (Local_Time >= 24)
+		Local_Time -= 24
+
+	; Format output as HHMM
+	FormattedTime := (Local_Time < 10 ? "0" : "") . Local_Time . "00"
+
+	Return FormattedTime
+}
 
 
 
 
 
+; sStage is the screen the bot is currently on prior to running SelectPack()
+; "Home" --> Home screen with 3 packs at the top
+; "Daily" --> On a screen with only a single "Open Pack" button in the middle
+; "Paid" --> On a screen with "Open 10 Packs | Open a Pack"
+SelectPack(sStage := "Home") {
+	global openPack, packArray
+	
+	; Check to determine which pack to open
+	switch openPack
+	{
+		case "Arceus":
+			iPackX := 72
+			iPackY := 272
+		case "Dialga":
+			iPackX := 180
+			iPackY := 272
+		case "Palkia":
+			iPackX := 221
+			iPackY := 272
+		case "Mew":
+			iPackX := 72
+			iPackY := 407
+		case "Charizard":
+			iPackX := 160
+			iPackY := 407
+		case "Mewtwo":
+			iPackX := 200
+			iPackY := 407
+		case "Pikachu":
+			iPackX := 240
+			iPackY := 407
+	}
 
+	; Default 3rd pack farthest to the right on home screen
+	iDefaultPackX := 200
+	iDefaultPackY := 196
 
+	switch sStage
+	{
+		case "HomeFree":			
+			; Select default pack
+			aDefaultPack := [iDefaultPackX, iDefaultPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
+			ClickUntilImageVisible(aDefaultPack, aPointsImgCoords, sPointsImgName)
+			
+			; Select Other Boosters
+			aSelectExpansionBtn := [245, 475], aCloseBtnImg := [129, 497, 146, 515], sCloseBtnName := "CloseMissions"
+			ClickUntilImageVisible(aSelectExpansionBtn, aCloseBtnImg, sCloseBtnName)
 
+			; Select Desired openPack
+			aOpenPack := [iPackX, iPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
+			ClickUntilImageVisible(aOpenPack, aPointsImgCoords, sPointsImgName)
 
+			; Click Desired Pack, Click Open, Pack Carousel
+			aOpenPackBtn := [137, 434], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
+			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
+			
+			; Open Pack
+			PackOpening()
+		
+		Case "Daily":
+			; Open Pack Carousel
+			aOpenPackBtn := [137, 416], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
+			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
+			
+			; Open Pack
+			PackOpening()
+
+		case "Paid":
+			; Click "Open a Pack"
+			aOpenaPack := [146, 439], aPayImgCoords := [60, 440, 90, 480], sPayImgName := "HourglassPack"
+			ClickUntilImageVisible(aOpenaPack, aPayImgCoords, sPayImgName)
+
+			; Pay for the pack | Open Pack Carousel
+			aOKPack := [205, 458], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
+			ClickUntilImageVisible(aOKPack, aSkipImgCoords, sSkipImgName)
+
+			; Open Pack
+			PackOpening()
+
+		case "HomePaid":
+			; Select default pack
+			aDefaultPack := [iDefaultPackX, iDefaultPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
+			ClickUntilImageVisible(aDefaultPack, aPointsImgCoords, sPointsImgName)
+
+			; Select Other Boosters
+			aSelectExpansionBtn := [245, 475], aCloseBtnImg := [129, 497, 146, 515], sCloseBtnName := "CloseMissions"
+			ClickUntilImageVisible(aSelectExpansionBtn, aCloseBtnImg, sCloseBtnName)
+
+			; Select Desired openPack
+			aOpenPack := [iPackX, iPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
+			ClickUntilImageVisible(aOpenPack, aPointsImgCoords, sPointsImgName)
+
+			; Click on desired pack and then "Open a Pack"
+			aOpenaPack := [146, 439], aPayImgCoords := [60, 440, 90, 480], sPayImgName := "HourglassPack"
+			ClickUntilImageVisible(aOpenaPack, aPayImgCoords, sPayImgName)
+
+			; Pay for the pack | Open Pack Carousel
+			aOKPack := [205, 458], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
+			ClickUntilImageVisible(aOKPack, aSkipImgCoords, sSkipImgName)
+
+			; Open Pack
+			PackOpening()
+	}
+}
 
 
 DidAccountLevel() {
@@ -3058,6 +3056,7 @@ ClickUntilImageVisible(aClickCoords, aImageCoords, sImageName, iVariation := 0, 
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
+		CreateStatusMessage("Finding " . sImageName)
 		; Check: Is the image visible?
 		aPOSCoords := FindOrLoseImage(aImageCoords[1], aImageCoords[2], aImageCoords[3], aImageCoords[4], , sImageName, 0, failSafeTime)
 		if(aPOSCoords) {
@@ -3176,46 +3175,7 @@ DoFinalLevel() {
 	}
 }
 
-getChangeDateTime() {
-	; Get system timezone bias and determine local time for 1 AM EST
 
-	; Retrieve timezone information from Windows registry
-	RegRead, TimeBias, HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation, Bias
-	RegRead, DltBias, HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation, ActiveTimeBias
-
-	; Convert registry values to integers
-	Bias := TimeBias + 0
-	DltBias := DltBias + 0
-
-	; Determine if Daylight Saving Time (DST) is active
-	IsDST := (Bias != DltBias) ? 1 : 0
-
-	; EST is UTC-5 (300 minutes offset)
-	EST_Offset := 300
-
-	; Use the correct local offset (DST or Standard)
-	Local_Offset := (IsDST) ? DltBias : Bias
-
-	; Convert 1 AM EST to UTC (UTC = EST + 5 hours)
-	UTC_Time := 1 + EST_Offset / 60  ; 06:00 UTC
-
-	; Convert UTC to local time
-	Local_Time := UTC_Time - (Local_Offset / 60)
-
-	; Round to ensure we get whole numbers
-	Local_Time := Floor(Local_Time)
-
-	; Handle 24-hour wrap-around
-	If (Local_Time < 0)
-		Local_Time += 24
-	Else If (Local_Time >= 24)
-		Local_Time -= 24
-
-	; Format output as HHMM
-	FormattedTime := (Local_Time < 10 ? "0" : "") . Local_Time . "00"
-
-	Return FormattedTime
-}
 
 ; ^e::
 ; msgbox ss
