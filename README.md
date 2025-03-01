@@ -22,10 +22,11 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 ## Update and FAQS:
 
 ### What is this / what does it do?
-- Identifies what each card is after a pack opening
-- Uses a points system to determine if a pack is valuable and should be saved (Values based on user settings)
+-Personalized Wonderpicks
 - Enables up to 13 packs to be opened
 - Uses custom multi-tabbed GUI for organization
+- Identifies what each card is after a pack opening
+- Uses a points system to determine if a pack is valuable and should be saved (Values based on user settings)
 
 ### How do I use this?
 Unlike many other alternate solutions, this project is not a simple replacement of 1.ahk.  
