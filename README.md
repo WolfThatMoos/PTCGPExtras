@@ -2,14 +2,15 @@
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
 > [!WARNING]
-> I've uploaded files to start testing this and to get helpers going, but please note!  
+> I've uploaded files to start testing this and to get helpers going, but please note:  
 > **This is not ready for public release and will not work yet.**
 
 ## Todo:
-- ~~Updating support for 6.3.6~~
-- ~~Complete needle extraction for Palkia pack~~
-- Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode and a quick launch button for editing the Pokedex
-- Update Settings.ini to support Minimum Pack Points / New Godpack Mode
+- ~~Updating support for 6.3.11~~  
+- ~~Update support for new pack~~  
+- ~~Complete needle extraction for Palkia pack~~  
+- Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode and a quick launch button for editing the Pokedex  
+- Update Settings.ini to support Minimum Pack Points / New Godpack Mode  
 - ~~Update 1.ahk~~
 	- ~~To support new logging system (packs.txt)~~
   	- ~~Cleanup~~
@@ -21,7 +22,9 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 
 ### What is this / what does it do?
 - Identifies what each card is after a pack opening
-- Uses a points system to determine if a pack is valuable and should be saved (based on user settings)
+- Uses a points system to determine if a pack is valuable and should be saved (Values based on user settings)
+- Enables up to 13 packs to be opened
+- Uses custom multi-tabbed GUI for organization
 
 ### How do I use this?
 Unlike many other alternate solutions, this project is not a simple replacement of 1.ahk.  
