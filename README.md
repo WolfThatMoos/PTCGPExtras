@@ -22,8 +22,9 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 ## Update and FAQS:
 
 ### What is this / what does it do?
--Personalized Wonderpicks
+- Personalized Wonderpicks
 - Enables up to 13 packs to be opened
+- Injection accounts have account names
 - Uses custom multi-tabbed GUI for organization
 - Identifies what each card is after a pack opening
 - Uses a points system to determine if a pack is valuable and should be saved (Values based on user settings)
