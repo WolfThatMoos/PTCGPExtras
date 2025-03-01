@@ -14,6 +14,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Update 1.ahk~~
 	- ~~To support new logging system (packs.txt)~~
   	- ~~Cleanup~~
+- Add Support to use exports from [PTCG-Tracker](https://ptcgp-tracker.com) to update Pokedex automatically based on missing cards.
  
 ## Bugs:
 - Need to fix screenshots not displaying names correctly
