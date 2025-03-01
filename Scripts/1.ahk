@@ -16,10 +16,18 @@ CoordMode, Pixel, Screen
 DllCall("AllocConsole")
 WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
+
+; Moo Settings (Temp until GUI)
 global iPackCount, bAddFriends, iLastPackScore, bSplashStatus
-bSplashStatus := 1
+bSplashStatus := 0
 bAddFriends := 0
 iPackCount := 0
+bCheckPack := 0
+
+
+
+
+
 
 global winTitle, changeDate, failSafe, openPack, Delay, failSafeTime, StartSkipTime, Columns, failSafe, adbPort, scriptName, adbShell, adbPath, GPTest, StatusText, defaultLanguage, setSpeed, jsonFileName, pauseToggle, SelectedMonitorIndex, swipeSpeed, godPack, scaleParam, discordUserId, discordWebhookURL, deleteMethod, packs, FriendID, friendIDs, Instances, username, friendCode, stopToggle, friended, runMain, showStatus, injectMethod, packMethod, loadDir, loadedAccount, nukeAccount, TrainerCheck, FullArtCheck, RainbowCheck, dateChange, foundGP, foundTS, friendsAdded, minStars, PseudoGodPack, Palkia, Dialga, Mew, Pikachu, Charizard, Mewtwo, packArray, CrownCheck, ImmersiveCheck, slowMotion
 scriptName := StrReplace(A_ScriptName, ".ahk")
@@ -231,17 +239,10 @@ Loop {
 	Delay(1)
 	packs := 0
 
-	
-
-
-
-
-
 	if(!injectMethod || !loadedAccount) {
 		SplashStatus("Doing Tutorial...")
 		DoTutorial()
 	}
-		
 	
 	if(deleteMethod = "5 Pack" || packMethod) {
 		if(!loadedAccount) {
@@ -250,121 +251,139 @@ Loop {
 		}
 	}
 
-
+	; Pack 1
 	if (bAddFriends) {
 		SplashStatus("Adding Friend - First Time")
 		friendsAdded := AddFriends()
 	}
-	
-
 	SplashStatus("Pack 1")
 	SelectPack("HomeFree")
 
 
+	; Pack 2
 	if (bAddFriends) {
 		SplashStatus("Post Pack 1 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 2")
+		SelectPack("HomeFree")
+	} else {
+		SplashStatus("Pack 2")
+		SelectPack("Daily")
 	}
-
-	SplashStatus("Pack 2")
-	SelectPack("Daily")
-
 	
-	if(!injectMethod || !loadedAccount) {
-		SplashStatus("Starting Hourglass...")
-		HourglassOpening()
+	; Pack 3
+	HourglassOpening()
+	if (bAddFriends) {
+		SplashStatus("Post Pack 2 - Renewing Friendship")
+		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 3")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 3")
+		SelectPack("Paid")
 	}
 
-
+	; Pack 4
 	if (bAddFriends) {
 		SplashStatus("Post Pack 3 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 4")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 4")
+		SelectPack("Paid")
 	}
-	
-	SplashStatus("Pack 4")
-	SelectPack("Paid")
 
+	; Pack 5
 	if (bAddFriends) {
 		SplashStatus("Post Pack 4 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 5")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 5")
+		SelectPack("Paid")
 	}
 
-	SplashStatus("Pack 5")
-	SelectPack("Paid")
-
+	; Pack 6
+	CompleteMission("Stamina")
 	if (bAddFriends) {
 		SplashStatus("Post Pack 5 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
 	}
-
-	CompleteMission("Stamina")
-
 	SplashStatus("Pack 6")
 	SelectPack("HomePaid")
 
+	; Pack 7
 	if (bAddFriends) {
 		SplashStatus("Post Pack 6 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 7")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 7")
+		SelectPack("Paid")
 	}
 
-	SplashStatus("Pack 7")
-	SelectPack("Paid")
-
+	; Pack 8
+	CompleteMission("Level3")
 	if (bAddFriends) {
 		SplashStatus("Post Pack 7 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
 	}
-
-	CompleteMission("Level3")
-	
 	SplashStatus("Pack 8")
 	SelectPack("HomePaid")
 
+	; Pack 9
 	if (bAddFriends) {
 		SplashStatus("Post Pack 8 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 9")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 9")
+		SelectPack("Paid")
 	}
 
-	SplashStatus("Pack 9")
-	SelectPack("Paid")
-
+	; Pack 10
 	if (bAddFriends) {
 		SplashStatus("Post Pack 9 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 10")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 10")
+		SelectPack("Paid")
 	}
 
-	SplashStatus("Pack 10")
-	SelectPack("Paid")
-
+	; Pack 11
+	CompleteMission("50Card")
 	if (bAddFriends) {
 		SplashStatus("Post Pack 10 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
 	}
-
-	CompleteMission("50Card")
-
 	SplashStatus("Pack 11")
 	SelectPack("HomePaid")
 
+	; Pack 12
 	if (bAddFriends) {
 		SplashStatus("Post Pack 11 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
+		SplashStatus("Pack 12")
+		SelectPack("HomePaid")
+	} else {
+		SplashStatus("Pack 12")
+		SelectPack("Paid")
 	}
 
-	SplashStatus("Pack 12")
-	SelectPack("Paid")
-
+	; Pack 13
+	DoFinalLevel()
 	if (bAddFriends) {
 		SplashStatus("Post Pack 12 - Renewing Friendship")
 		friendsAdded := AddFriends(true)
 	}
-
-	DoFinalLevel()
-
 	SplashStatus("Pack 13")
 	SelectPack("HomePaid")
-
-
 
 	if(nukeAccount && !injectMethod)
 		menuDelete()
@@ -1216,26 +1235,30 @@ SplashStatus(sStatus) {
 }
 
 CheckPack() {
-	; global iPackCount, iPackScore, scriptName, username, friendCode, accountFile
+	global iPackCount, iPackScore, scriptName, username, friendCode, accountFile, bCheckPack
 
-	; FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440) ; Used to delay identifying cards until all cards are rendered
-	; iPackCount++
-	; Delay(1)
-	; aOpenedPack := identifyCards()
-	; iPackScore := getPackPoints(aOpenedPack)
-	; sPackMessage := "Pack " . iPackCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
-	; LogToFile(sPackMessage, "Packs.txt")
-	; ; MsgBox, % "Matched Cards: " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5]
-	; if (iPackScore < 2) {
-	; 	; MsgBox, The total pack score is: %iPackScore%
-	; 	return
-	; } else {
-	; 	screenShot := Screenshot("DesiredPack")
-	; 	logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . packs . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts folder and continuing..."
-	; 	CreateStatusMessage(logMessage)
-	; 	LogToFile(logMessage, "GPlog.txt")
-	; 	return true
-	; }
+	if (bCheckPack = 1) {
+
+		FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440) ; Used to delay identifying cards until all cards are rendered
+		Delay(1)
+
+		iPackCount++
+
+		; Identify the cards in the pack, log them, and determine if you should keep the pack or continue
+		aOpenedPack := identifyCards()
+		iPackScore := getPackPoints(aOpenedPack)
+		sPackMessage := "Pack " . iPackCount . " | " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5] . " | " . "Instance " . scriptName . " | " . username . " (" . friendCode . ") | " . accountFile
+		LogToFile(sPackMessage, "Packs.txt")
+		; MsgBox, % "Matched Cards: " . aOpenedPack[1] . ", " . aOpenedPack[2] . ", " . aOpenedPack[3] . ", " . aOpenedPack[4] . ", " . aOpenedPack[5]
+		if (iPackScore >= 5) {
+			screenShot := Screenshot("DesiredPack")
+			logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . packs . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts folder and continuing..."
+			CreateStatusMessage(logMessage)
+			LogToFile(logMessage, "GPlog.txt")
+			restartGameInstance("Desired pack found. Restarting...", "GodPack") ; restarts to backup and delete xml file with account info.
+			return true
+		}
+	}
 	
 	; foundGP := false ;check card border to find godpacks
 	; foundTrainer := false
@@ -2569,131 +2592,21 @@ PackOpening() {
 	}
 }
 
-HourglassOpening(HG := false) {
-	if(!HG) {
-		Delay(3)
-		adbClick(146, 441) ; Close pop-up for "If you run out of pack stamina"
-		Delay(3)
-		adbClick(146, 441) ; "Tap the Open Pack Button" prompt
-		Delay(3)
-		adbClick(146, 441) ; Tap "Open a Pack" button
-		Delay(3)
-		
-		; Tap the X button in the center/bottom until premium pass prompt
-		FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5)
-		Delay(1)
+HourglassOpening() {
+	SplashStatus("Doing Hourglass...")
+	Delay(3)
+	adbClick(146, 441) ; Close pop-up for "If you run out of pack stamina"
+	Delay(3)
+	adbClick(146, 441) ; "Tap the Open Pack Button" prompt
+	Delay(3)
+	adbClick(146, 441) ; Tap "Open a Pack" button
+	Delay(3)
+	
+	; Tap the X button in the center/bottom until premium pass prompt
+	FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5)
+	Delay(1)
 
-		adbClick(203, 436) ; Close the premium pass prompt
-
-		; Ignore pack opening, and renew friendship
-		SplashStatus("Post Pack 2 - Renewing Friendship")
-		if(packMethod) {
-			if (bAddFriends) {
-				friendsAdded := AddFriends(true)
-				SelectPack("Tutorial")
-			}
-		}
-		else {
-			FindImageAndClick(236, 198, 266, 226, , "Hourglass2", 180, 436, 500) ;stop at hourglasses tutorial 2 180 to 203?
-		}
-	}
-
-	SplashStatus("Pack 3")
-
-	if(!packMethod) {
-		failSafe := A_TickCount
-		failSafeTime := 0
-		Loop {
-			if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 0, failSafeTime)) {
-				break
-			}
-			adbClick(146, 439)
-			Delay(1)
-			failSafeTime := (A_TickCount - failSafe) // 1000
-			CreateStatusMessage("In failsafe for HourglassPack. " . failSafeTime "/45 seconds")
-		}
-		failSafe := A_TickCount
-		failSafeTime := 0
-		Loop {
-			if(FindOrLoseImage(60, 440, 90, 480, , "HourglassPack", 1, failSafeTime)) {
-				break
-			}
-			adbClick(205, 458)
-			Delay(1)
-			failSafeTime := (A_TickCount - failSafe) // 1000
-			CreateStatusMessage("In failsafe for HourglassPack2. " . failSafeTime "/45 seconds")
-		}
-	}
-
-	; Everything else below is manually opening the pack that was selected above. idk why it's not calling PackOpening()
-	Loop {
-		adbClick(146, 439)
-		Delay(1)
-		if(FindOrLoseImage(225, 273, 235, 290, , "Pack", 0, failSafeTime))
-			break ;wait for pack to be ready to Trace and click skip
-		else
-			adbClick(239, 497)
-		clickButton := FindOrLoseImage(145, 440, 258, 480, 80, "Button", 0, failSafeTime)
-		if(clickButton) {
-			StringSplit, pos, clickButton, `,  ; Split at ", "
-			adbClick(pos1, pos2)
-		}
-		failSafeTime := (A_TickCount - failSafe) // 1000
-		CreateStatusMessage("In failsafe for Pack. " . failSafeTime "/45 seconds")
-		if(failSafeTime > 45)
-			restartGameInstance("Stuck at Pack")
-	}
-
-	if(setSpeed > 1) {
-	FindImageAndClick(65, 195, 100, 215, , "Platin", 18, 109, 2000) ; click mod settings
-	FindImageAndClick(9, 170, 25, 190, , "One", 26, 180) ; click mod settings
-		Delay(1)
-	}
-	failSafe := A_TickCount
-	failSafeTime := 0
-	Loop {
-		adbSwipe()
-		Sleep, 10
-		if (FindOrLoseImage(203, 273, 228, 290, , "Pack", 1, failSafeTime)){
-		if(setSpeed > 1) {
-			if(setSpeed = 3)
-					FindImageAndClick(182, 170, 194, 190, , "Three", 187, 180) ; click mod settings
-			else
-					FindImageAndClick(100, 170, 113, 190, , "Two", 107, 180) ; click mod settings
-		}
-			adbClick(41, 296)
-			break
-		}
-		failSafeTime := (A_TickCount - failSafe) // 1000
-		CreateStatusMessage("In failsafe for Trace. " . failSafeTime "/45 seconds")
-		Delay(1)
-	}
-
-	FindImageAndClick(0, 98, 116, 125, 5, "Opening", 239, 497) ;skip through cards until results opening screen
-
-	CheckPack()
-
-	FindImageAndClick(233, 486, 272, 519, , "Skip", 146, 494) ;click on next until skip button appears
-
-	failSafe := A_TickCount
-	failSafeTime := 0
-	Loop {
-		Delay(1)
-		if(FindOrLoseImage(233, 486, 272, 519, , "Skip", 0, failSafeTime)) {
-			adbClick(239, 497)
-		} else if(FindOrLoseImage(120, 70, 150, 100, , "Next", 0, failSafeTime)) {
-			adbClick(146, 494) ;146, 494
-		} else if(FindOrLoseImage(120, 70, 150, 100, , "Next2", 0, failSafeTime)) {
-			adbClick(146, 494) ;146, 494
-		} else if(FindOrLoseImage(121, 465, 140, 485, , "ConfirmPack", 0, failSafeTime)) {
-			break
-		}
-		failSafeTime := (A_TickCount - failSafe) // 1000
-		CreateStatusMessage("In failsafe for ConfirmPack. " . failSafeTime "/45 seconds")
-		LogToFile("In failsafe for ConfirmPack. " . failSafeTime "/45 seconds")
-		if(failSafeTime > 45)
-			restartGameInstance("Stuck at ConfirmPack")
-	}
+	adbClick(203, 436) ; Close the premium pass prompt
 }
 
 getFriendCode() {
@@ -2900,7 +2813,7 @@ getChangeDateTime() {
 ; "Home" --> Home screen with 3 packs at the top
 ; "Daily" --> On a screen with only a single "Open Pack" button in the middle
 ; "Paid" --> On a screen with "Open 10 Packs | Open a Pack"
-SelectPack(sStage := "Home") {
+SelectPack(sStage := "HomeFree") {
 	global openPack, packArray
 	
 	; Check to determine which pack to open
