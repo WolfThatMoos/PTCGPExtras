@@ -17,8 +17,9 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Test 9 Pack~~
 - ~~Test 10 Pack~~
 - ~~Test 11 Pack~~
-- Test 12 Pack
-- Test 13 Pack
+- ~~Test 12 Pack~~
+- ~~Test 13 Pack~~
+- Skip Adding Friends
 - Test Account Injection
 
 ## Update and FAQS:
