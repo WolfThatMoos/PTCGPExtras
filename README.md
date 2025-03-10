@@ -6,18 +6,20 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 > **This is not ready for public release and will not work yet.**
 
 ## Todo:
-- ~~Updating support for 6.3.11~~  
-- ~~Update support for new pack~~  
-- ~~Complete needle extraction for Palkia pack~~  
-- Update PTCGPBot GUI to support Minimum Pack Points / New Godpack Mode and a quick launch button for editing the Pokedex  
-- Update Settings.ini to support Minimum Pack Points / New Godpack Mode  
-- ~~Update 1.ahk~~
-	- ~~To support new logging system (packs.txt)~~
-  	- ~~Cleanup~~
-- Add Support to use exports from [PTCG-Tracker](https://ptcgp-tracker.com) to update Pokedex automatically based on missing cards.
- 
-## Bugs:
-- Need to fix screenshots not displaying names correctly
+- ~~Test 1 Pack~~
+- ~~Test 2 Pack~~
+- Test 3 Pack
+- Test 4 Pack
+- Test 5 Pack
+- Test 6 Pack
+- Test 7 Pack
+- Test 8 Pack
+- Test 9 Pack
+- Test 10 Pack
+- Test 11 Pack
+- Test 12 Pack
+- Test 13 Pack
+- Test Account Injection
 
 ## Update and FAQS:
 
