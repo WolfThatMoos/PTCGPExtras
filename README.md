@@ -15,7 +15,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Test 7 Pack~~
 - ~~Test 8 Pack~~
 - ~~Test 9 Pack~~
-- Test 10 Pack
+- ~~Test 10 Pack~~
 - Test 11 Pack
 - Test 12 Pack
 - Test 13 Pack
