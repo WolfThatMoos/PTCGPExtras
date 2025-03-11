@@ -6,20 +6,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 > **This is not ready for public release and will not work yet.**
 
 ## Todo:
-- ~~Test 1 Pack~~
-- ~~Test 2 Pack~~
-- ~~Test 3 Pack~~
-- ~~Test 4 Pack~~
-- ~~Test 5 Pack~~
-- ~~Test 6 Pack~~
-- ~~Test 7 Pack~~
-- ~~Test 8 Pack~~
-- ~~Test 9 Pack~~
-- ~~Test 10 Pack~~
-- ~~Test 11 Pack~~
-- ~~Test 12 Pack~~
-- ~~Test 13 Pack~~
-- Skip Adding Friends
+- Test Main Instance
 - Test Account Injection
 
 ## Update and FAQS:
