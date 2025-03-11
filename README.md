@@ -9,7 +9,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 [Instances]
 - ~~Main Instance~~
 - ~~Number of Instances~~
-- Number of Columns
+- ~~Number of Columns~~
 - No Speed Mod
 - ~~Arrange Windows~~
 [Packs]
