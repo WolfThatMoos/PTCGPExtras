@@ -10,8 +10,8 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Main Instance~~
 - ~~Number of Instances~~
 - ~~Number of Columns~~
-- No Speed Mod
-- ~~Arrange Windows~~
+- ~~No Speed Mod~~ - Failed. It's Art's original code and it didn't work, so this feature will be disabled.
+- ~~Arrange Windows~~  
 [Packs]
 - Minimum Pack Value
 - Pokedex
