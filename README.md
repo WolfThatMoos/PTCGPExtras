@@ -6,8 +6,35 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 > **This is not ready for public release and will not work yet.**
 
 ## Todo:
-- Test Main Instance
-- Test Account Injection
+[Instances]
+- ~~Main Instance~~
+- ~~Number of Instances~~
+- Number of Columns
+- No Speed Mod
+- ~~Arrange Windows~~
+[Packs]
+- Minimum Pack Value
+- Pokedex
+- Pack To Open
+- ~~Number of Packs to Open~~
+- Use Threshold
+- One Pack Mode
+- Injection Mode
+- Menu Delete Account
+[Discord]
+- Does it post to discord correctly
+- Does heart beat work
+- Does discord list work
+[Displays]
+- Need to update listing that this will not work with 100%, only 125%
+[Moo]
+- ~~Skip Adding Main~~
+- Fingerprint Mode
+- Trade Mode - Update listing that this feature will not be released anymore
+- ~~Show Status Window~~
+- Select Pack Per Instance - Update that this feature will no longer be released.
+[About]
+- Check for updates needs to be updated to say this project is EoL
 
 ## Update and FAQS:
 
