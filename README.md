@@ -18,7 +18,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - Pack To Open
 - ~~Number of Packs to Open~~
 - ~~Use Threshold - Disabled, will be implemented into new bot~~
-- One Pack Mode
+- ~~One Pack Mode. This feature will be on by default. There is no functionality to not open packs one at a time with this version.~~
 - Injection Mode
 - Menu Delete Account  
 [Discord]
