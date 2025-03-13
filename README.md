@@ -17,24 +17,24 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - Pokedex
 - Pack To Open
 - ~~Number of Packs to Open~~
-- Use Threshold
+- ~~Use Threshold - Disabled, will be implemented into new bot~~
 - One Pack Mode
 - Injection Mode
-- Menu Delete Account
+- Menu Delete Account  
 [Discord]
 - Does it post to discord correctly
 - Does heart beat work
-- Does discord list work
+- Does discord list work  
 [Displays]
-- Need to update listing that this will not work with 100%, only 125%
+- Need to update listing that this will not work with 100%, only 125%  
 [Moo]
 - ~~Skip Adding Main~~
 - Fingerprint Mode
-- Trade Mode - Update listing that this feature will not be released anymore
+- ~~Trade Mode - Update listing that this feature will not be released anymore~~
 - ~~Show Status Window~~
-- Select Pack Per Instance - Update that this feature will no longer be released.
+- ~~Select Pack Per Instance - Update that this feature will no longer be released.~~  
 [About]
-- Check for updates needs to be updated to say this project is EoL
+- ~~Check for updates needs to be updated to say this project is EoL~~
 
 ## Update and FAQS:
 
