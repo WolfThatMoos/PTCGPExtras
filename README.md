@@ -20,7 +20,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Use Threshold - Disabled, will be implemented into new bot~~
 - ~~One Pack Mode. This feature will be on by default. There is no functionality to not open packs one at a time with this version.~~
 - Injection Mode
-- Menu Delete Account  
+- ~~Menu Delete Account. This feature will be off by default. There is no functionality to menu delete accounts with this version.~~
 [Discord]
 - Does it post to discord correctly
 - Does heart beat work
