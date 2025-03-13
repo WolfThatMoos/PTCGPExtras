@@ -23,10 +23,10 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~Menu Delete Account. This feature will be off by default. There is no functionality to menu delete accounts with this version.~~
 [Discord]
 - Does it post to discord correctly
-- Does heart beat work
-- Does discord list work  
+- ~~Does heart beat work. Untested. Did not alter original code.~~
+- ~~Does discord list work. Untested. Did not alter original code.~~  
 [Displays]
-- Need to update listing that this will not work with 100%, only 125%  
+- ~~125% scale available only. All card images are captured at 125% scale, will no work with other scales with this version.~~
 [Moo]
 - ~~Skip Adding Main~~
 - Fingerprint Mode
