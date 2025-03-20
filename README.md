@@ -1,5 +1,6 @@
 > [!CAUTION]
-> This bot has been deprecated. It will no longer recieve updates and will no longer be maintained.  
+> This bot has been deprecated. It will no longer recieve updates and will no longer be maintained.
+> Please see "Project End" at the bottom for more details.
 
 # PTCGPExtras
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
