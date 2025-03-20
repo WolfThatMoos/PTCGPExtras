@@ -1,66 +1,30 @@
+> [!CAUTION]
+> This bot has been deprecated. It will no longer recieve updates and will no longer be maintained.  
+
 # PTCGPExtras
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
-
-> [!WARNING]
-> I've uploaded files to start testing this and to get helpers going, but please note:  
-> **This is not ready for public release and will not work yet.**
-
-## Todo:
-[Instances]
-- ~~Main Instance~~
-- ~~Number of Instances~~
-- ~~Number of Columns~~
-- ~~No Speed Mod - Failed. It's Art's original code and it didn't work, so this feature will be disabled.~~
-- ~~Arrange Windows~~  
-[Packs]
-- ~~Minimum Pack Value~~
-- ~~Pokedex~~
-- ~~Pack To Open~~
-- ~~Number of Packs to Open~~
-- ~~Use Threshold - Disabled, will be implemented into new bot~~
-- ~~One Pack Mode. This feature will be on by default. There is no functionality to not open packs one at a time with this version.~~
-- ~~Injection Mode~~
-- ~~Menu Delete Account. This feature will be off by default. There is no functionality to menu delete accounts with this version.~~  
-[Discord]
-- Does it post to discord correctly
-- ~~Does heart beat work. Untested. Did not alter original code.~~
-- ~~Does discord list work. Untested. Did not alter original code.~~  
-[Displays]
-- ~~125% scale available only. All card images are captured at 125% scale, will no work with other scales with this version.~~  
-[Moo]
-- ~~Skip Adding Main~~
-- Fingerprint Mode
-- ~~Trade Mode - Update listing that this feature will not be released anymore~~
-- ~~Show Status Window~~
-- ~~Select Pack Per Instance - Update that this feature will no longer be released.~~  
-[About]
-- ~~Check for updates needs to be updated to say this project is EoL~~
 
 ## Update and FAQS:
 
 ### What is this / what does it do?
-- Personalized Wonderpicks
+- Allows you to create personalized Wonderpicks
 - Enables up to 13 packs to be opened
 - Injection accounts have account names
 - Uses custom multi-tabbed GUI for organization
 - Identifies what each card is after a pack opening
-- Uses a points system to determine if a pack is valuable and should be saved (Values based on user settings)
-
-### How do I use this?
-Unlike many other alternate solutions, this project is not a simple replacement of 1.ahk.  
-Instead, it is a library of functions that will be added in the "Include" directory. These new functions will then be called in an updated 1.ahk file. 
+- Uses a points system to determine if a pack is valuable (Values based on user settings)
 
 ### Why aren't you forking Arturo's bot?
 I believe the functionality I'm contributing doesn't align with the majority of the user base demand nor Arturo's direction / intended use. It's for a niche subset of users that want specific cards from their wonderpick.
 
+> [!NOTE]
+> To align with my own direction / goals, this project has ended so I can focus development on my own bot. See "Project End" below for more details.
+
 ### What makes yours different / why would I use yours?
 Here's the major reasons:
-1.  I don't use gdip_ImageSearch().
-    - There's no search variation, it's 100% accurate.
-    - It's extremely fast
-    - Instead of results being a "God Pack" or a "Trainer Card", the results are simply what cards were opened in the pack.  
+1.  Instead of results being a "God Pack" or a "Trainer Card", the results are simply what cards were opened in the pack.  
 	Example pack opening: 
-	>	```Pack 1201: STS_FanRotom, STS_Kricketot, STS_Spiritomb, STS_Misdreavus, STS_WeavileEX_2Star```
+	>	```User|stantler|Pack Value|4|TL_Gastly|TL_Noctowl|TL_Croagunk|TL_Marill|TL_Irida_2Star|Instance|4```
 2.  Saving desired packs is based on a points system.
     - A standard csv file is created called Pokedex, which contains a list of all cards in the game.  
       In the cell adjacent to the card's name is a value column representing the cards desirability.  
@@ -70,53 +34,112 @@ Here's the major reasons:
       The SavePack() criteria is based on a minimum desired pack value points.  
       You can say you only want to keep packs with a minimum pack value of 2 points, for example.  <br/><br/>
       These are the default values:
-      - 1 Star : 1 Points
-      - EX : 1 Points
-      - 2 Star : 2 Points
-      - 2 Star Rainbow : 2 Points
+      - 1 through 3 Diamond: 1 Point
+      - 1 Star : 2 Points
+      - EX : 3 Points
+      - 2 Star : 4 Points
+      - 2 Star Rainbow : 4 Points
       - Immsersive/Crown Rares: -99 Points (If Skip is enabled in GUI)
       - Everything else: 0 Points  <br/><br/>
     - Opening a pack with a defined minimum pack value of 5, for example, with a pack whose total pack value is 4, will not save the pack, but instead continue rerolling.
 
 > [!TIP]
-> There is a special "GodPack" value as an alternative to the points system, where it will ensure that each card in the pack is 1 star or greater
+> Arturo's original FindGodPack() function is still enabled, so all godpacks will be saved by default.
 
 ### How do I get a specific card?
-Open and edit Pokedex.csv (locationed in [Bot folder] --> [Scripts]  
-Excel: Go through the list or search for your desired specific card (Ctrl+f). On the cell beside it in column B, put the desirability value to something high like 7, for example.  
-Notepad: Find the specific card in the list and add a comma after it, then a high desirability value such as 7.  
+Click the "Open Pokdex" button under the Instances tab.  
+If Using Excel: Go through the list or search for your desired specific card. On the cell to the right of it (column B), enter a desirability value that matches your Minimum Pack Value.  
+If Using Notepad: Find the specific card in the list and add a comma after it, then a matching desirability value of your Minimum Pack Value.  
 Save the file.  
-In the PTCGP GUI, change the Minimum Pack Value to 7.  
+Now when a pack is opened and that specific card is identified, it will be saved for a chance in a wonderpick.
+
+### How do I create a custom Wonderpick?
+Update all the desirability values to reflect cards you're interested in, in the Pokdex file (See above "How do I get a specific card" for instructions).  
+Once you have updated the values of cards you're intersted in, set you Minimum Pack Value to align with your target goal.  <br><br>
+For example, if you're missing a couple of 2 diamond cards, EX cards, and a lot of 2 Star cards, then if you assign the 2 diamond cards a value of 1, the EX cards a value of 3, and the 2 Star cards a value of 4, and set your Minimum Pack Value to be 5, then your wonderpicks will consist of a collection of your needed cards, increasing your odds to 40%+, because for the pack to be saved, it will have to contain some combination of cards to hit your target goal.
 
 ### Does this work on all packs? Specific packs?
-Currently this will only support the Palkia pack. <br><br> 
-  
-> [!NOTE]    
-> Future releases will definitely include all packs.  
-> However, the needle creation process is very specific to a tool I've created specially for it, which requires it be ran and used in such a way to completely remove user error.  
-> Unfortunately, this means I have to manually create the needles for each card and name them myself, to ensure the accuracy I want to present to the community.
+Currently this works will all existing packs. However, moving forward the community will have to find a solution of exchanging and collecting needle images for new pack releases. <br> 
 
-### Can I contribute? Screenshots or something?
-See above to understand why I have to gather the screenshots myself unfortunately.  
-This may change in the future if there's enough demand for users to create needles themselves. Just understand creating the needles is simple, not easy. _And very tedious_. 
+### What are needles? How are the card images created?
+- A needle is made from a collection of pixels extracted from an image of a card.  
+- The needle images I use were created by dumping the raw pixel values data into RAM. It uses a multidimensional array containing specific capture coordinates to create a "fingerprint" of a card, which is typically called a needle (because you search for needles in a haystack).    
+- The fingerprint is unique not only to the card, but also to the card's specific slot (1-5).  
+- The fingerprint is then stitched together with 4 more fingerprints, creating a single hand print. _(The same card type for the remaining slots, ultimately creating one needle image file with the data in it representing that card type, in all card slots.)_  <br><br>
 
-### How do needles get created? What makes it different than Arturo's or other ones I've seen?
-The needle image I use is created by dumping the raw pixel value data directly into RAM. It uses a multidimensional array containing specific capture coordinates to create a "fingerprint" of a card.  
-The fingerprint is unique not only to the card, but to the card's specific slot (1-5).  
-The fingerprint is then stitched together with 4 more fingerprints, creating a single hand print. _(The same card type for the remaining slots, ultimately creating one needle image file with the data in it representing that card type, in all card slots.)_  
+In order to get card images/needles, in the UI settings click on the "Moo" tab, and check "Fingerprinting Mode".  
+When the bot instance encounters an unidentified card in a specific slot, it will prompt you to name it.  
+Using the prompt, enter the name of the card according to the naming convention below this.  
+Finally, open the pokedex by clicking on the "Instance" tab and then click "Open Pokedex".  
+Append the new card name and desirability value to the csv file and save it.  
+Now the bot will be able to correctly identify the card in the future.  
 
-### How do I install?
-The goal of this project is to create a plugin for the bot, so that updates are simple (and syncs easily with updates to Arturo's bot).  <br><br>
-For now, installation works like this:  
-- Download and extract the repo. Copy entire Scripts folder into the main PTCGPB's main folder, overwriting all files.  
-- Run 1.ahk (Program can't be called from PTCGPB.ahk, otherwise the update will overwrite the 1.ahk file). Stay tuned for a patcher program.
+### Card Naming Convention:
+- Do not use any spaces in a file name, just remove them.
+- Underscores "_" designate special rarity types (see below)
+- It is case sensitive. All words have the first letter capitalized
+- Every card is prefixed with the abbreviation of the set name, followed by the first letter of the pack name. If there's only one pack for the set, no pack name abbreviation is used. If a card is found in more than one pack, it's considered a "mutual card" and just uses the set name as a prefix.
 
-> [!IMPORTANT]  
-> I'll be creating a separate file called Install.ahk that automatically updates 1.ahk's functionality and moves files accordingly, for a simple installation. Later it will have checks to fetch the latest version.
+Prefix Examples:  
+Dialga Pack: STSD_  
+Pikachu Pack: GAP_  
+Mutual Card in Genetic Apex: GA_  
 
-### What about that instance monitor app I saw?
-It's a progressive web app (fancy website for mobile phones) that allows you to monitor your bot instances.  
-It polls every 10 seconds (user set) to determine details like what cards were last opened, what instance/account opened it, how many packs have been opened, how long, etc etc.  <br><br>
-This app requires quite a heavy tutorial and indepth installation, and will really be for advanced users only.  
-This program will not be available soon, it's more of a personal project and proof of concept for others to get creative with.  
-Once this plugin is at a state I'm happy with, I'll divert my attention to the monitor app and we'll go from there. It will be a separate plugin from this one.
+Basic Cards (1 Diamond to 3 Diamond): Just the card name  
+Example(s): STSP_Chimchar, STS_Magcargo, STSD_Mamoswine
+
+EX Cards (4 Diamond): Base card name and EX  
+Example(s): STSP_InfernapeEX, STSP_PalkiaEX, STSP_MismagiusEX
+
+1 Star Card: Base card name, underscore, and then 1Star  
+Example(s): STSP_Spiritomb_1Star, STSP_Giratina_1Star, STSP_Staraptor_1Star
+
+2 Star Card: Base card name, EX if applicable, underscore, and then 2Star  
+Example(s): STSP_Mars_2Star, STSP_MismagiusEX_2Star, STSP_InfernapeEX_2Star
+
+2 Star Rainbow Bordered Card: Base card name, EX if applicable, underscore, then RR, then underscore, and then 2Star  
+Example(s): STSP_LickilickyEX_RR_2Star, STSP_WeavileEX_RR_2Star, STSP_InfernapeEX_RR_2Star
+
+Immsersive Card: Base card name, EX if applicable, underscore, then Immersive  
+Example(s): STSP_PalkiaEX_Immersive
+
+Crown Rare Card: Base card name, EX if applicable, underscore, then CrownRare  
+Example(s): STS_PalkiaEX_CrownRare, STS_DialgaEX_CrownRare
+
+Card with multiple words with have spaces removed  
+Example(s):  
+"Armor Fossil" becomes "ArmorFossil"  
+"Lum Berry" becomes "LumBerry"  
+"Team Galactic Grunt" 2 Star becomes "TeamGalacticGrunt_2Star  
+
+### How do I install? 
+- Download and extract from releases. Copy entire Scripts folder into the main PTCGPB's main folder, overwriting all files.  
+- Launch PTCGPB.ahk and configure appropriately.
+
+### Some functionality is disabled, Why? Can I enable it?
+See "Project End" below for details. TLDR: I'm starting my own project, separate from using/modifying Arturo's bot. As a result, my efforts are going into that new development, not into this project. So some functionality that was suppose to be a part of this bot have been paused indefinitely. 
+Here's some particular notes though:  
+- Speed Mod is disabled. It's Arturo's original code but it didn't work in my testing, so this feature has been disabled.
+- Threshold exists in the code but is not implemented because of the challenges of explaining how to use the system.
+- One Pack Mode. This feature will be on by default. This version is designed to open packs one at a time. OpenPacks() would need additional functionality development.
+- Menu Delete Account. This feature will be off by default. There is no functionality to menu delete accounts with this version.
+- Discord Heartbeat. Untested. Did not alter original code.
+- Discord.txt list. Untested. Did not alter original code.
+- 125% scale available only. All card images are captured at 125% scale. 100% will not work with this version.
+
+## Project End (EoL)
+There is enough difference between my own personal goals with this project and Arturo's bot, that I decided to start from scratch designing my own project.  
+Not only that, but the AHK language (both v1 and v2) has limitations that became obstacles to my goals, so I'm switching to python, a language I'm more comfortable wtih developing in and fits my needs better.  
+My new bot is a radically different program, targeted towards a different audience, as it caters more to solo re-rollers with many different and unique features.  
+
+I apologize that this project is being superseded before it's even released, but it was all the discoveries and headaches along the way that really made this decision.
+
+If you're interested in following my new project, view it [here] on Github.
+
+### Special Thanks
+I want to give credit to m4ttstodon. Super awesome guy. He helped with card collection and beta testing. He's also had some really great ideas (check out the fork on this project for potential online database functionality using googleSS as a backend). He's also helping me with my new bot.
+
+I also want to credit Balum. This dude is full of creative ideas and inspiration. He helped with the majority of card collection and has acted as support in communicating to the community about this project, and also kindly decided to help me with the creation of my new bot.
+
+Thanks guys!
+
