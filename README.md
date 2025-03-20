@@ -27,6 +27,9 @@ BotStatus:
 - Uses a points system to determine if a pack is valuable (Values based on user settings)
 - Creates a "Packs.txt" file in the logs folder, which contains a list designed to be imported into excel, to view every card in every pack you've opened. (Useful for analytics and more)
 
+> [!NOTE]
+> This version of the bot has only been tested using the English Language
+
 ### Why aren't you forking Arturo's bot?
 I believe the functionality I'm contributing doesn't align with the majority of the user base demand nor Arturo's direction / intended use. It's for a niche subset of users that want specific cards from their wonderpick.
 
@@ -72,7 +75,8 @@ Once you have updated the values of cards you're intersted in, set you Minimum P
 For example, if you're missing a couple of 2 diamond cards, EX cards, and a lot of 2 Star cards, then if you assign the 2 diamond cards a value of 1, the EX cards a value of 3, and the 2 Star cards a value of 4, and set your Minimum Pack Value to be 5, then your wonderpicks will consist of a collection of your needed cards, increasing your odds to 40%+, because for the pack to be saved, it will have to contain some combination of cards to hit your target goal.
 
 ### Does this work on all packs? Specific packs?
-Currently this works will all existing packs. However, moving forward the community will have to find a solution of exchanging and collecting needle images for new pack releases. <br> 
+Currently this works will all existing packs.  _(Mewtwo card images and remaining Arceus card images will be uploaded shortly)_  
+However, moving forward the community will have to find a solution of exchanging and collecting needle images for new pack releases. <br> 
 
 ### What are needles? How are the card images created?
 - A needle is made from a collection of pixels extracted from an image of a card.  
@@ -150,7 +154,7 @@ I apologize that this project is being superseded before it's even released, but
 If you're interested in following my new project, view it [here] on Github.
 
 ### Special Thanks
-I want to give credit to m4ttstodon. Super awesome guy. He helped with card collection and beta testing. He's also had some really great ideas (check out the fork on this project for potential online database functionality using googleSS as a backend). He's also helping me with my new bot.
+I want to give credit to m4ttstodon. Super awesome guy. He helped with card collection and beta testing. He's also had some really great ideas (check out the pull request on this project for potential online database functionality using googleSS as a backend). He's also helping me with my new bot.
 
 I also want to credit Balum. This dude is full of creative ideas and inspiration. He helped with the majority of card collection and has acted as support in communicating to the community about this project, and also kindly decided to help me with the creation of my new bot.
 
