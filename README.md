@@ -14,6 +14,7 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - Uses custom multi-tabbed GUI for organization
 - Identifies what each card is after a pack opening
 - Uses a points system to determine if a pack is valuable (Values based on user settings)
+- Creates a "Packs.txt" file in the logs folder, which contains a list designed to be imported into excel, to view every card in every pack you've opened. (Useful for analytics and more)
 
 ### Why aren't you forking Arturo's bot?
 I believe the functionality I'm contributing doesn't align with the majority of the user base demand nor Arturo's direction / intended use. It's for a niche subset of users that want specific cards from their wonderpick.
