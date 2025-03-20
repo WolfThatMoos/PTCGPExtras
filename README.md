@@ -5,6 +5,9 @@
 # PTCGPExtras
 Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/PTCGPB)
 
+> [!WARNING]
+> This version of the bot is only tested working with Arturo's PTCGP Bot Version 6.3.16
+
 ## Update and FAQS:
 
 ### What is this / what does it do?
