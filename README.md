@@ -13,13 +13,13 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 - ~~No Speed Mod - Failed. It's Art's original code and it didn't work, so this feature will be disabled.~~
 - ~~Arrange Windows~~  
 [Packs]
-- Minimum Pack Value
-- Pokedex
-- Pack To Open
+- ~~Minimum Pack Value~~
+- ~~Pokedex~~
+- ~~Pack To Open~~
 - ~~Number of Packs to Open~~
 - ~~Use Threshold - Disabled, will be implemented into new bot~~
 - ~~One Pack Mode. This feature will be on by default. There is no functionality to not open packs one at a time with this version.~~
-- Injection Mode
+- ~~Injection Mode~~
 - ~~Menu Delete Account. This feature will be off by default. There is no functionality to menu delete accounts with this version.~~  
 [Discord]
 - Does it post to discord correctly
