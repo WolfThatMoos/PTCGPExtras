@@ -10,6 +10,14 @@ Additional functionality to [Arturo's PTCGP bot](https://github.com/Arturo-1212/
 
 ## Update and FAQS:
 
+### Screenshots
+Main UI:  
+![Main UI](https://github.com/WolfThatMoos/PTCGPExtras/blob/main/ReadMe_Screenshots/GUI.png?raw=true)
+
+BotStatus:  
+![Main UI](https://github.com/WolfThatMoos/PTCGPExtras/blob/main/ReadMe_Screenshots/BotStatus.png?raw=true)
+
+
 ### What is this / what does it do?
 - Allows you to create personalized Wonderpicks
 - Enables up to 13 packs to be opened
