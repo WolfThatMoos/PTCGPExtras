@@ -232,7 +232,7 @@ AddFriends(renew := false, getFC := false) {
 	Loop
 	{
 
-		if(count > iAddMainDelay) {
+		if(count > iAddMainDelay && !getFC) {
 			break
 		}
 
@@ -1907,6 +1907,7 @@ HourglassOpening() {
 getFriendCode() {
 	global friendCode
 	CreateStatusMessage("Getting friend code")
+	Sleep, 2000
 	FindImageAndClick(233, 486, 272, 519, , "Skip", 146, 494) ;click on next until skip button appears
 	failSafe := A_TickCount
 	failSafeTime := 0
@@ -1930,8 +1931,7 @@ getFriendCode() {
 		if(failSafeTime > 45)
 			restartGameInstance("Stuck at Home")
 	}
-	if (bSkipAddingMain)
-		friendCode := AddFriends(false, true)
+	friendCode := AddFriends(false, true)
 
 	return friendCode
 }
