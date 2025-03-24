@@ -1244,11 +1244,9 @@ ToggleTestScript() {
 ; Function to create or select the JSON file
 InitializeJsonFile() {
 	global jsonFileName
-	fileName := A_ScriptDir . "\..\json\Packs.json"
-	if !FileExist(fileName) {
+	if !FileExist(jsonFileName) {
 		; Create a new file with an empty JSON array
-		FileAppend, [], %fileName%  ; Write an empty JSON array
-		jsonFileName := fileName
+		FileAppend, [], %jsonFileName%  ; Write an empty JSON array
 		return
 	}
 }
@@ -1270,7 +1268,7 @@ AppendToJsonFile(variableValue) {
 	jsonContent := SubStr(jsonContent, 1, StrLen(jsonContent) - 1) ; Remove trailing bracket
 	if (jsonContent != "[")
 		jsonContent .= ","
-	jsonContent .= "{""time"": """ A_Now """, ""variable"": " variableValue "}]"
+	jsonContent .= "{""time"":""" A_Now """,""variable"":" variableValue "}]"
 
 	; Write the updated JSON back to the file
 	FileDelete, %jsonFileName%
