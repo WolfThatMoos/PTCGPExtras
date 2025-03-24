@@ -1129,8 +1129,13 @@ Screenshot(filename := "Valid") {
 	; File path for saving the screenshot locally
 	screenshotFile := screenshotsDir "\" . A_Now . "_" . winTitle . "_" . filename . ".png"
 
-	pBitmap := from_window(WinExist(winTitle))
+	pBitmapW := from_window(WinExist(winTitle))
+
+	pBitmap := Gdip_CloneBitmapArea(pBitmapW, 18, 175, 240, 227)
+	Gdip_DisposeImage(pBitmapW)
+
 	Gdip_SaveBitmapToFile(pBitmap, screenshotFile)
+	Gdip_DisposeImage(pBitmap)
 
 	return screenshotFile
 }
