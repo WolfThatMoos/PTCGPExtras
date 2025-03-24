@@ -105,7 +105,7 @@ firstRun := true
 ; Click social icon until social hub is active tab
 FindImageAndClick(120, 500, 155, 530, 10, "Social", 143, 518, 1000, 30)
 
-Loop 
+Loop
 {
 
 	if(bHeartBeat)
@@ -119,7 +119,7 @@ Loop
 
 	; Click on the approve tab button until it's selected
 	FindImageAndClick(170, 450, 195, 480, , "Approve", 228, 464)
-	
+
 	; Deny all friend requests if there are any
 	if(firstRun) {
 		Sleep, 1000
@@ -212,7 +212,7 @@ return
 ; Arrange Windows
 ArrangeWindows() {
 	global bRunMain, iTotalInstances, iTotalColumns, iScale, iDisplayProfile
-	
+
 	; Initialize values
 	SysGet, Monitor, Monitor, %iDisplayProfile%
 
@@ -279,7 +279,7 @@ ArrangeWindows() {
 
 FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", EL := 1, safeTime := 0) {
 	global winTitle, Variation, failSafe, defaultLanguage
-	
+
 	imagePath := A_ScriptDir . "\" . defaultLanguage . "\"
 	confirmed := false
 
@@ -303,37 +303,37 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	; 		Y1 := 220
 	; 		X2 := 230
 	; 		Y2 := 260
-	; 	} 
+	; 	}
 	; 	else if (imageName = "99") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "991") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "992") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "993") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "player") { ; 100% bot got deleted
 	; 		X1 := 85
 	; 		Y1 := 168
 	; 		X2 := 120
 	; 		Y2 := 181
-	; 	} 
+	; 	}
 	; }
 	;bboxAndPause(X1, Y1, X2, Y2)
 
@@ -372,7 +372,7 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 }
 
 FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", clickx := 0, clicky := 0, sleepTime := "", skip := false, safeTime := 0) {
-	
+
 	global winTitle, Variation, failSafe, confirmed, iGeneralDelay, defaultLanguage
 
 	imagePath := A_ScriptDir . "\" defaultLanguage "\"

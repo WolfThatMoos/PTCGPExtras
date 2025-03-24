@@ -76,7 +76,7 @@ global rerollTime
 rerollTime := A_TickCount
 
 Loop {
-	
+
 	friended := false
 	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
 	FormatTime, CurrentTime,, HHmm
@@ -115,7 +115,7 @@ Loop {
 	Delay(1)
 	adbClick(41, 296) ; Click Hide/Kill
 	Delay(1)
-	
+
 	iFinalPack := OpenPacks()
 
 	if(bMenuDelete && !bInjectionMode)
@@ -244,7 +244,7 @@ AddFriends(renew := false, getFC := false) {
 			failSafeTime := 0
 
 			; Loop until social is visible
-			Loop 
+			Loop
 			{
 				; Click on Social
 				adbClick(143, 518)
@@ -259,7 +259,7 @@ AddFriends(renew := false, getFC := false) {
 						StringSplit, pos, clickButton, `,  ; Split at ", "
 						adbClick(pos1, pos2)
 					}
-				} else if (FindOrLoseImage(175, 165, 255, 235, , "Hourglass3", 0)) {					
+				} else if (FindOrLoseImage(175, 165, 255, 235, , "Hourglass3", 0)) {
 					Delay(3)
 					adbClick(146, 441) ; 146 440
 					Delay(3)
@@ -298,7 +298,7 @@ AddFriends(renew := false, getFC := false) {
 
 			; If there's no friend id's saved in ids.txt
 			if (!friendIDs) {
-				
+
 				failSafe := A_TickCount
 				failSafeTime := 0
 				Loop {
@@ -868,7 +868,7 @@ SplashStatus(sStatus) {
 
 	switch winTitle
 	{
-	case 1:    
+	case 1:
 		iLocX := bRunMain ? (278 * 1) : (278 * 0)
 	case 2:
 		iLocX := bRunMain ? (278 * 2) : (278 * 1)
@@ -877,7 +877,7 @@ SplashStatus(sStatus) {
 	case 4:
 		iLocX := bRunMain ? (278 * 4) : (278 * 3)
 	}
-	
+
 	SplashTextOn, 275, 50, BotStatus, %sStatus%
 	WinMove, BotStatus,, iLocX, 535
 }
@@ -899,7 +899,7 @@ CheckPack() {
 
 	sPackMessage := "User|" . username . "|Pack Value|" . iPackScore . "|" . aOpenedPack[1] . "|" . aOpenedPack[2] . "|" . aOpenedPack[3] . "|" . aOpenedPack[4] . "|" . aOpenedPack[5] . "|Instance|" . scriptName
 	LogToFile(sPackMessage, "Packs.txt")
-	
+
 	if (iPackScore >= iMinPackVal) {
 		screenShot := Screenshot("DesiredPack")
 		logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . iCurrentPackCount . " packs) File name: " . accountFile . " Backing up to the Accounts folder and continuing..."
@@ -909,7 +909,7 @@ CheckPack() {
 		restartGameInstance("Desired pack found. Restarting...", "GodPack") ; restarts to backup and delete xml file with account info.
 		return true
 	}
-	
+
 	foundGP := false ;check card border to find godpacks
 	; foundTrainer := false
 	; foundRainbow := false
@@ -1245,6 +1245,7 @@ LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
 		}
 	}
 }
+
 ; Pause Script
 PauseScript:
 	CreateStatusMessage("Pausing...")
@@ -1682,7 +1683,7 @@ DoTutorial() {
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
-		
+
 		; Attempt to pick a user name
 		username := createAccount()
 		adbInput(username)
@@ -1987,7 +1988,7 @@ HourglassOpening() {
 	Delay(3)
 	adbClick(146, 441) ; Tap "Open a Pack" button
 	Delay(3)
-	
+
 	; Tap the X button in the center/bottom until premium pass prompt
 	FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5)
 	Delay(1)
@@ -2096,7 +2097,7 @@ DoWonderPick() {
 
 	; After the first mission is clicked, wait until the popup for the rewards shows, then accept them
 	FindImageAndClick(120, 185, 150, 215, , "FirstMission", 150, 286, 1000)
-	
+
 	; Close the rewards prompt, and finish on the home screen
 	failSafe := A_TickCount
 	failSafeTime := 0
@@ -2170,7 +2171,7 @@ getChangeDateTime() {
 ; "Paid" --> On a screen with "Open 10 Packs | Open a Pack"
 SelectPack(sStage := "HomeFree") {
 	global sPackToOpen
-	
+
 	; Check to determine which pack to open
 	switch sPackToOpen
 	{
@@ -2203,11 +2204,11 @@ SelectPack(sStage := "HomeFree") {
 
 	switch sStage
 	{
-		case "HomeFree":			
+		case "HomeFree":
 			; Select default pack
 			aDefaultPack := [iDefaultPackX, iDefaultPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
 			ClickUntilImageVisible(aDefaultPack, aPointsImgCoords, sPointsImgName)
-			
+
 			; Select Other Boosters
 			aSelectExpansionBtn := [245, 475], aCloseBtnImg := [129, 497, 146, 515], sCloseBtnName := "CloseMissions"
 			ClickUntilImageVisible(aSelectExpansionBtn, aCloseBtnImg, sCloseBtnName)
@@ -2223,15 +2224,15 @@ SelectPack(sStage := "HomeFree") {
 			; Click Open, Pack Carousel
 			aOpenPackBtn := [137, 434], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
 			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
-			
+
 			; Open Pack
 			PackOpening()
-		
+
 		Case "Daily":
 			; Open Pack Carousel
 			aOpenPackBtn := [137, 416], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
 			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
-			
+
 			; Open Pack
 			PackOpening()
 
@@ -2304,15 +2305,15 @@ SkipLevelUp(bLeveled) {
 			; Check: Showing Unlock Battles screen?
 			aLockCoords := FindOrLoseImage(120, 185, 150, 245, , "LevelUnlock", 0)
 			if(aLockCoords) {
-				
+
 				; Click the OK Button to dismiss the Unlocked popup
 				aOKButton := [150, 386], aLevelUnlock := [120, 185, 150, 245], sLevelUnlock := "LevelUnlock"
 				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
-				
+
 				; Check: Leveled Up screen?
 				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
 				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
-				
+
 				; Should be on home screen
 				break
 
@@ -2399,7 +2400,7 @@ CompleteMission(sMissionName) {
 			aMissionImgCoords := [190, 266, 232, 300], sMissionImgName := "50CardMission"
 	}
 	ClickImageWhenVisible(aMissionImgCoords, sMissionImgName)
-	
+
 	; Complete the mission
 	aCompleteButton := [141, 444, 176, 452], sCompleteButton := "Button", iVariation := 80
 	ClickImageWhenVisible(aCompleteButton, sCompleteButton, iVariation)
@@ -2417,7 +2418,7 @@ CompleteMission(sMissionName) {
 }
 
 DoFinalLevel() {
-		
+
 	; Update user
 	SplashStatus("Doing Final Level...")
 
@@ -2430,15 +2431,15 @@ DoFinalLevel() {
 			; Check: Showing Unlock Display Boards screen?
 			aLockCoords := FindOrLoseImage(130, 208, 146, 230, , "Level4Unlock", 0)
 			if(aLockCoords) {
-				
+
 				; Click the OK Button to dismiss the Unlocked popup
 				aOKButton := [138, 360], aLevelUnlock := [130, 208, 146, 230], sLevelUnlock := "Level4Unlock"
 				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
-				
+
 				; Check: Leveled Up screen?
 				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
 				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
-				
+
 				; Should be on home screen
 				break
 
@@ -2474,7 +2475,7 @@ OpenPacks() {
 		SplashStatus("Doing Wonderpick...")
 		bDidWonderPick := DoWonderPick()
 	}
-	
+
 	; Packs: 1 - 2 | No Requirements
 	If (bInjectionMode) {
 		; Sometimes there's a pop-up that the game closed during a pack opening. This dismisses it
@@ -2757,7 +2758,7 @@ CreateMenuGUI() {
 			OwnerWND := WinExist(winTitle)
 			x4 := x + 5
 			y4 := y + 44
-	
+
 			Gui, New, +Owner%OwnerWND% -AlwaysOnTop +ToolWindow -Caption
 			Gui, Default
 			Gui, Margin, 4, 4  ; Set margin for the GUI
@@ -2815,10 +2816,10 @@ restartGameInstance(reason, RL := true) {
 	CreateStatusMessage("Restarting game reason: `n" reason)
 
 	if(!RL || RL != "GodPack") {
-		
+
 		; Close the game
 		adb_ClosePTCGP()
-		
+
 		; Clear the account
 		if(!RL)
 			adb_DeleteAccountFromGame()
@@ -2839,10 +2840,10 @@ restartGameInstance(reason, RL := true) {
 	}
 }
 
-; Arrange Windows 
+; Arrange Windows
 ArrangeWindows() {
 	global bRunMain, iTotalInstances, iTotalColumns, iScale, iDisplayProfile
-	
+
 	; Initialize values
 	SysGet, Monitor, Monitor, %iDisplayProfile%
 
@@ -2917,8 +2918,8 @@ GetDayOfRest() {
     year := SubStr(currentDate, 1, 4)
     month := SubStr(currentDate, 5, 2)
     day := SubStr(currentDate, 7, 2)
-    
-    daysSinceBase := (year - 1900) * 365 + Floor((year - 1900) / 4)    
+
+    daysSinceBase := (year - 1900) * 365 + Floor((year - 1900) / 4)
     daysSinceBase += MonthToDays(year, month)
     daysSinceBase += day
 
@@ -2953,7 +2954,7 @@ loadAccount() {
     saveDir := A_WorkingDir . "\Accounts\Saved\" . remainder . "\" . winTitle
 	SetWorkingDir %A_ScriptDir%
 	outputTxt := saveDir . "\list.txt"
-	
+
 	if FileExist(outputTxt) {
 		FileRead, fileContent, %outputTxt%  ; Read entire file
 		fileLines := StrSplit(fileContent, "`n", "`r")  ; Split into lines
@@ -3116,25 +3117,25 @@ findAdbPorts(baseFolder := "C:\Program Files\Netease") {
 
 InitializeAdb() {
 	global adbPort, adbShell, adbPath, sMuMuInstallPath
-	
+
 	adbPath := sMuMuInstallPath . "\MuMuPlayerGlobal-12.0\shell\adb.exe"
 	adbPort := findAdbPorts(sMuMuInstallPath)
-	
+
 	if !FileExist(adbPath) ;if international mumu file path isn't found look for chinese domestic path
 		adbPath := sMuMuInstallPath . "\MuMu Player 12\shell\adb.exe"
-	
+
 	if !FileExist(adbPath)
 		MsgBox Double check your folder path! It should be the one that contains the MuMuPlayer 12 folder! `nDefault is just C:\Program Files\Netease
-	
+
 	if(!adbPort) {
 		Msgbox, Invalid port... Check the common issues section in the readme/github guide.
 		ExitApp
 	}
-	
+
 	; connect adb
 	instanceSleep := scriptName * 1000
 	Sleep, %instanceSleep%
-	
+
 	; Attempt to connect to ADB
 	CreateStatusMessage("Connecting to ADB...")
 	ConnectAdb()
@@ -3212,7 +3213,7 @@ adb_OpenPTCGP() {
 	global adbShell
 
 	adbShell.StdIn.WriteLine("am start -n jp.pokemon.pokemontcgp/com.unity3d.player.UnityPlayerActivity")
-	
+
 	waitadb()
 	Sleep, 1000
 }
