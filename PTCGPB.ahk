@@ -218,10 +218,10 @@ DownloadFile(url, filename) {
 
 CreateStatusMessage(Message, X := 0, Y := 80) {
 	global PacksText, iDisplayProfile
-	iDisplayProfile := GetSelectedMonitor()
 
 	try {
 		GuiName := 22
+		iDisplayProfile := RegExReplace(iDisplayProfile, ":.*$")
 		SysGet, Monitor, Monitor, %iDisplayProfile%
 		X := MonitorLeft + X
 		Y := MonitorTop + Y
@@ -231,12 +231,14 @@ CreateStatusMessage(Message, X := 0, Y := 80) {
 		} else {
 			OwnerWND := WinExist(1)
 			if(!OwnerWND)
-				Gui, %GuiName%:New, +ToolWindow -Caption
+				Gui, %GuiName%:New, +ToolWindow -Caption +LastFound
 			else
-				Gui, %GuiName%:New, +Owner%OwnerWND% +ToolWindow -Caption
+				Gui, %GuiName%:New, +Owner%OwnerWND% +ToolWindow -Caption +LastFound
 			Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
 			Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
 			Gui, %GuiName%:Add, Text, vPacksText, %Message%
+			DllCall("SetWindowPos", "Ptr", WinExist(), "Ptr", WinExist("A")  ; set behind active window
+				, "Int", 0, "Int", 0, "Int", 0, "Int", 0, "UInt", 0x13)  ; SWP_NOSIZE, SWP_NOMOVE, SWP_NOACTIVATE
 			Gui, %GuiName%:Show, NoActivate x%X% y%Y%, NoActivate %GuiName%
 		}
 	}
