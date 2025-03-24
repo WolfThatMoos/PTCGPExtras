@@ -911,67 +911,13 @@ CheckPack() {
 	}
 
 	foundGP := false ;check card border to find godpacks
-	; foundTrainer := false
-	; foundRainbow := false
-	; foundFullArt := false
-	; foundCrown := false
-	; foundImmersive := false
-	; foundTS := false
 	foundGP := FindGodPack()
-	; ;msgbox 1 foundGP:%foundGP%, TC:%TrainerCheck%, RC:%RainbowCheck%, FAC:%FullArtCheck%, FTS:%foundTS%
-	; if(TrainerCheck && !foundTS) {
-	; 	foundTrainer := FindBorders("trainer")
-	; 	if(foundTrainer)
-	; 		foundTS := "Trainer"
-	; }
-	; if(RainbowCheck && !foundTS) {
-	; 	foundRainbow := FindBorders("rainbow")
-	; 	if(foundRainbow)
-	; 		foundTS := "Rainbow"
-	; }
-	; if(FullArtCheck && !foundTS) {
-	; 	foundFullArt := FindBorders("fullart")
-	; 	if(foundFullArt)
-	; 		foundTS := "Full Art"
-	; }
-	; if(ImmersiveCheck && !foundTS) {
-	; 	foundImmersive := FindBorders("immersive")
-	; 	if(foundImmersive)
-	; 		foundTS := "Immersive"
-	; }
-	; If(CrownCheck && !foundTS) {
-	; 	foundCrown := FindBorders("crown")
-	; 	if(foundCrown)
-	; 		foundTS := "Crown"
-	; }
-	; If(PseudoGodPack && !foundTS) {
-	; 	2starCount := FindBorders("trainer") + FindBorders("rainbow") + FindBorders("fullart")
-	; 	if(2starCount > 1)
-	; 		foundTS := "Double two star"
-	; }
+
 	if(foundGP) {
 		if(loadedAccount)
 			FileDelete, %loadedAccount% ;delete xml file from folder if using inject method
-		if(foundGP)
-			restartGameInstance("God Pack found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
-		else {
-			FoundStars(foundTS)
-			restartGameInstance(foundTS . " found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
-		}
+		restartGameInstance("God Pack found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
 	}
-}
-
-FoundStars(star) {
-	global iDiscordID
-	screenShot := Screenshot(star)
-	accountFile := saveAccount(star)
-	friendCode := getFriendCode()
-	if(star = "Crown" || star = "Immersive")
-		RemoveFriends(friendsAdded)
-	logMessage := star . " found by " . username . " (" . friendCode . ") in instance: " . scriptName . " (" . iCurrentPackCount . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
-	CreateStatusMessage(logMessage)
-	LogToFile(logMessage, "GPlog.txt")
-	LogToDiscord(logMessage, screenShot, iDiscordID)
 }
 
 FindBorders(prefix) {
@@ -1332,41 +1278,6 @@ AppendToJsonFile(variableValue) {
 	; Write the updated JSON back to the file
 	FileDelete, %jsonFileName%
 	FileAppend, %jsonContent%, %jsonFileName%
-}
-
-; Function to sum all variable values in the JSON file
-SumVariablesInJsonFile() {
-	global jsonFileName
-	if (jsonFileName = "") {
-		return 0
-	}
-
-	; Read the file content
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		return 0
-	}
-
-	; Parse the JSON and calculate the sum
-	sum := 0
-	; Clean and parse JSON content
-	jsonContent := StrReplace(jsonContent, "[", "") ; Remove starting bracket
-	jsonContent := StrReplace(jsonContent, "]", "") ; Remove ending bracket
-	Loop, Parse, jsonContent, {, }
-	{
-		; Match each variable value
-		if (RegExMatch(A_LoopField, """variable"":\s*(-?\d+)", match)) {
-			sum += match1
-		}
-	}
-
-	; Write the total sum to a file called "total.json"
-	totalFile := A_ScriptDir . "\json\total.json"
-	totalContent := "{""total_sum"": " sum "}"
-	FileDelete, %totalFile%
-	FileAppend, %totalContent%, %totalFile%
-
-	return sum
 }
 
 from_window(ByRef image) {
@@ -2461,8 +2372,6 @@ OpenPacks() {
 		MsgBox, 64, Error - OpenPacks, Skip Adding Main not checked and no Friend Code provided for Main.`nPlease check your settings and try again.
 		ExitApp
 	}
-
-	; bOnePackMode
 
 	; Only do the tutorial if not using injection mode and not using a loaded account
 	If (bInjectionMode = 0 || !loadedAccount) {

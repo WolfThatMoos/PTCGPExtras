@@ -259,31 +259,6 @@ InitializeJsonFile() {
 	}
 }
 
-; Function to append a time and variable pair to the JSON file
-AppendToJsonFile(variableValue) {
-	global jsonFileName
-	if (jsonFileName = "") {
-		MsgBox, JSON file not initialized. Call InitializeJsonFile() first.
-		return
-	}
-
-	; Read the current content of the JSON file
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		jsonContent := "[]"
-	}
-
-	; Parse and modify the JSON content
-	jsonContent := SubStr(jsonContent, 1, StrLen(jsonContent) - 1) ; Remove trailing bracket
-	if (jsonContent != "[")
-		jsonContent .= ","
-	jsonContent .= "{""time"": """ A_Now """, ""variable"": " variableValue "}]"
-
-	; Write the updated JSON back to the file
-	FileDelete, %jsonFileName%
-	FileAppend, %jsonContent%, %jsonFileName%
-}
-
 ; Function to sum all variable values in the JSON file
 SumVariablesInJsonFile() {
 	global jsonFileName
