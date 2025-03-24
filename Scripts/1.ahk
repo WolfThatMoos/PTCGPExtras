@@ -33,6 +33,7 @@ global changeDate, dateChange
 changeDate := getChangeDateTime() ; get server reset time
 dateChange := false
 
+global bHeartBeat
 if(bHeartBeat)
 	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
 

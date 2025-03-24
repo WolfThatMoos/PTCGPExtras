@@ -27,9 +27,6 @@ Variation := 20
 scaleParam := 277
 defaultLanguage := "Scale125"
 
-if(bHeartBeat)
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
-
 adbPort := findAdbPorts(sMuMuInstallPath)
 
 adbPath := sMuMuInstallPath . "\MuMuPlayerGlobal-12.0\shell\adb.exe"
@@ -93,6 +90,7 @@ initializeAdbShell()
 restartGameInstance("Initializing bot...", false)
 pToken := Gdip_Startup()
 
+global bHeartBeat
 if(bHeartBeat)
 	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
 

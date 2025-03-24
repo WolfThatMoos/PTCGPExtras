@@ -49,12 +49,20 @@ CreateMainGUI()
 
 Start() {
 	global bRunMain, iTotalInstances, iInstanceStartDelay, bHeartBeat
-	bRunMain := GetMainCheckBox()
-	iTotalInstances := GetTotalInstances()
-	iInstanceStartDelay := GetInstanceStartDelay()
 
 	Gui, Submit  ; Collect the input values from the first page
 	Gui, Destroy ; Close the first page
+
+	CreateSettingsFile() ; Read all control data and save it
+
+	bRunMain := GetMainCheckBox()
+	iTotalInstances := GetTotalInstances()
+	iInstanceStartDelay := GetInstanceStartDelay()
+	bHeartBeat := GetHeartbeatCheckBox()
+	iHeartBeatID := GetHeartbeatID()
+	iDiscordID := GetDiscordID()
+	FriendID := GetMainFriendID()
+	sPackToOpen := GetPackToOpen()
 
 	; Run main before instances to account for instance start delay
 	If (bRunMain) {
@@ -89,16 +97,11 @@ Start() {
 		Run, %FileName%
 	}
 
-	CreateSettingsFile() ; Read all control data and save it
-
 	; Fetch friends list if online
 	if(inStr(FriendID, "https"))
 		DownloadFile(FriendID, "ids.txt")
 
 	rerollTime := A_TickCount
-	bHeartBeat := GetHeartbeatCheckBox()
-	iHeartBeatID := GetHeartbeatID()
-	iDiscordID := GetDiscordID()
 
 	Loop {
 		Sleep, 30000
@@ -108,39 +111,30 @@ Start() {
 
 		totalSeconds := Round((A_TickCount - rerollTime) / 1000) ; Total time in seconds
 		mminutes := Floor(totalSeconds / 60)
-		if(total = 0)
-			total := "0                             "
-		packStatus := "Time: " . mminutes . "m Packs: " . total
 
-		CreateStatusMessage(packStatus, 287, 490)
+		packStatus := "Time: " . mminutes . "m | Packs: " . total
+		packStatus .= " | Avg: " . Round(total / mminutes, 2) . " packs/min"
 
-		if(bHeartBeat)
+		CreateStatusMessage(packStatus, 282, 490)
+
+		if(bHeartBeat) {
 			if((A_Index = 1 || (Mod(A_Index, 60) = 0))) {
-				onlineAHK := "Online: "
-				offlineAHK := "Offline: "
-				Online := []
+				onlineAHK := ""
+				offlineAHK := ""
+				aOnline := []
 
-				if(bRunMain) {
-					IniRead, value, HeartBeat.ini, HeartBeat, Main
-					if(value)
-						onlineAHK := "Online: Main, "
-					else
-						offlineAHK := "Offline: Main, "
-					IniWrite, 0, HeartBeat.ini, HeartBeat, Main
-				}
-
-				Loop %iTotalInstances% {
+				Loop % iTotalInstances {
 					IniRead, value, HeartBeat.ini, HeartBeat, Instance%A_Index%
 					if(value)
-						Online.push(1)
+						aOnline.push(1)
 					else
-						Online.Push(0)
+						aOnline.Push(0)
 					IniWrite, 0, HeartBeat.ini, HeartBeat, Instance%A_Index%
 				}
 
-				for index, value in Online {
-					if(index = Online.MaxIndex())
-						commaSeparate := "."
+				for index, value in aOnline {
+					if(index = aOnline.MaxIndex())
+						commaSeparate := ""
 					else
 						commaSeparate := ", "
 					if(value)
@@ -149,28 +143,44 @@ Start() {
 						offlineAHK .= A_Index . commaSeparate
 				}
 
-				if(offlineAHK = "Offline: ")
-					offlineAHK := "Offline: none."
-				if(onlineAHK = "Online: ")
-					onlineAHK := "Online: none."
+				if(bRunMain) {
+					IniRead, value, HeartBeat.ini, HeartBeat, Main
+					if(value) {
+						if (onlineAHK)
+							onlineAHK := "Online: Main, " . onlineAHK
+						else
+							onlineAHK := "Online: Main"
+					}
+					else {
+						if (offlineAHK)
+							offlineAHK := "Offline: Main, " . offlineAHK
+						else
+							offlineAHK := "Offline: Main"
+					}
+					IniWrite, 0, HeartBeat.ini, HeartBeat, Main
+				}
 
-				discMessage := "\n" . onlineAHK . "\n" . offlineAHK . "\n" . packStatus
-				if(iHeartBeatID)
-					iDiscordID := iHeartBeatID
-				LogToDiscord(discMessage, , iDiscordID)
+				if(offlineAHK = "")
+					offlineAHK := "Offline: none"
+				else
+					offlineAHK := RTrim(offlineAHK, ", ")
+				if(onlineAHK = "")
+					onlineAHK := "Online: none"
+				else
+					onlineAHK := RTrim(onlineAHK, ", ")
+
+				discMessage := "\n" . onlineAHK . "\n" . offlineAHK . "\nOpening: " . sPackToOpen
+				discMessage .= "\nTime: " . mminutes . "m\nPacks: " . total . "\nAvg: " . Round(total / mminutes, 2) . " packs/min"
+
+				LogToDiscord(discMessage,, iHeartBeatID)
 			}
+		}
 	}
 }
 
-LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
-	
-	global iDiscordID, sDiscordWebhookURL, sHeartBeatWebhookURL
+LogToDiscord(message, screenshotFile := "", discordPing := "") {
+	global sDiscordWebhookURL, sHeartBeatWebhookURL
 
-	iDiscordID := GetDiscordID()
-	sDiscordWebhookURL := GetDiscordWebhook()
-	sHeartBeatWebhookURL := GetHeartbeatWebhook()
-
-	discordPing := iDiscordID
 	if(sHeartBeatWebhookURL)
 		sDiscordWebhookURL := sHeartBeatWebhookURL
 
@@ -244,19 +254,15 @@ CreateStatusMessage(Message, X := 0, Y := 80) {
 	}
 }
 
-; Global variable to track the current JSON file
-global jsonFileName := ""
-
 ; Function to create or select the JSON file
 InitializeJsonFile() {
 	global jsonFileName
-	fileName := A_ScriptDir . "\json\Packs.json"
-	if FileExist(fileName)
-		FileDelete, %fileName%
-	if !FileExist(fileName) {
+	jsonFileName := A_ScriptDir . "\json\Packs.json"
+	if FileExist(jsonFileName)
+		FileDelete, %jsonFileName%
+	if !FileExist(jsonFileName) {
 		; Create a new file with an empty JSON array
-		FileAppend, [], %fileName%  ; Write an empty JSON array
-		jsonFileName := fileName
+		FileAppend, [], %jsonFileName%  ; Write an empty JSON array
 		return
 	}
 }
@@ -265,7 +271,7 @@ InitializeJsonFile() {
 SumVariablesInJsonFile() {
 	global jsonFileName
 	if (jsonFileName = "") {
-		return
+		return 0
 	}
 
 	; Read the file content
