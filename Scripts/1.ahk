@@ -1005,7 +1005,6 @@ FindGodPack() {
 }
 
 GodPackFound(validity) {
-	global iDiscordID
 	if(validity = "Valid") {
 		Praise := ["Congrats!", "Congratulations!", "GG!", "Whoa!", "Praise Helix! ༼ つ ◕_◕ ༽つ", "Way to go!", "You did it!", "Awesome!", "Nice!", "Cool!", "You deserve it!", "Keep going!", "This one has to be live!", "No duds, no duds, no duds!", "Fantastic!", "Bravo!", "Excellent work!", "Impressive!", "You're amazing!", "Well done!", "You're crushing it!", "Keep up the great work!", "You're unstoppable!", "Exceptional!", "You nailed it!", "Hats off to you!", "Sweet!", "Kudos!", "Phenomenal!", "Boom! Nailed it!", "Marvelous!", "Outstanding!", "Legendary!", "Youre a rock star!", "Unbelievable!", "Keep shining!", "Way to crush it!", "You're on fire!", "Killing it!", "Top-notch!", "Superb!", "Epic!", "Cheers to you!", "Thats the spirit!", "Magnificent!", "Youre a natural!", "Gold star for you!", "You crushed it!", "Incredible!", "Shazam!", "You're a genius!", "Top-tier effort!", "This is your moment!", "Powerful stuff!", "Wicked awesome!", "Props to you!", "Big win!", "Yesss!", "Champion vibes!", "Spectacular!"]
 		invalid := ""
@@ -1025,7 +1024,7 @@ GodPackFound(validity) {
 	godPackLog = GPlog.txt
 	LogToFile(logMessage, godPackLog)
 	;Run, http://google.com, , Hide ;Remove the ; at the start of the line and replace your url if you want to trigger a link when finding a god pack.
-	LogToDiscord(logMessage, screenShot, iDiscordID)
+	LogToDiscord(logMessage, screenShot, true)
 }
 
 adbClick(X, Y) {
@@ -1136,16 +1135,20 @@ Screenshot(filename := "Valid") {
 	return screenshotFile
 }
 
-LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
-	global iDiscordID, sDiscordWebhookURL, friendCode
-	discordPing := "<@" . iDiscordID . "> "
-	discordFriends := ReadFile("discord")
+LogToDiscord(message, screenshotFile := "", ping := false) {
+	global iDiscordID, sDiscordWebhookURL
 
-	if(discordFriends) {
-		for index, value in discordFriends {
-			if(value = iDiscordID)
-				continue
-			discordPing .= "<@" . value . "> "
+	discordPing := ""
+	if (ping) {
+		discordPing := "<@" . iDiscordID . "> "
+
+		discordFriends := ReadFile("discord")
+		if (discordFriends) {
+			for index, value in discordFriends {
+				if (value = iDiscordID)
+					continue
+				discordPing .= "<@" . value . "> "
+			}
 		}
 	}
 
@@ -2977,7 +2980,7 @@ saveAccount(file := "Valid") {
 
 		if(count > 10 && file != "All") {
 			CreateStatusMessage("Attempted to save the account XML`n10 times, but was unsuccesful.`nPausing...")
-			LogToDiscord("Attempted to save account in " . scriptName . " but was unsuccessful. Pausing. You will need to manually extract.", Screenshot(), iDiscordID)
+			LogToDiscord("Attempted to save account in " . scriptName . " but was unsuccessful. Pausing. You will need to manually extract.", Screenshot(), true)
 			Pause, On
 		} else if(count > 10) {
 			LogToDiscord("Couldnt save this regular account skipping it.")
