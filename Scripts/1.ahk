@@ -519,8 +519,8 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	else
 		FSTime := 45
 	if (safeTime >= FSTime) {
-		CreateStatusMessage("Instance " . scriptName . " has been `nstuck " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
-		restartGameInstance("Instance " . scriptName . " has been stuck " . imageName)
+		CreateStatusMessage("Instance " . scriptName . " has been stuck at " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
+		restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName)
 		failSafe := A_TickCount
 	}
 	Gdip_DisposeImage(pBitmap)
@@ -617,7 +617,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 			}
 			if (ElapsedTime >= FSTime || safeTime >= FSTime) {
 				CreateStatusMessage("Instance " . scriptName . " has been stuck for 90s. Killing it...")
-				restartGameInstance("Instance " . scriptName . " has been stuck at `n" . imageName) ; change to reset the instance and delete data then reload script
+				restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName) ; change to reset the instance and delete data then reload script
 				StartSkipTime := A_TickCount
 				failSafe := A_TickCount
 			}

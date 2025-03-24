@@ -361,8 +361,8 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	else
 		FSTime := 180
 	if (safeTime >= FSTime) {
-		CreateStatusMessage("Instance " . scriptName . " has been `nstuck " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
-		restartGameInstance("Instance " . scriptName . " has been stuck " . imageName)
+		CreateStatusMessage("Instance " . scriptName . " has been stuck at " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
+		restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName)
 		failSafe := A_TickCount
 	}
 	return confirmed
@@ -505,7 +505,6 @@ restartGameInstance(reason, RL := true){
 	Sleep, 3000
 	if(RL) {
 		LogToFile("Restarted game for instance " scriptName " Reason: " reason, "Restart.txt")
-		LogToDiscord("Restarted game for instance " scriptName " Reason: " reason, , iDiscordID)
 		Reload
 	}
 }
