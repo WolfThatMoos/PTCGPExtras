@@ -899,11 +899,21 @@ CheckPack() {
 	LogToFile(sPackMessage, "Packs.txt")
 
 	if (iPackScore >= iMinPackVal) {
+		AppendToJsonFile(iCurrentPackCount)
+
 		screenShot := Screenshot("DesiredPack")
-		logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . iCurrentPackCount . " packs) File name: " . accountFile . " Backing up to the Accounts folder and continuing..."
-		CreateStatusMessage(logMessage)
+		accountFile := saveAccount("Desired")
+		friendCode := getFriendCode()
+
+		statusMessage := "Desired Pack found for " . username . " (" . friendCode . ")"
+		CreateStatusMessage(statusMessage . " Backing up to the Accounts folder and continuing...")
+
+		logMessage := statusMessage . " in instance: " . scriptName . " File name: " . accountFile
 		LogToFile(logMessage, "GPlog.txt")
-		LogToDiscord(sPackMessage, screenShot, iDiscordID)
+
+		discordMessage := statusMessage . " in instance: " . scriptName . "\nFile name: " . accountFile
+		LogToDiscord(discordMessage, screenShot, true)
+
 		restartGameInstance("Desired pack found. Restarting...", "GodPack") ; restarts to backup and delete xml file with account info.
 		return true
 	}
