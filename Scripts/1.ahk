@@ -137,9 +137,6 @@ Loop {
 	SplashStatus("Starting New Run...")
 	CreateStatusMessage("New Run")
 	rerolls++
-	if(!loadedAccount)
-		if(bOnePackMode)
-			iCurrentPackCount := 5
 	AppendToJsonFile(iCurrentPackCount)
 	totalSeconds := Round((A_TickCount - rerollTime) / 1000) ; Total time in seconds
 	avgtotalSeconds := Round(totalSeconds / rerolls) ; Total time in seconds
@@ -884,13 +881,13 @@ SplashStatus(sStatus) {
 }
 
 CheckPack() {
-	global iPackCount, iPackScore, iMinPackVal, scriptName, username, friendCode, accountFile
+	global iCurrentPackCount, iPackScore, iMinPackVal, scriptName, username, friendCode, accountFile
 
 	; Wait until cards are rendered
 	FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440)
 	Delay(1)
 
-	iPackCount++
+	iCurrentPackCount++
 
 	; Identify the cards in the pack, log them, and determine if you should keep the pack or continue
 	aOpenedPack := identifyCards()
@@ -915,6 +912,8 @@ CheckPack() {
 	foundGP := FindGodPack()
 
 	if(foundGP) {
+		AppendToJsonFile(iCurrentPackCount)
+
 		if(loadedAccount)
 			FileDelete, %loadedAccount% ;delete xml file from folder if using inject method
 		restartGameInstance("God Pack found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
@@ -946,7 +945,7 @@ FindBorders(prefix) {
 }
 
 FindGodPack() {
-	global winTitle, iCurrentPackCount
+	global winTitle
 	gpFound := false
 	invalidGP := false
 	searchVariation := 5
@@ -959,8 +958,6 @@ FindGodPack() {
 	borderCoords := [[20, 284, 90, 286]
 		,[103, 284, 173, 286]]
 	Sleep, 250 ; give time for cards to render
-	if(iCurrentPackCount = 3)
-		iCurrentPackCount := 0
 	Loop {
 		normalBorders := false
 		pBitmap := from_window(WinExist(winTitle))
@@ -977,12 +974,8 @@ FindGodPack() {
 		Gdip_DisposeImage(pBitmap)
 		if(normalBorders) {
 			CreateStatusMessage("Not a God Pack ")
-			iCurrentPackCount += 1
 			break
 		} else {
-			iCurrentPackCount += 1
-			if(bOnePackMode)
-				iCurrentPackCount := 1
 			; foundImmersive := FindBorders("immersive")
 			; foundCrown := FindBorders("crown")
 			; if(foundImmersive || foundCrown) {
@@ -1126,7 +1119,7 @@ adbSwipe() {
 }
 
 Screenshot(filename := "Valid") {
-	global adbShell, adbPath, iCurrentPackCount
+	global adbShell, adbPath
 	SetWorkingDir %A_ScriptDir%  ; Ensures the working directory is the script's directory
 
 	; Define folder and file paths
