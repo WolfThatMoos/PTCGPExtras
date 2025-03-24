@@ -1019,7 +1019,7 @@ GodPackFound(validity) {
 	screenShot := Screenshot(validity)
 	accountFile := saveAccount(validity)
 	friendCode := getFriendCode()
-	logMessage := Interjection . "\n" . username . " (" . friendCode . ")\n[" . starCount . "/5][" . iCurrentPackCount . "P] " . invalid . " God pack found in instance: " . scriptName . "\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
+	logMessage := Interjection . "\n" . username . " (" . friendCode . ")\n[" . starCount . "/5][1P] " . invalid . " God pack found in instance: " . scriptName . "\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
 	CreateStatusMessage(logMessage)
 	godPackLog = GPlog.txt
 	LogToFile(logMessage, godPackLog)
@@ -1127,7 +1127,7 @@ Screenshot(filename := "Valid") {
 		FileCreateDir, %screenshotsDir%
 
 	; File path for saving the screenshot locally
-	screenshotFile := screenshotsDir "\" . A_Now . "_" . winTitle . "_" . filename . "_" . iCurrentPackCount . "_packs.png"
+	screenshotFile := screenshotsDir "\" . A_Now . "_" . winTitle . "_" . filename . ".png"
 
 	pBitmap := from_window(WinExist(winTitle))
 	Gdip_SaveBitmapToFile(pBitmap, screenshotFile)
@@ -2954,11 +2954,11 @@ saveAccount(file := "Valid") {
 		filePath := saveDir . "\" . A_Now . "_" . username . "_" . winTitle . ".xml"
 	} else if(file = "Valid" || file = "Invalid") {
 		saveDir := A_ScriptDir "\..\Accounts\GodPacks\"
-		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . "_" . packs . "_packs.xml"
+		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . ".xml"
 		filePath := saveDir . xmlFile
 	} else {
 		saveDir := A_ScriptDir "\..\Accounts\SpecificCards\"
-		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . "_" . packs . "_packs.xml"
+		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . ".xml"
 		filePath := saveDir . xmlFile
 	}
 
