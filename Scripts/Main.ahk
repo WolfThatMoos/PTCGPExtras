@@ -354,7 +354,7 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	Gdip_DisposeImage(pBitmap)
 	if (vRet = 1) {
 		CreateStatusMessage("At home page. Opening app..." )
-		restartGameInstance("At the home page during: `n" imageName)
+		restartGameInstance("At the home page during: " imageName)
 	}
 	if(imageName = "Country" || imageName = "Social")
 		FSTime := 90
@@ -472,7 +472,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 		Gdip_DisposeImage(pBitmap)
 		if (vRet = 1) {
 			CreateStatusMessage("At home page. Opening app..." )
-			restartGameInstance("Found myself at the home page during: `n" imageName)
+			restartGameInstance("Found myself at the home page during: " imageName)
 		}
 
 		if(skip) {

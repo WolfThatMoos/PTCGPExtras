@@ -487,7 +487,7 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	vRet := Gdip_ImageSearch(pBitmap, pNeedle, vPosXY, 225, 300, 242, 314, searchVariation)
 	if (vRet = 1) {
 		CreateStatusMessage("At home page. Opening app..." )
-		restartGameInstance("At the home page during: `n" imageName)
+		restartGameInstance("At the home page during: " imageName)
 	}
 	if(imageName = "Social" || imageName = "Add") {
 		TradeTutorial()
@@ -637,7 +637,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 		vRet := Gdip_ImageSearch(pBitmap, pNeedle, vPosXY, 225, 300, 242, 314, searchVariation)
 		if (vRet = 1) {
 			CreateStatusMessage("At home page. Opening app..." )
-			restartGameInstance("Found myself at the home page during: `n" imageName)
+			restartGameInstance("Found myself at the home page during: " imageName)
 		}
 		if(imageName = "Social" || imageName = "Country" || imageName = "Account2" || imageName = "Account") { ;only look for deleted account on start up.
 			Path = %imagePath%NoSave.png ; look for No Save Data error message > if loaded account > delete xml > reload
