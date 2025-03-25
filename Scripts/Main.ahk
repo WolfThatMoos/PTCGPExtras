@@ -27,8 +27,11 @@ Variation := 20
 scaleParam := 277
 defaultLanguage := "Scale125"
 
-adbPort := findAdbPorts(sMuMuInstallPath)
+global bHeartBeat
+if(bHeartBeat)
+	IniWrite, 0, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
 
+adbPort := findAdbPorts(sMuMuInstallPath)
 adbPath := sMuMuInstallPath . "\MuMuPlayerGlobal-12.0\shell\adb.exe"
 
 if !FileExist(adbPath) ; if international mumu file path isn't found look for chinese domestic path
@@ -90,12 +93,10 @@ initializeAdbShell()
 restartGameInstance("Initializing bot...", false)
 pToken := Gdip_Startup()
 
-global bHeartBeat
-if(bHeartBeat)
+; Start Run ----------------------------------------------------------------------------------------------------------------------------
+
+if (bHeartBeat)
 	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
-
-
-; Start up ----------------------------------------------------------------------------------------------------------------------------
 
 firstRun := true
 
@@ -105,7 +106,7 @@ FindImageAndClick(120, 500, 155, 530, 10, "Social", 143, 518, 1000, 30)
 Loop
 {
 
-	if(bHeartBeat)
+	if (bHeartBeat)
 		IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
 
 	; Click on Social icon until social hub is active tab

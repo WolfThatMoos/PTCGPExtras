@@ -34,10 +34,12 @@ changeDate := getChangeDateTime() ; get server reset time
 dateChange := false
 
 global bHeartBeat
-if(bHeartBeat)
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
 
 ; Start up ----------------------------------------------------------------------------------------------------------------------------
+
+if (bHeartBeat)
+	IniWrite, 0, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
 pToken := Gdip_Startup()
 InitializeAdb()
 initializeAdbShell()
@@ -79,7 +81,10 @@ rerollTime := A_TickCount
 Loop {
 
 	friended := false
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
+	if (bHeartBeat)
+		IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
 	FormatTime, CurrentTime,, HHmm
 
 	StartTime := changeDate - 45 ; 12:55 AM2355
