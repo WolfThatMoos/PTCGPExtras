@@ -33,10 +33,13 @@ global changeDate, dateChange
 changeDate := getChangeDateTime() ; get server reset time
 dateChange := false
 
-if(bHeartBeat)
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+global bHeartBeat
 
 ; Start up ----------------------------------------------------------------------------------------------------------------------------
+
+if (bHeartBeat)
+	IniWrite, 0, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
 pToken := Gdip_Startup()
 InitializeAdb()
 initializeAdbShell()
@@ -76,9 +79,12 @@ global rerollTime
 rerollTime := A_TickCount
 
 Loop {
-	
+
 	friended := false
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
+	if (bHeartBeat)
+		IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Instance%scriptName%
+
 	FormatTime, CurrentTime,, HHmm
 
 	StartTime := changeDate - 45 ; 12:55 AM2355
@@ -115,7 +121,7 @@ Loop {
 	Delay(1)
 	adbClick(41, 296) ; Click Hide/Kill
 	Delay(1)
-	
+
 	iFinalPack := OpenPacks()
 
 	if(bMenuDelete && !bInjectionMode)
@@ -136,9 +142,6 @@ Loop {
 	SplashStatus("Starting New Run...")
 	CreateStatusMessage("New Run")
 	rerolls++
-	if(!loadedAccount)
-		if(bOnePackMode)
-			iCurrentPackCount := 5
 	AppendToJsonFile(iCurrentPackCount)
 	totalSeconds := Round((A_TickCount - rerollTime) / 1000) ; Total time in seconds
 	avgtotalSeconds := Round(totalSeconds / rerolls) ; Total time in seconds
@@ -234,7 +237,7 @@ AddFriends(renew := false, getFC := false) {
 	Loop
 	{
 
-		if(count > iAddMainDelay) {
+		if(count > iAddMainDelay && !getFC) {
 			break
 		}
 
@@ -244,7 +247,7 @@ AddFriends(renew := false, getFC := false) {
 			failSafeTime := 0
 
 			; Loop until social is visible
-			Loop 
+			Loop
 			{
 				; Click on Social
 				adbClick(143, 518)
@@ -259,7 +262,7 @@ AddFriends(renew := false, getFC := false) {
 						StringSplit, pos, clickButton, `,  ; Split at ", "
 						adbClick(pos1, pos2)
 					}
-				} else if (FindOrLoseImage(175, 165, 255, 235, , "Hourglass3", 0)) {					
+				} else if (FindOrLoseImage(175, 165, 255, 235, , "Hourglass3", 0)) {
 					Delay(3)
 					adbClick(146, 441) ; 146 440
 					Delay(3)
@@ -298,7 +301,7 @@ AddFriends(renew := false, getFC := false) {
 
 			; If there's no friend id's saved in ids.txt
 			if (!friendIDs) {
-				
+
 				failSafe := A_TickCount
 				failSafeTime := 0
 				Loop {
@@ -489,7 +492,7 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	vRet := Gdip_ImageSearch(pBitmap, pNeedle, vPosXY, 225, 300, 242, 314, searchVariation)
 	if (vRet = 1) {
 		CreateStatusMessage("At home page. Opening app..." )
-		restartGameInstance("At the home page during: `n" imageName)
+		restartGameInstance("At the home page during: " imageName)
 	}
 	if(imageName = "Social" || imageName = "Add") {
 		TradeTutorial()
@@ -518,8 +521,8 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	else
 		FSTime := 45
 	if (safeTime >= FSTime) {
-		CreateStatusMessage("Instance " . scriptName . " has been `nstuck " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
-		restartGameInstance("Instance " . scriptName . " has been stuck " . imageName)
+		CreateStatusMessage("Instance " . scriptName . " has been stuck at " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
+		restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName)
 		failSafe := A_TickCount
 	}
 	Gdip_DisposeImage(pBitmap)
@@ -616,7 +619,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 			}
 			if (ElapsedTime >= FSTime || safeTime >= FSTime) {
 				CreateStatusMessage("Instance " . scriptName . " has been stuck for 90s. Killing it...")
-				restartGameInstance("Instance " . scriptName . " has been stuck at `n" . imageName) ; change to reset the instance and delete data then reload script
+				restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName) ; change to reset the instance and delete data then reload script
 				StartSkipTime := A_TickCount
 				failSafe := A_TickCount
 			}
@@ -639,7 +642,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 		vRet := Gdip_ImageSearch(pBitmap, pNeedle, vPosXY, 225, 300, 242, 314, searchVariation)
 		if (vRet = 1) {
 			CreateStatusMessage("At home page. Opening app..." )
-			restartGameInstance("Found myself at the home page during: `n" imageName)
+			restartGameInstance("Found myself at the home page during: " imageName)
 		}
 		if(imageName = "Social" || imageName = "Country" || imageName = "Account2" || imageName = "Account") { ;only look for deleted account on start up.
 			Path = %imagePath%NoSave.png ; look for No Save Data error message > if loaded account > delete xml > reload
@@ -868,7 +871,7 @@ SplashStatus(sStatus) {
 
 	switch winTitle
 	{
-	case 1:    
+	case 1:
 		iLocX := bRunMain ? (278 * 1) : (278 * 0)
 	case 2:
 		iLocX := bRunMain ? (278 * 2) : (278 * 1)
@@ -877,19 +880,19 @@ SplashStatus(sStatus) {
 	case 4:
 		iLocX := bRunMain ? (278 * 4) : (278 * 3)
 	}
-	
+
 	SplashTextOn, 275, 50, BotStatus, %sStatus%
 	WinMove, BotStatus,, iLocX, 535
 }
 
 CheckPack() {
-	global iPackCount, iPackScore, iMinPackVal, scriptName, username, friendCode, accountFile
+	global iCurrentPackCount, iPackScore, iMinPackVal, scriptName, username, friendCode, accountFile
 
 	; Wait until cards are rendered
 	FindImageAndClick(125, 501, 151, 511, , "Next1", 135, 440)
 	Delay(1)
 
-	iPackCount++
+	iCurrentPackCount++
 
 	; Identify the cards in the pack, log them, and determine if you should keep the pack or continue
 	aOpenedPack := identifyCards()
@@ -899,79 +902,37 @@ CheckPack() {
 
 	sPackMessage := "User|" . username . "|Pack Value|" . iPackScore . "|" . aOpenedPack[1] . "|" . aOpenedPack[2] . "|" . aOpenedPack[3] . "|" . aOpenedPack[4] . "|" . aOpenedPack[5] . "|Instance|" . scriptName
 	LogToFile(sPackMessage, "Packs.txt")
-	
+
 	if (iPackScore >= iMinPackVal) {
+		AppendToJsonFile(iCurrentPackCount)
+
 		screenShot := Screenshot("DesiredPack")
-		logMessage := "Desired Pack found for " . username . "(" . friendCode . ") in instance: " . scriptName . " (" . iCurrentPackCount . " packs) File name: " . accountFile . " Backing up to the Accounts folder and continuing..."
-		CreateStatusMessage(logMessage)
+		accountFile := saveAccount("Desired")
+		friendCode := getFriendCode()
+
+		statusMessage := "Desired Pack found for " . username . " (" . friendCode . ")"
+		CreateStatusMessage(statusMessage . " Backing up to the Accounts folder and continuing...")
+
+		logMessage := statusMessage . " in instance: " . scriptName . " File name: " . accountFile
 		LogToFile(logMessage, "GPlog.txt")
-		LogToDiscord(sPackMessage, screenShot, iDiscordID)
+
+		discordMessage := statusMessage . " in instance: " . scriptName . "\nFile name: " . accountFile
+		LogToDiscord(discordMessage, screenShot, true)
+
 		restartGameInstance("Desired pack found. Restarting...", "GodPack") ; restarts to backup and delete xml file with account info.
 		return true
 	}
-	
+
 	foundGP := false ;check card border to find godpacks
-	; foundTrainer := false
-	; foundRainbow := false
-	; foundFullArt := false
-	; foundCrown := false
-	; foundImmersive := false
-	; foundTS := false
 	foundGP := FindGodPack()
-	; ;msgbox 1 foundGP:%foundGP%, TC:%TrainerCheck%, RC:%RainbowCheck%, FAC:%FullArtCheck%, FTS:%foundTS%
-	; if(TrainerCheck && !foundTS) {
-	; 	foundTrainer := FindBorders("trainer")
-	; 	if(foundTrainer)
-	; 		foundTS := "Trainer"
-	; }
-	; if(RainbowCheck && !foundTS) {
-	; 	foundRainbow := FindBorders("rainbow")
-	; 	if(foundRainbow)
-	; 		foundTS := "Rainbow"
-	; }
-	; if(FullArtCheck && !foundTS) {
-	; 	foundFullArt := FindBorders("fullart")
-	; 	if(foundFullArt)
-	; 		foundTS := "Full Art"
-	; }
-	; if(ImmersiveCheck && !foundTS) {
-	; 	foundImmersive := FindBorders("immersive")
-	; 	if(foundImmersive)
-	; 		foundTS := "Immersive"
-	; }
-	; If(CrownCheck && !foundTS) {
-	; 	foundCrown := FindBorders("crown")
-	; 	if(foundCrown)
-	; 		foundTS := "Crown"
-	; }
-	; If(PseudoGodPack && !foundTS) {
-	; 	2starCount := FindBorders("trainer") + FindBorders("rainbow") + FindBorders("fullart")
-	; 	if(2starCount > 1)
-	; 		foundTS := "Double two star"
-	; }
+
 	if(foundGP) {
+		AppendToJsonFile(iCurrentPackCount)
+
 		if(loadedAccount)
 			FileDelete, %loadedAccount% ;delete xml file from folder if using inject method
-		if(foundGP)
-			restartGameInstance("God Pack found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
-		else {
-			FoundStars(foundTS)
-			restartGameInstance(foundTS . " found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
-		}
+		restartGameInstance("God Pack found. Continuing...", "GodPack") ; restarts to backup and delete xml file with account info.
 	}
-}
-
-FoundStars(star) {
-	global iDiscordID
-	screenShot := Screenshot(star)
-	accountFile := saveAccount(star)
-	friendCode := getFriendCode()
-	if(star = "Crown" || star = "Immersive")
-		RemoveFriends(friendsAdded)
-	logMessage := star . " found by " . username . " (" . friendCode . ") in instance: " . scriptName . " (" . iCurrentPackCount . " packs)\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
-	CreateStatusMessage(logMessage)
-	LogToFile(logMessage, "GPlog.txt")
-	LogToDiscord(logMessage, screenShot, iDiscordID)
 }
 
 FindBorders(prefix) {
@@ -999,7 +960,7 @@ FindBorders(prefix) {
 }
 
 FindGodPack() {
-	global winTitle, iCurrentPackCount
+	global winTitle
 	gpFound := false
 	invalidGP := false
 	searchVariation := 5
@@ -1012,8 +973,6 @@ FindGodPack() {
 	borderCoords := [[20, 284, 90, 286]
 		,[103, 284, 173, 286]]
 	Sleep, 250 ; give time for cards to render
-	if(iCurrentPackCount = 3)
-		iCurrentPackCount := 0
 	Loop {
 		normalBorders := false
 		pBitmap := from_window(WinExist(winTitle))
@@ -1030,12 +989,8 @@ FindGodPack() {
 		Gdip_DisposeImage(pBitmap)
 		if(normalBorders) {
 			CreateStatusMessage("Not a God Pack ")
-			iCurrentPackCount += 1
 			break
 		} else {
-			iCurrentPackCount += 1
-			if(bOnePackMode)
-				iCurrentPackCount := 1
 			; foundImmersive := FindBorders("immersive")
 			; foundCrown := FindBorders("crown")
 			; if(foundImmersive || foundCrown) {
@@ -1065,7 +1020,6 @@ FindGodPack() {
 }
 
 GodPackFound(validity) {
-	global iDiscordID
 	if(validity = "Valid") {
 		Praise := ["Congrats!", "Congratulations!", "GG!", "Whoa!", "Praise Helix! ༼ つ ◕_◕ ༽つ", "Way to go!", "You did it!", "Awesome!", "Nice!", "Cool!", "You deserve it!", "Keep going!", "This one has to be live!", "No duds, no duds, no duds!", "Fantastic!", "Bravo!", "Excellent work!", "Impressive!", "You're amazing!", "Well done!", "You're crushing it!", "Keep up the great work!", "You're unstoppable!", "Exceptional!", "You nailed it!", "Hats off to you!", "Sweet!", "Kudos!", "Phenomenal!", "Boom! Nailed it!", "Marvelous!", "Outstanding!", "Legendary!", "Youre a rock star!", "Unbelievable!", "Keep shining!", "Way to crush it!", "You're on fire!", "Killing it!", "Top-notch!", "Superb!", "Epic!", "Cheers to you!", "Thats the spirit!", "Magnificent!", "Youre a natural!", "Gold star for you!", "You crushed it!", "Incredible!", "Shazam!", "You're a genius!", "Top-tier effort!", "This is your moment!", "Powerful stuff!", "Wicked awesome!", "Props to you!", "Big win!", "Yesss!", "Champion vibes!", "Spectacular!"]
 		invalid := ""
@@ -1080,12 +1034,12 @@ GodPackFound(validity) {
 	screenShot := Screenshot(validity)
 	accountFile := saveAccount(validity)
 	friendCode := getFriendCode()
-	logMessage := Interjection . "\n" . username . " (" . friendCode . ")\n[" . starCount . "/5][" . iCurrentPackCount . "P] " . invalid . " God pack found in instance: " . scriptName . "\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
+	logMessage := Interjection . "\n" . username . " (" . friendCode . ")\n[" . starCount . "/5][1P] " . invalid . " God pack found in instance: " . scriptName . "\nFile name: " . accountFile . "\nBacking up to the Accounts\\GodPacks folder and continuing..."
 	CreateStatusMessage(logMessage)
 	godPackLog = GPlog.txt
 	LogToFile(logMessage, godPackLog)
 	;Run, http://google.com, , Hide ;Remove the ; at the start of the line and replace your url if you want to trigger a link when finding a god pack.
-	LogToDiscord(logMessage, screenShot, iDiscordID)
+	LogToDiscord(logMessage, screenShot, true)
 }
 
 adbClick(X, Y) {
@@ -1179,7 +1133,7 @@ adbSwipe() {
 }
 
 Screenshot(filename := "Valid") {
-	global adbShell, adbPath, iCurrentPackCount
+	global adbShell, adbPath
 	SetWorkingDir %A_ScriptDir%  ; Ensures the working directory is the script's directory
 
 	; Define folder and file paths
@@ -1188,24 +1142,33 @@ Screenshot(filename := "Valid") {
 		FileCreateDir, %screenshotsDir%
 
 	; File path for saving the screenshot locally
-	screenshotFile := screenshotsDir "\" . A_Now . "_" . winTitle . "_" . filename . "_" . iCurrentPackCount . "_packs.png"
+	screenshotFile := screenshotsDir "\" . A_Now . "_" . winTitle . "_" . filename . ".png"
 
-	pBitmap := from_window(WinExist(winTitle))
+	pBitmapW := from_window(WinExist(winTitle))
+
+	pBitmap := Gdip_CloneBitmapArea(pBitmapW, 18, 175, 240, 227)
+	Gdip_DisposeImage(pBitmapW)
+
 	Gdip_SaveBitmapToFile(pBitmap, screenshotFile)
+	Gdip_DisposeImage(pBitmap)
 
 	return screenshotFile
 }
 
-LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
-	global iDiscordID, sDiscordWebhookURL, friendCode
-	discordPing := "<@" . iDiscordID . "> "
-	discordFriends := ReadFile("discord")
+LogToDiscord(message, screenshotFile := "", ping := false) {
+	global iDiscordID, sDiscordWebhookURL
 
-	if(discordFriends) {
-		for index, value in discordFriends {
-			if(value = iDiscordID)
-				continue
-			discordPing .= "<@" . value . "> "
+	discordPing := ""
+	if (ping) {
+		discordPing := "<@" . iDiscordID . "> "
+
+		discordFriends := ReadFile("discord")
+		if (discordFriends) {
+			for index, value in discordFriends {
+				if (value = iDiscordID)
+					continue
+				discordPing .= "<@" . value . "> "
+			}
 		}
 	}
 
@@ -1245,6 +1208,7 @@ LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
 		}
 	}
 }
+
 ; Pause Script
 PauseScript:
 	CreateStatusMessage("Pausing...")
@@ -1300,11 +1264,9 @@ ToggleTestScript() {
 ; Function to create or select the JSON file
 InitializeJsonFile() {
 	global jsonFileName
-	fileName := A_ScriptDir . "\..\json\Packs.json"
-	if !FileExist(fileName) {
+	if !FileExist(jsonFileName) {
 		; Create a new file with an empty JSON array
-		FileAppend, [], %fileName%  ; Write an empty JSON array
-		jsonFileName := fileName
+		FileAppend, [], %jsonFileName%  ; Write an empty JSON array
 		return
 	}
 }
@@ -1326,46 +1288,11 @@ AppendToJsonFile(variableValue) {
 	jsonContent := SubStr(jsonContent, 1, StrLen(jsonContent) - 1) ; Remove trailing bracket
 	if (jsonContent != "[")
 		jsonContent .= ","
-	jsonContent .= "{""time"": """ A_Now """, ""variable"": " variableValue "}]"
+	jsonContent .= "{""time"":""" A_Now """,""variable"":" variableValue "}]"
 
 	; Write the updated JSON back to the file
 	FileDelete, %jsonFileName%
 	FileAppend, %jsonContent%, %jsonFileName%
-}
-
-; Function to sum all variable values in the JSON file
-SumVariablesInJsonFile() {
-	global jsonFileName
-	if (jsonFileName = "") {
-		return 0
-	}
-
-	; Read the file content
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		return 0
-	}
-
-	; Parse the JSON and calculate the sum
-	sum := 0
-	; Clean and parse JSON content
-	jsonContent := StrReplace(jsonContent, "[", "") ; Remove starting bracket
-	jsonContent := StrReplace(jsonContent, "]", "") ; Remove ending bracket
-	Loop, Parse, jsonContent, {, }
-	{
-		; Match each variable value
-		if (RegExMatch(A_LoopField, """variable"":\s*(-?\d+)", match)) {
-			sum += match1
-		}
-	}
-
-	; Write the total sum to a file called "total.json"
-	totalFile := A_ScriptDir . "\json\total.json"
-	totalContent := "{""total_sum"": " sum "}"
-	FileDelete, %totalFile%
-	FileAppend, %totalContent%, %totalFile%
-
-	return sum
 }
 
 from_window(ByRef image) {
@@ -1682,7 +1609,7 @@ DoTutorial() {
 	failSafe := A_TickCount
 	failSafeTime := 0
 	Loop {
-		
+
 		; Attempt to pick a user name
 		username := createAccount()
 		adbInput(username)
@@ -1987,7 +1914,7 @@ HourglassOpening() {
 	Delay(3)
 	adbClick(146, 441) ; Tap "Open a Pack" button
 	Delay(3)
-	
+
 	; Tap the X button in the center/bottom until premium pass prompt
 	FindImageAndClick(98, 184, 151, 224, , "Hourglass1", 168, 438, 500, 5)
 	Delay(1)
@@ -1998,6 +1925,7 @@ HourglassOpening() {
 getFriendCode() {
 	global friendCode
 	CreateStatusMessage("Getting friend code")
+	Sleep, 2000
 	FindImageAndClick(233, 486, 272, 519, , "Skip", 146, 494) ;click on next until skip button appears
 	failSafe := A_TickCount
 	failSafeTime := 0
@@ -2021,8 +1949,7 @@ getFriendCode() {
 		if(failSafeTime > 45)
 			restartGameInstance("Stuck at Home")
 	}
-	if (bSkipAddingMain)
-		friendCode := AddFriends(false, true)
+	friendCode := AddFriends(false, true)
 
 	return friendCode
 }
@@ -2096,7 +2023,7 @@ DoWonderPick() {
 
 	; After the first mission is clicked, wait until the popup for the rewards shows, then accept them
 	FindImageAndClick(120, 185, 150, 215, , "FirstMission", 150, 286, 1000)
-	
+
 	; Close the rewards prompt, and finish on the home screen
 	failSafe := A_TickCount
 	failSafeTime := 0
@@ -2170,7 +2097,7 @@ getChangeDateTime() {
 ; "Paid" --> On a screen with "Open 10 Packs | Open a Pack"
 SelectPack(sStage := "HomeFree") {
 	global sPackToOpen
-	
+
 	; Check to determine which pack to open
 	switch sPackToOpen
 	{
@@ -2203,11 +2130,11 @@ SelectPack(sStage := "HomeFree") {
 
 	switch sStage
 	{
-		case "HomeFree":			
+		case "HomeFree":
 			; Select default pack
 			aDefaultPack := [iDefaultPackX, iDefaultPackY], aPointsImgCoords := [233, 400, 264, 428], sPointsImgName := "Points"
 			ClickUntilImageVisible(aDefaultPack, aPointsImgCoords, sPointsImgName)
-			
+
 			; Select Other Boosters
 			aSelectExpansionBtn := [245, 475], aCloseBtnImg := [129, 497, 146, 515], sCloseBtnName := "CloseMissions"
 			ClickUntilImageVisible(aSelectExpansionBtn, aCloseBtnImg, sCloseBtnName)
@@ -2223,15 +2150,15 @@ SelectPack(sStage := "HomeFree") {
 			; Click Open, Pack Carousel
 			aOpenPackBtn := [137, 434], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
 			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
-			
+
 			; Open Pack
 			PackOpening()
-		
+
 		Case "Daily":
 			; Open Pack Carousel
 			aOpenPackBtn := [137, 416], aSkipImgCoords := [233, 486, 272, 519], sSkipImgName := "Skip2"
 			ClickUntilImageVisible(aOpenPackBtn, aSkipImgCoords, sSkipImgName)
-			
+
 			; Open Pack
 			PackOpening()
 
@@ -2304,15 +2231,15 @@ SkipLevelUp(bLeveled) {
 			; Check: Showing Unlock Battles screen?
 			aLockCoords := FindOrLoseImage(120, 185, 150, 245, , "LevelUnlock", 0)
 			if(aLockCoords) {
-				
+
 				; Click the OK Button to dismiss the Unlocked popup
 				aOKButton := [150, 386], aLevelUnlock := [120, 185, 150, 245], sLevelUnlock := "LevelUnlock"
 				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
-				
+
 				; Check: Leveled Up screen?
 				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
 				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
-				
+
 				; Should be on home screen
 				break
 
@@ -2399,7 +2326,7 @@ CompleteMission(sMissionName) {
 			aMissionImgCoords := [190, 266, 232, 300], sMissionImgName := "50CardMission"
 	}
 	ClickImageWhenVisible(aMissionImgCoords, sMissionImgName)
-	
+
 	; Complete the mission
 	aCompleteButton := [141, 444, 176, 452], sCompleteButton := "Button", iVariation := 80
 	ClickImageWhenVisible(aCompleteButton, sCompleteButton, iVariation)
@@ -2417,7 +2344,7 @@ CompleteMission(sMissionName) {
 }
 
 DoFinalLevel() {
-		
+
 	; Update user
 	SplashStatus("Doing Final Level...")
 
@@ -2430,15 +2357,15 @@ DoFinalLevel() {
 			; Check: Showing Unlock Display Boards screen?
 			aLockCoords := FindOrLoseImage(130, 208, 146, 230, , "Level4Unlock", 0)
 			if(aLockCoords) {
-				
+
 				; Click the OK Button to dismiss the Unlocked popup
 				aOKButton := [138, 360], aLevelUnlock := [130, 208, 146, 230], sLevelUnlock := "Level4Unlock"
 				ClickUntilImageNotVisible(aOKButton, aLevelUnlock, sLevelUnlock)
-				
+
 				; Check: Leveled Up screen?
 				aHomeIcon := [40, 516], aMissionIcon := [218, 448, 248, 474], sMissionIcon := "MissionNotification"
 				ClickUntilImageVisible(aHomeIcon, aMissionIcon, sMissionIcon)
-				
+
 				; Should be on home screen
 				break
 
@@ -2461,8 +2388,6 @@ OpenPacks() {
 		ExitApp
 	}
 
-	; bOnePackMode
-
 	; Only do the tutorial if not using injection mode and not using a loaded account
 	If (bInjectionMode = 0 || !loadedAccount) {
 		SplashStatus("Doing Tutorial...")
@@ -2474,7 +2399,7 @@ OpenPacks() {
 		SplashStatus("Doing Wonderpick...")
 		bDidWonderPick := DoWonderPick()
 	}
-	
+
 	; Packs: 1 - 2 | No Requirements
 	If (bInjectionMode) {
 		; Sometimes there's a pop-up that the game closed during a pack opening. This dismisses it
@@ -2723,27 +2648,62 @@ OpenPacks() {
 ;
 CreateStatusMessage(Message, GuiName := 50, X := 0, Y := 80) {
 	global scriptName, winTitle, StatusText, showStatus
-	
-	if(!showStatus)
+	static hwnds = {}
+	if(!showStatus) {
 		return
-
-	try {
-		GuiName := GuiName+scriptName
-		WinGetPos, xpos, ypos, Width, Height, %winTitle%
-		X := X + xpos + 5
-		Y := Y + ypos
-		if(!X)
-			X := 0
-		if(!Y)
-			Y := 0
-
-		; Create a new GUI with the given name, position, and message
-		Gui, %GuiName%:New, -AlwaysOnTop +ToolWindow -Caption
-		Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
-		Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
-		Gui, %GuiName%:Add, Text, vStatusText, %Message%
-		Gui, %GuiName%:Show, NoActivate x%X% y%Y% AutoSize, NoActivate %GuiName%
 	}
+	try {
+		; Check if GUI with this name already exists
+		GuiName := GuiName+scriptName
+		if !hwnds.HasKey(GuiName) {
+			WinGetPos, xpos, ypos, Width, Height, %winTitle%
+			X := X + xpos + 5
+			Y := Y + ypos
+			if(!X)
+				X := 0
+			if(!Y)
+				Y := 0
+
+			; Create a new GUI with the given name, position, and message
+			Gui, %GuiName%:New, -AlwaysOnTop +ToolWindow -Caption
+			Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
+			Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
+			Gui, %GuiName%:Add, Text, hwndhCtrl vStatusText,
+			hwnds[GuiName] := hCtrl
+			OwnerWND := WinExist(winTitle)
+			Gui, %GuiName%:+Owner%OwnerWND% +LastFound
+			DllCall("SetWindowPos", "Ptr", WinExist(), "Ptr", 1  ; HWND_BOTTOM
+				, "Int", 0, "Int", 0, "Int", 0, "Int", 0, "UInt", 0x13)  ; SWP_NOSIZE, SWP_NOMOVE, SWP_NOACTIVATE
+			Gui, %GuiName%:Show, NoActivate x%X% y%Y% AutoSize
+		}
+		SetTextAndResize(hwnds[GuiName], Message)
+		Gui, %GuiName%:Show, NoActivate AutoSize
+	}
+}
+
+;Modified from https://stackoverflow.com/a/49354127
+SetTextAndResize(controlHwnd, newText) {
+	dc := DllCall("GetDC", "Ptr", controlHwnd)
+
+	; 0x31 = WM_GETFONT
+	SendMessage 0x31,,,, ahk_id %controlHwnd%
+	hFont := ErrorLevel
+	oldFont := 0
+	if (hFont != "FAIL")
+		oldFont := DllCall("SelectObject", "Ptr", dc, "Ptr", hFont)
+
+	VarSetCapacity(rect, 16, 0)
+	; 0x440 = DT_CALCRECT | DT_EXPANDTABS
+	h := DllCall("DrawText", "Ptr", dc, "Ptr", &newText, "Int", -1, "Ptr", &rect, "UInt", 0x440)
+	; width = rect.right - rect.left
+	w := NumGet(rect, 8, "Int") - NumGet(rect, 0, "Int")
+
+	if oldFont
+		DllCall("SelectObject", "Ptr", dc, "Ptr", oldFont)
+	DllCall("ReleaseDC", "Ptr", controlHwnd, "Ptr", dc)
+
+	GuiControl,, %controlHwnd%, %newText%
+	GuiControl MoveDraw, %controlHwnd%, % "h" h*96/A_ScreenDPI + 2 " w" w*96/A_ScreenDPI + 2
 }
 
 CreateMenuGUI() {
@@ -2757,7 +2717,7 @@ CreateMenuGUI() {
 			OwnerWND := WinExist(winTitle)
 			x4 := x + 5
 			y4 := y + 44
-	
+
 			Gui, New, +Owner%OwnerWND% -AlwaysOnTop +ToolWindow -Caption
 			Gui, Default
 			Gui, Margin, 4, 4  ; Set margin for the GUI
@@ -2815,10 +2775,10 @@ restartGameInstance(reason, RL := true) {
 	CreateStatusMessage("Restarting game reason: `n" reason)
 
 	if(!RL || RL != "GodPack") {
-		
+
 		; Close the game
 		adb_ClosePTCGP()
-		
+
 		; Clear the account
 		if(!RL)
 			adb_DeleteAccountFromGame()
@@ -2839,10 +2799,10 @@ restartGameInstance(reason, RL := true) {
 	}
 }
 
-; Arrange Windows 
+; Arrange Windows
 ArrangeWindows() {
 	global bRunMain, iTotalInstances, iTotalColumns, iScale, iDisplayProfile
-	
+
 	; Initialize values
 	SysGet, Monitor, Monitor, %iDisplayProfile%
 
@@ -2917,8 +2877,8 @@ GetDayOfRest() {
     year := SubStr(currentDate, 1, 4)
     month := SubStr(currentDate, 5, 2)
     day := SubStr(currentDate, 7, 2)
-    
-    daysSinceBase := (year - 1900) * 365 + Floor((year - 1900) / 4)    
+
+    daysSinceBase := (year - 1900) * 365 + Floor((year - 1900) / 4)
     daysSinceBase += MonthToDays(year, month)
     daysSinceBase += day
 
@@ -2953,7 +2913,7 @@ loadAccount() {
     saveDir := A_WorkingDir . "\Accounts\Saved\" . remainder . "\" . winTitle
 	SetWorkingDir %A_ScriptDir%
 	outputTxt := saveDir . "\list.txt"
-	
+
 	if FileExist(outputTxt) {
 		FileRead, fileContent, %outputTxt%  ; Read entire file
 		fileLines := StrSplit(fileContent, "`n", "`r")  ; Split into lines
@@ -3012,11 +2972,11 @@ saveAccount(file := "Valid") {
 		filePath := saveDir . "\" . A_Now . "_" . username . "_" . winTitle . ".xml"
 	} else if(file = "Valid" || file = "Invalid") {
 		saveDir := A_ScriptDir "\..\Accounts\GodPacks\"
-		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . "_" . packs . "_packs.xml"
+		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . ".xml"
 		filePath := saveDir . xmlFile
 	} else {
 		saveDir := A_ScriptDir "\..\Accounts\SpecificCards\"
-		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . "_" . packs . "_packs.xml"
+		xmlFile := A_Now . "_" . username . "_" . winTitle . "_" . file . ".xml"
 		filePath := saveDir . xmlFile
 	}
 
@@ -3038,7 +2998,7 @@ saveAccount(file := "Valid") {
 
 		if(count > 10 && file != "All") {
 			CreateStatusMessage("Attempted to save the account XML`n10 times, but was unsuccesful.`nPausing...")
-			LogToDiscord("Attempted to save account in " . scriptName . " but was unsuccessful. Pausing. You will need to manually extract.", Screenshot(), iDiscordID)
+			LogToDiscord("Attempted to save account in " . scriptName . " but was unsuccessful. Pausing. You will need to manually extract.", Screenshot(), true)
 			Pause, On
 		} else if(count > 10) {
 			LogToDiscord("Couldnt save this regular account skipping it.")
@@ -3116,25 +3076,25 @@ findAdbPorts(baseFolder := "C:\Program Files\Netease") {
 
 InitializeAdb() {
 	global adbPort, adbShell, adbPath, sMuMuInstallPath
-	
+
 	adbPath := sMuMuInstallPath . "\MuMuPlayerGlobal-12.0\shell\adb.exe"
 	adbPort := findAdbPorts(sMuMuInstallPath)
-	
+
 	if !FileExist(adbPath) ;if international mumu file path isn't found look for chinese domestic path
 		adbPath := sMuMuInstallPath . "\MuMu Player 12\shell\adb.exe"
-	
+
 	if !FileExist(adbPath)
 		MsgBox Double check your folder path! It should be the one that contains the MuMuPlayer 12 folder! `nDefault is just C:\Program Files\Netease
-	
+
 	if(!adbPort) {
 		Msgbox, Invalid port... Check the common issues section in the readme/github guide.
 		ExitApp
 	}
-	
+
 	; connect adb
 	instanceSleep := scriptName * 1000
 	Sleep, %instanceSleep%
-	
+
 	; Attempt to connect to ADB
 	CreateStatusMessage("Connecting to ADB...")
 	ConnectAdb()
@@ -3212,7 +3172,7 @@ adb_OpenPTCGP() {
 	global adbShell
 
 	adbShell.StdIn.WriteLine("am start -n jp.pokemon.pokemontcgp/com.unity3d.player.UnityPlayerActivity")
-	
+
 	waitadb()
 	Sleep, 1000
 }

@@ -44,17 +44,25 @@ if FileExist(packsFile) {
 }
 
 InitializeJsonFile() ; Create or open the JSON file
- 
+
 CreateMainGUI()
 
 Start() {
 	global bRunMain, iTotalInstances, iInstanceStartDelay, bHeartBeat
-	bRunMain := GetMainCheckBox()
-	iTotalInstances := GetTotalInstances()
-	iInstanceStartDelay := GetInstanceStartDelay()
 
 	Gui, Submit  ; Collect the input values from the first page
 	Gui, Destroy ; Close the first page
+
+	CreateSettingsFile() ; Read all control data and save it
+
+	bRunMain := GetMainCheckBox()
+	iTotalInstances := GetTotalInstances()
+	iInstanceStartDelay := GetInstanceStartDelay()
+	bHeartBeat := GetHeartbeatCheckBox()
+	iHeartBeatID := GetHeartbeatID()
+	iDiscordID := GetDiscordID()
+	FriendID := GetMainFriendID()
+	sPackToOpen := GetPackToOpen()
 
 	; Run main before instances to account for instance start delay
 	If (bRunMain) {
@@ -67,7 +75,6 @@ Start() {
 
 	; Loop to process each instance
 	Loop % iTotalInstances {
-
 		; Duplicate 1.ahk for each remaining instance
 		if (A_Index != 1) {
 			TargetFile := TargetFolder . A_Index . ".ahk" ; Generate target file path
@@ -90,17 +97,11 @@ Start() {
 		Run, %FileName%
 	}
 
-	CreateSettingsFile() ; Read all control data and save it
-
 	; Fetch friends list if online
 	if(inStr(FriendID, "https"))
 		DownloadFile(FriendID, "ids.txt")
 
-
 	rerollTime := A_TickCount
-	bHeartBeat := GetHeartbeatCheckBox()
-	iHeartBeatID := GetHeartbeatID()
-	iDiscordID := GetDiscordID()
 
 	Loop {
 		Sleep, 30000
@@ -110,39 +111,30 @@ Start() {
 
 		totalSeconds := Round((A_TickCount - rerollTime) / 1000) ; Total time in seconds
 		mminutes := Floor(totalSeconds / 60)
-		if(total = 0)
-			total := "0                             "
-		packStatus := "Time: " . mminutes . "m Packs: " . total
 
-		CreateStatusMessage(packStatus, 287, 490)
+		packStatus := "Time: " . mminutes . "m | Packs: " . total
+		packStatus .= " | Avg: " . Round(total / mminutes, 2) . " packs/min"
 
-		if(bHeartBeat)
+		CreateStatusMessage(packStatus, 282, 490)
+
+		if(bHeartBeat) {
 			if((A_Index = 1 || (Mod(A_Index, 60) = 0))) {
-				onlineAHK := "Online: "
-				offlineAHK := "Offline: "
-				Online := []
+				onlineAHK := ""
+				offlineAHK := ""
+				aOnline := []
 
-				if(bRunMain) {
-					IniRead, value, HeartBeat.ini, HeartBeat, Main
-					if(value)
-						onlineAHK := "Online: Main, "
-					else
-						offlineAHK := "Offline: Main, "
-					IniWrite, 0, HeartBeat.ini, HeartBeat, Main
-				}
-
-				Loop %iTotalInstances% {
+				Loop % iTotalInstances {
 					IniRead, value, HeartBeat.ini, HeartBeat, Instance%A_Index%
 					if(value)
-						Online.push(1)
+						aOnline.push(1)
 					else
-						Online.Push(0)
+						aOnline.Push(0)
 					IniWrite, 0, HeartBeat.ini, HeartBeat, Instance%A_Index%
 				}
 
-				for index, value in Online {
-					if(index = Online.MaxIndex())
-						commaSeparate := "."
+				for index, value in aOnline {
+					if(index = aOnline.MaxIndex())
+						commaSeparate := ""
 					else
 						commaSeparate := ", "
 					if(value)
@@ -151,28 +143,44 @@ Start() {
 						offlineAHK .= A_Index . commaSeparate
 				}
 
-				if(offlineAHK = "Offline: ")
-					offlineAHK := "Offline: none."
-				if(onlineAHK = "Online: ")
-					onlineAHK := "Online: none."
+				if(bRunMain) {
+					IniRead, value, HeartBeat.ini, HeartBeat, Main
+					if(value) {
+						if (onlineAHK)
+							onlineAHK := "Main, " . onlineAHK
+						else
+							onlineAHK := "Main"
+					}
+					else {
+						if (offlineAHK)
+							offlineAHK := "Main, " . offlineAHK
+						else
+							offlineAHK := "Main"
+					}
+					IniWrite, 0, HeartBeat.ini, HeartBeat, Main
+				}
 
-				discMessage := "\n" . onlineAHK . "\n" . offlineAHK . "\n" . packStatus
-				if(iHeartBeatID)
-					iDiscordID := iHeartBeatID
-				LogToDiscord(discMessage, , iDiscordID)
+				if(offlineAHK = "")
+					offlineAHK := "Offline: none"
+				else
+					offlineAHK := "Offline: " . RTrim(offlineAHK, ", ")
+				if(onlineAHK = "")
+					onlineAHK := "Online: none"
+				else
+					onlineAHK := "Online: " . RTrim(onlineAHK, ", ")
+
+				discMessage := "\n" . onlineAHK . "\n" . offlineAHK . "\nOpening: " . sPackToOpen
+				discMessage .= "\nTime: " . mminutes . "m\nPacks: " . total . "\nAvg: " . Round(total / mminutes, 2) . " packs/min"
+
+				LogToDiscord(discMessage,, iHeartBeatID)
 			}
+		}
 	}
 }
 
-LogToDiscord(message, screenshotFile := "", ping := false, xmlFile := "") {
-	
-	global iDiscordID, sDiscordWebhookURL, sHeartBeatWebhookURL
+LogToDiscord(message, screenshotFile := "", discordPing := "") {
+	global sDiscordWebhookURL, sHeartBeatWebhookURL
 
-	iDiscordID := GetDiscordID()
-	sDiscordWebhookURL := GetDiscordWebhook()
-	sHeartBeatWebhookURL := GetHeartbeatWebhook()
-
-	discordPing := iDiscordID
 	if(sHeartBeatWebhookURL)
 		sDiscordWebhookURL := sHeartBeatWebhookURL
 
@@ -216,20 +224,14 @@ DownloadFile(url, filename) {
 	localPath = %A_ScriptDir%\%filename% ; Change to the folder you want to save the file
 
 	URLDownloadToFile, %url%, %localPath%
-
-	; if ErrorLevel
-	; MsgBox, Download failed!
-	; else
-	; MsgBox, File downloaded successfully!
-
 }
 
 CreateStatusMessage(Message, X := 0, Y := 80) {
 	global PacksText, iDisplayProfile
-	iDisplayProfile := GetSelectedMonitor()
 
 	try {
 		GuiName := 22
+		iDisplayProfile := RegExReplace(iDisplayProfile, ":.*$")
 		SysGet, Monitor, Monitor, %iDisplayProfile%
 		X := MonitorLeft + X
 		Y := MonitorTop + Y
@@ -239,64 +241,37 @@ CreateStatusMessage(Message, X := 0, Y := 80) {
 		} else {
 			OwnerWND := WinExist(1)
 			if(!OwnerWND)
-				Gui, %GuiName%:New, +ToolWindow -Caption
+				Gui, %GuiName%:New, +ToolWindow -Caption +LastFound
 			else
-				Gui, %GuiName%:New, +Owner%OwnerWND% +ToolWindow -Caption
+				Gui, %GuiName%:New, +Owner%OwnerWND% +ToolWindow -Caption +LastFound
 			Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
 			Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
 			Gui, %GuiName%:Add, Text, vPacksText, %Message%
+			DllCall("SetWindowPos", "Ptr", WinExist(), "Ptr", WinExist("A")  ; set behind active window
+				, "Int", 0, "Int", 0, "Int", 0, "Int", 0, "UInt", 0x13)  ; SWP_NOSIZE, SWP_NOMOVE, SWP_NOACTIVATE
 			Gui, %GuiName%:Show, NoActivate x%X% y%Y%, NoActivate %GuiName%
 		}
 	}
 }
 
-; Global variable to track the current JSON file
-global jsonFileName := ""
-
 ; Function to create or select the JSON file
 InitializeJsonFile() {
 	global jsonFileName
-	fileName := A_ScriptDir . "\json\Packs.json"
-	if FileExist(fileName)
-		FileDelete, %fileName%
-	if !FileExist(fileName) {
+	jsonFileName := A_ScriptDir . "\json\Packs.json"
+	if FileExist(jsonFileName)
+		FileDelete, %jsonFileName%
+	if !FileExist(jsonFileName) {
 		; Create a new file with an empty JSON array
-		FileAppend, [], %fileName%  ; Write an empty JSON array
-		jsonFileName := fileName
+		FileAppend, [], %jsonFileName%  ; Write an empty JSON array
 		return
 	}
-}
-
-; Function to append a time and variable pair to the JSON file
-AppendToJsonFile(variableValue) {
-	global jsonFileName
-	if (jsonFileName = "") {
-		MsgBox, JSON file not initialized. Call InitializeJsonFile() first.
-		return
-	}
-
-	; Read the current content of the JSON file
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		jsonContent := "[]"
-	}
-
-	; Parse and modify the JSON content
-	jsonContent := SubStr(jsonContent, 1, StrLen(jsonContent) - 1) ; Remove trailing bracket
-	if (jsonContent != "[")
-		jsonContent .= ","
-	jsonContent .= "{""time"": """ A_Now """, ""variable"": " variableValue "}]"
-
-	; Write the updated JSON back to the file
-	FileDelete, %jsonFileName%
-	FileAppend, %jsonContent%, %jsonFileName%
 }
 
 ; Function to sum all variable values in the JSON file
 SumVariablesInJsonFile() {
 	global jsonFileName
 	if (jsonFileName = "") {
-		return
+		return 0
 	}
 
 	; Read the file content
@@ -322,7 +297,7 @@ SumVariablesInJsonFile() {
 	; Write the total sum to a file called "total.json"
 	if(sum > 0) {
 		totalFile := A_ScriptDir . "\json\total.json"
-		totalContent := "{""total_sum"": " sum "}"
+		totalContent := "{""total_sum"":" sum "}"
 		FileDelete, %totalFile%
 		FileAppend, %totalContent%, %totalFile%
 	}
@@ -558,7 +533,7 @@ VersionCompare(v1, v2) {
 ; SETTINGS MANAGEMENT
 ; #############################################################################################
 ;
-CreateSettingsFile() {	
+CreateSettingsFile() {
 	global iMainID, bRunMain, iTotalInstances, iTotalColumns, sMuMuInstallPath, bSpeedMod
 	global iMinPackVal, sPackToOpen, iThresholdVal, iNumPacksToOpen, bThreshold, bOnePackMode, bInjectionMode, bMenuDelete
 	global iGeneralDelay, iSwipeSpeed, iAddMainDelay, iInstanceStartDelay
@@ -652,13 +627,13 @@ CreateSettingsFile() {
 	if (bFirstTime) {
 		; Load settings
 		FileRead, settings, Settings.ini
-	
+
 		; Split the content into lines
 		StringSplit, lines, settings, `n
-	
+
 		; Initialize the newSettings variable to hold the updated content
 		newSettings := ""
-	
+
 		; Loop through each line of the settings
 		Loop, % lines0
 		{
@@ -669,15 +644,15 @@ CreateSettingsFile() {
 					newSettings .= "`n"  ; Add a blank line before the section header
 				}
 			}
-			
+
 			; Add the current line to newSettings
 			newSettings .= lines%A_Index% . "`n"
 		}
-	
+
 		; Save the modified content back to the settings.ini file
 		FileDelete, Settings.ini
 		FileAppend, %newSettings%, Settings.ini
-	}	
+	}
 }
 ;LoadSettingsFile()
 RunPokedexCheck() {
@@ -723,7 +698,7 @@ CreateMainGUI() {
 	; Timings
 	global iGeneralDelay, iSwipeSpeed, iAddMainDelay, iInstanceStartDelay
 	; Discord
-	global iDiscordID, sDiscordWebhookURL, bHeartBeat, iHeartBeatID, sHeartBeatWebhookURL 
+	global iDiscordID, sDiscordWebhookURL, bHeartBeat, iHeartBeatID, sHeartBeatWebhookURL
 	; Displays
 	global iDisplayProfile, sMonitors
 	; Moo
@@ -806,7 +781,7 @@ CreateMainGUI() {
 			ScaledOptions := "x" iStartXPos " y" Round(255 * ScaleFactor) " w" Round(220 * ScaleFactor)
 			Gui, Add, Button, %ScaledOptions% hWndhStartBtn vcStart gStart, Start
 			Gui_StyleButton(hStartBtn)
-			
+
 			; Arrange Windows Button
 			iStartXPos := Round(((Round(iGuiWidth * ScaleFactor) / 4) * 3) - (Round(220 * ScaleFactor) / 2))
 			ScaledOptions := "x" iStartXPos " y" Round(255 * ScaleFactor) " w" Round(220 * ScaleFactor)
@@ -814,7 +789,7 @@ CreateMainGUI() {
 			Gui_StyleButton(hArrangeWinBtn)
 
 		Gui, Tab, 2 ; Packs
-			; Minimum Pack Value 
+			; Minimum Pack Value
 			Gui_SetFont()
 			ScaledOptions := "x" Round(18 * ScaleFactor) " y" Round(80 * ScaleFactor)
 			Gui, Add, Text, %ScaledOptions% vcMinPackValLabel, Minimum Pack Value:
@@ -822,7 +797,7 @@ CreateMainGUI() {
 			Gui, Add, Edit, x+10 yp-3 %ScaledOptions% +Limit2 Number Center HwndhMinPackVal gSetMinPackVal vcMinPackVal, %iMinPackVal%
 
 			; Threshold Value (Hidden)
-			GuiControlGet, MinValEditPos, Pos, %hMinPackVal%        
+			GuiControlGet, MinValEditPos, Pos, %hMinPackVal%
 			MatchingPos := "x" MinValEditPosX " y" MinValEditPosY " w" MinValEditPosW " h" MinValEditPosH " Hidden"
 			Gui, Add, Edit, %MatchingPos% +Limit3 Center gSetThresholdVal vcThresholdVal, %iThresholdVal%
 
@@ -874,29 +849,29 @@ CreateMainGUI() {
 			cMenuDeleteCheckbox.status := bMenuDelete
 
 		Gui, Tab, 3 ; Timings
-			; General Delay 
+			; General Delay
 			Gui_SetFont()
 			Gui_CreateText("General Delay:")
 			ScaledOptions := "w" Round(70 * ScaleFactor)
 			Gui, Add, Edit, x+10 yp-3 %ScaledOptions% +Limit4 Number Center gSetGeneralDelay vcGeneralDelay, %iGeneralDelay%
 
-			; Swipe Speed 
+			; Swipe Speed
 			Gui, Add, Text, x+30 yp+3, Swipe Speed:
 			ScaledOptions := "w" Round(70 * ScaleFactor)
 			Gui, Add, Edit, x+10 yp-3 %ScaledOptions% +Limit4 Number Center gSetSwipeSpeed vcSwipeSpeed, %iSwipeSpeed%
-			
+
 			; Add Main Delay
 			Gui_CreateText("Add Main Delay:", , 140)
 			ScaledOptions := "w" Round(50 * ScaleFactor)
 			Gui, Add, Edit, x+10 yp-3 %ScaledOptions% +Limit2 Number Center gSetAddMainDelay vcAddMainDelay, %iAddMainDelay%
 
-			; Instance Start Delay 
+			; Instance Start Delay
 			Gui, Add, Text, x+30 yp+3, Instance Start Delay:
 			ScaledOptions := "w" Round(50 * ScaleFactor)
 			Gui, Add, Edit, x+10 yp-3 %ScaledOptions% +Limit2 Number Center gSetInstanceStartDelay vcInstanceStartDelay, %iInstanceStartDelay%
 
 		Gui, Tab, 4 ; Discord
-			; Discord ID 
+			; Discord ID
 			Gui_SetFont()
 			Gui_CreateText("Discord ID:")
 			ScaledOptions := "w" Round(250 * ScaleFactor)
@@ -907,7 +882,7 @@ CreateMainGUI() {
 			Gui, Add, Button, x+25 yp w130 hWndhOpenDiscordListBtn gOpenDiscordList, % "Open Discord List"
 			Gui_StyleButton(hOpenDiscordListBtn)
 
-			; Discord Webhook 
+			; Discord Webhook
 			Gui_SetFont()
 			Gui_CreateText("Discord Webhook URL:", , 140)
 			ScaledOptions := "w" Round(370 * ScaleFactor)
@@ -987,7 +962,7 @@ CreateMainGUI() {
 			Gui, Add, Text, Disabled x+5 yp-1 hp hwndhPackPerInstanceLabel, Select Pack Per Instance
 			cPackPerInstanceCheckbox := new CustomCheckbox(bSelectPackPerInstance, hPackPerInstanceCB, hPackPerInstanceLabel, "ToggleSelectPackPerInstanceCheckBox")
 			cPackPerInstanceCheckbox.status := bSelectPackPerInstance
-		
+
 		Gui, Tab, 7 ; About
 			; About Title
 			sTitle := "Arturo's PTCGP Bot - Version: " . localVersion
@@ -1161,7 +1136,7 @@ GetMuMuInstallPath() {
 ; Arrange Windows
 ArrangeWindows() {
 	global bRunMain, iTotalInstances, iTotalColumns, iScale, iDisplayProfile
-	
+
 	; Initialize values
 	bRunMain := GetMainCheckBox()
 	iTotalInstances := GetTotalInstances()
@@ -1370,7 +1345,7 @@ GetGeneralDelay() {
     GuiControlGet, iGeneralDelay,, cGeneralDelay
 	return iGeneralDelay
 }
-; Swipe Speed  
+; Swipe Speed
 SetSwipeSpeed() {
     global cSwipeSpeed, iSwipeSpeed
     GuiControlGet, iSwipeSpeed,, cSwipeSpeed
@@ -1380,7 +1355,7 @@ GetSwipeSpeed() {
     GuiControlGet, iSwipeSpeed,, cSwipeSpeed
 	return iSwipeSpeed
 }
-; Add Main Delay 
+; Add Main Delay
 SetAddMainDelay() {
     global cAddMainDelay, iAddMainDelay
     GuiControlGet, iAddMainDelay,, cAddMainDelay
@@ -1390,7 +1365,7 @@ GetAddMainDelay() {
     GuiControlGet, iAddMainDelay,, cAddMainDelay
 	return iAddMainDelay
 }
-; Instance Start Delay 
+; Instance Start Delay
 SetInstanceStartDelay() {
     global cInstanceStartDelay, iInstanceStartDelay
     GuiControlGet, iInstanceStartDelay,, cInstanceStartDelay
@@ -1403,7 +1378,7 @@ GetInstanceStartDelay() {
 ;
 ; DISCORD #############################------------------------------------------------------
 ;
-; Discord ID 
+; Discord ID
 SetDiscordID() {
     global cDiscordID, iDiscordID
     GuiControlGet, iDiscordID,, cDiscordID
@@ -1420,7 +1395,7 @@ NormalizeDiscordUserID(sDiscordID) {
 		return sDiscordID
 	}
 }
-; Discord Webhook 
+; Discord Webhook
 SetDiscordWebhook() {
     global cDiscordWebhookURL, sDiscordWebhookURL
     GuiControlGet, sDiscordWebhookURL,, cDiscordWebhookURL
@@ -1512,7 +1487,7 @@ MonitorChanged() {
 }
 GetSelectedMonitor() {
     global cMonitorList, iDisplayProfile
-	
+
 	; Read currently selected monitor from control [will be (1: 1920x1080) for example]
     GuiControlGet, iDisplayProfile,, cMonitorList
 	; Update the display profile with the index number from the selected profile [returns "1" for example]
@@ -1571,7 +1546,7 @@ GetScaleVal(sIniRead := 0) {
 	If (sIniRead = 1) {
 		IniRead, iScale, Settings.ini, Displays, iScale
 		return iScale
-	}	
+	}
 
 	; Get values stored in control, store them temporarily
     GuiControlGet, iScale,, cScale100
@@ -1710,7 +1685,7 @@ CheckForUpdates() {
 ; HELPERS #############################------------------------------------------------------
 ;
 VerifyFiles() {
-	; This doesn't do jack shit. It's here so that while the UI is loading, the user isn't 
+	; This doesn't do jack shit. It's here so that while the UI is loading, the user isn't
 	; sitting there like...hello? Is it loading? *spams click opens it 10 more times*
 	; The immediate feedback lets them chill and wait for it to load. Looks snazzy too.
 }
@@ -1722,7 +1697,7 @@ AddImageTab(Options, Pages, Vertical := False) {
                       , [0, 0x8086D0E7, , , 0, , 0x8046B8DA, 1]      ; hover
                       , [0, 0x8046B8DA, , , 0, , 0x8046B8DA, 1]      ; pressed
                       , [0, 0x80F0F0F0, , , 0, , 0x8046B8DA, 1] ]
-                      
+
     InactiveTabStyle := [ [0, 0x80F0F0F0, , , , , 0xb0b0b0b0, 1]      ; normal
                         , [0, 0x80C6E6C6, , , , , 0xb0b0b0b0, 1]      ; hover
                         , [0, 0x8091CF91, , , , , 0xb0b0b0b0, 1]      ; pressed
@@ -1753,11 +1728,11 @@ AddImageTab(Options, Pages, Vertical := False) {
 		} else {
 			ImageButton.Create(InactiveHwnd, InactiveTabStyle*)
 		}
-		
+
         ; Get the position and size of the inactive button
         GuiControlGet, InactivePos, Pos, %InactiveHwnd%
-        
-        ; Create Active Button (Initially Hidden, excluding first tab) **at the same location** 
+
+        ; Create Active Button (Initially Hidden, excluding first tab) **at the same location**
         ActiveOptions := "x" InactivePosX " y" InactivePosY " w" InactivePosW " h" InactivePosH
 		if (A_Index > 1)
             ActiveOptions .= " Hidden"
@@ -1851,12 +1826,12 @@ class CustomCheckbox {
 		}
 	}
  }
- 
+
  HBitmapFromBase64Image(base64, width, height) {
 	size := CryptStringToBinary(base64, data)
 	Return GetBitmapFromData(&data, size, width, height)
  }
- 
+
  GetBitmapFromData(pData, size, width, height) {
 	pIStream := DllCall("Shlwapi\SHCreateMemStream", "Ptr", pData, "UInt", size, "Ptr")
 	GDIp := new GDIplus
@@ -1875,7 +1850,7 @@ class CustomCheckbox {
 	GDIp.DisposeImage(pBitmap)
 	Return hBitmap
  }
- 
+
  CryptStringToBinary(string, ByRef outData, formatName := "CRYPT_STRING_BASE64") {
 	static formats := { CRYPT_STRING_BASE64: 0x1
 					  , CRYPT_STRING_HEX:    0x4
@@ -1890,7 +1865,7 @@ class CustomCheckbox {
 										 , "Str", outData, "UIntP", bytes, "UIntP", 0, "UIntP", 0)
 	Return bytes
  }
- 
+
  class GDIplus {
 	__New() {
 	   if !DllCall("GetModuleHandle", "Str", "gdiplus", "Ptr")
@@ -1940,9 +1915,9 @@ class CustomCheckbox {
 	   return DllCall("gdiplus\GdipDisposeImage", "Ptr", pBitmap)
 	}
  }
- 
+
  GetImage(name) {
-	ImgChecked = 
+	ImgChecked =
 	(LTrim Join
 	   iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJC
 	   i4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwr
@@ -1982,8 +1957,8 @@ class CustomCheckbox {
 	   DQ0NjxFCBMuywLJs/DTG87kCQslDCsMwwDAMcBwPLy4uajc2Nt7Z3t5+LXpdqVRuBgIBOulEFEXdQwiFIEfeUkbT+tTUVHHKS0eS5Hu5Il4mkz12u90pJRS+dY5IJJJHwWBQEwwGE7rJyzSuiyGE
 	   gKIoViwWr5Ypym6vrK7cT3mefP/c5v8BAOYVL7xyrA8tAAAAAElFTkSuQmCC
 	)
- 
-	ImgUnchecked = 
+
+	ImgUnchecked =
 	(LTrim Join
 	   iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJC
 	   i4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwr

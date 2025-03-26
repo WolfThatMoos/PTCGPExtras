@@ -12,14 +12,13 @@ CoordMode, Pixel, Screen
 DllCall("AllocConsole")
 WinHide % "ahk_id " DllCall("GetConsoleWindow", "ptr")
 
-global winTitle, changeDate, failSafe, failSafeTime, StartSkipTime, failSafe, adbPort, scriptName, adbShell, adbPath, GPTest, StatusText, jsonFileName, pauseToggle, deleteXML, packs, AddFriend, showStatus
+global winTitle, changeDate, failSafe, failSafeTime, StartSkipTime, failSafe, adbPort, scriptName, adbShell, adbPath, GPTest, StatusText, pauseToggle, deleteXML, packs, AddFriend, showStatus
 
 deleteAccount := false
 scriptName := StrReplace(A_ScriptName, ".ahk")
 winTitle := scriptName
 pauseToggle := false
 showStatus := true
-jsonFileName := A_ScriptDir . "\..\json\Packs.json"
 
 LoadSettingsFile()
 
@@ -28,11 +27,11 @@ Variation := 20
 scaleParam := 277
 defaultLanguage := "Scale125"
 
+global bHeartBeat
 if(bHeartBeat)
-	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
+	IniWrite, 0, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
 
 adbPort := findAdbPorts(sMuMuInstallPath)
-
 adbPath := sMuMuInstallPath . "\MuMuPlayerGlobal-12.0\shell\adb.exe"
 
 if !FileExist(adbPath) ; if international mumu file path isn't found look for chinese domestic path
@@ -94,21 +93,20 @@ initializeAdbShell()
 restartGameInstance("Initializing bot...", false)
 pToken := Gdip_Startup()
 
-if(bHeartBeat)
+; Start Run ----------------------------------------------------------------------------------------------------------------------------
+
+if (bHeartBeat)
 	IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
-
-
-; Start up ----------------------------------------------------------------------------------------------------------------------------
 
 firstRun := true
 
 ; Click social icon until social hub is active tab
 FindImageAndClick(120, 500, 155, 530, 10, "Social", 143, 518, 1000, 30)
 
-Loop 
+Loop
 {
 
-	if(bHeartBeat)
+	if (bHeartBeat)
 		IniWrite, 1, %A_ScriptDir%\..\HeartBeat.ini, HeartBeat, Main
 
 	; Click on Social icon until social hub is active tab
@@ -119,7 +117,7 @@ Loop
 
 	; Click on the approve tab button until it's selected
 	FindImageAndClick(170, 450, 195, 480, , "Approve", 228, 464)
-	
+
 	; Deny all friend requests if there are any
 	if(firstRun) {
 		Sleep, 1000
@@ -212,7 +210,7 @@ return
 ; Arrange Windows
 ArrangeWindows() {
 	global bRunMain, iTotalInstances, iTotalColumns, iScale, iDisplayProfile
-	
+
 	; Initialize values
 	SysGet, Monitor, Monitor, %iDisplayProfile%
 
@@ -279,7 +277,7 @@ ArrangeWindows() {
 
 FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", EL := 1, safeTime := 0) {
 	global winTitle, Variation, failSafe, defaultLanguage
-	
+
 	imagePath := A_ScriptDir . "\" . defaultLanguage . "\"
 	confirmed := false
 
@@ -303,37 +301,37 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	; 		Y1 := 220
 	; 		X2 := 230
 	; 		Y2 := 260
-	; 	} 
+	; 	}
 	; 	else if (imageName = "99") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "991") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "992") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "993") { ; 100% full of friend list
 	; 		X1 := 60 ; Francais
 	; 		Y1 := 103
 	; 		X2 := 168 ; English
 	; 		Y2 := 118
-	; 	} 
+	; 	}
 	; 	else if (imageName = "player") { ; 100% bot got deleted
 	; 		X1 := 85
 	; 		Y1 := 168
 	; 		X2 := 120
 	; 		Y2 := 181
-	; 	} 
+	; 	}
 	; }
 	;bboxAndPause(X1, Y1, X2, Y2)
 
@@ -357,22 +355,22 @@ FindOrLoseImage(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", E
 	Gdip_DisposeImage(pBitmap)
 	if (vRet = 1) {
 		CreateStatusMessage("At home page. Opening app..." )
-		restartGameInstance("At the home page during: `n" imageName)
+		restartGameInstance("At the home page during: " imageName)
 	}
 	if(imageName = "Country" || imageName = "Social")
 		FSTime := 90
 	else
 		FSTime := 180
 	if (safeTime >= FSTime) {
-		CreateStatusMessage("Instance " . scriptName . " has been `nstuck " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
-		restartGameInstance("Instance " . scriptName . " has been stuck " . imageName)
+		CreateStatusMessage("Instance " . scriptName . " has been stuck at " . imageName . " for 90s. EL: " . EL . " sT: " . safeTime . " Killing it...")
+		restartGameInstance("Instance " . scriptName . " has been stuck at " . imageName)
 		failSafe := A_TickCount
 	}
 	return confirmed
 }
 
 FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT", clickx := 0, clicky := 0, sleepTime := "", skip := false, safeTime := 0) {
-	
+
 	global winTitle, Variation, failSafe, confirmed, iGeneralDelay, defaultLanguage
 
 	imagePath := A_ScriptDir . "\" defaultLanguage "\"
@@ -475,7 +473,7 @@ FindImageAndClick(X1, Y1, X2, Y2, searchVariation := "", imageName := "DEFAULT",
 		Gdip_DisposeImage(pBitmap)
 		if (vRet = 1) {
 			CreateStatusMessage("At home page. Opening app..." )
-			restartGameInstance("Found myself at the home page during: `n" imageName)
+			restartGameInstance("Found myself at the home page during: " imageName)
 		}
 
 		if(skip) {
@@ -508,7 +506,6 @@ restartGameInstance(reason, RL := true){
 	Sleep, 3000
 	if(RL) {
 		LogToFile("Restarted game for instance " scriptName " Reason: " reason, "Restart.txt")
-		LogToDiscord("Restarted game for instance " scriptName " Reason: " reason, , iDiscordID)
 		Reload
 	}
 }
@@ -525,27 +522,63 @@ LogToFile(message, logFile := "") {
 	FileAppend, % "[" readableTime "] " message "`n", %logFile%
 }
 
-CreateStatusMessage(Message, GuiName := 50, X := 0, Y := 80) {
+CreateStatusMessage(Message, GuiName := "StatusMessage", X := 0, Y := 80) {
 	global scriptName, winTitle, StatusText
+	static hwnds := {}
 	if(!showStatus)
 		return
 	try {
-		GuiName := GuiName
-		WinGetPos, xpos, ypos, Width, Height, %winTitle%
-		X := X + xpos + 5
-		Y := Y + ypos
-		if(!X)
-			X := 0
-		if(!Y)
-			Y := 0
+		; Check if GUI with this name already exists
+		;GuiName := GuiName ; hoytdj Removed
+		if !hwnds.HasKey(GuiName) {
+			WinGetPos, xpos, ypos, Width, Height, %winTitle%
+			X := X + xpos + 5
+			Y := Y + ypos
+			if(!X)
+				X := 0
+			if(!Y)
+				Y := 0
 
-		; Create a new GUI with the given name, position, and message
-		Gui, %GuiName%:New, -AlwaysOnTop +ToolWindow -Caption
-		Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
-		Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
-		Gui, %GuiName%:Add, Text, vStatusText, %Message%
-		Gui, %GuiName%:Show, NoActivate x%X% y%Y% AutoSize, NoActivate %GuiName%
+			; Create a new GUI with the given name, position, and message
+			Gui, %GuiName%:New, -AlwaysOnTop +ToolWindow -Caption
+			Gui, %GuiName%:Margin, 2, 2  ; Set margin for the GUI
+			Gui, %GuiName%:Font, s8  ; Set the font size to 8 (adjust as needed)
+			Gui, %GuiName%:Add, Text, hwndhCtrl vStatusText,
+			hwnds[GuiName] := hCtrl
+			OwnerWND := WinExist(winTitle)
+			Gui, %GuiName%:+Owner%OwnerWND% +LastFound
+			DllCall("SetWindowPos", "Ptr", WinExist(), "Ptr", 1  ; HWND_BOTTOM
+				, "Int", 0, "Int", 0, "Int", 0, "Int", 0, "UInt", 0x13)  ; SWP_NOSIZE, SWP_NOMOVE, SWP_NOACTIVATE
+			Gui, %GuiName%:Show, NoActivate x%X% y%Y% AutoSize
+		}
+		SetTextAndResize(hwnds[GuiName], Message)
+		Gui, %GuiName%:Show, NoActivate AutoSize
 	}
+}
+
+;Modified from https://stackoverflow.com/a/49354127
+SetTextAndResize(controlHwnd, newText) {
+	dc := DllCall("GetDC", "Ptr", controlHwnd)
+
+	; 0x31 = WM_GETFONT
+	SendMessage 0x31,,,, ahk_id %controlHwnd%
+	hFont := ErrorLevel
+	oldFont := 0
+	if (hFont != "FAIL")
+		oldFont := DllCall("SelectObject", "Ptr", dc, "Ptr", hFont)
+
+	VarSetCapacity(rect, 16, 0)
+	; 0x440 = DT_CALCRECT | DT_EXPANDTABS
+	h := DllCall("DrawText", "Ptr", dc, "Ptr", &newText, "Int", -1, "Ptr", &rect, "UInt", 0x440)
+	; width = rect.right - rect.left
+	w := NumGet(rect, 8, "Int") - NumGet(rect, 0, "Int")
+
+	if oldFont
+		DllCall("SelectObject", "Ptr", dc, "Ptr", oldFont)
+	DllCall("ReleaseDC", "Ptr", controlHwnd, "Ptr", dc)
+
+	GuiControl,, %controlHwnd%, %newText%
+	GuiControl MoveDraw, %controlHwnd%, % "h" h*96/A_ScreenDPI + 2 " w" w*96/A_ScreenDPI + 2
 }
 
 adbClick(X, Y) {
@@ -730,77 +763,6 @@ ToggleTestScript() {
 FriendAdded() {
 	global AddFriend
 	AddFriend++
-}
-
-; Function to create or select the JSON file
-InitializeJsonFile() {
-	global jsonFileName
-	fileName := A_ScriptDir . "\..\json\Packs.json"
-	if !FileExist(fileName) {
-		; Create a new file with an empty JSON array
-		FileAppend, [], %fileName%  ; Write an empty JSON array
-		jsonFileName := fileName
-		return
-	}
-}
-
-; Function to append a time and variable pair to the JSON file
-AppendToJsonFile(variableValue) {
-	global jsonFileName
-	if (jsonFileName = "") {
-		return
-	}
-
-	; Read the current content of the JSON file
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		jsonContent := "[]"
-	}
-
-	; Parse and modify the JSON content
-	jsonContent := SubStr(jsonContent, 1, StrLen(jsonContent) - 1) ; Remove trailing bracket
-	if (jsonContent != "[")
-		jsonContent .= ","
-	jsonContent .= "{""time"": """ A_Now """, ""variable"": " variableValue "}]"
-
-	; Write the updated JSON back to the file
-	FileDelete, %jsonFileName%
-	FileAppend, %jsonContent%, %jsonFileName%
-}
-
-; Function to sum all variable values in the JSON file
-SumVariablesInJsonFile() {
-	global jsonFileName
-	if (jsonFileName = "") {
-		return 0
-	}
-
-	; Read the file content
-	FileRead, jsonContent, %jsonFileName%
-	if (jsonContent = "") {
-		return 0
-	}
-
-	; Parse the JSON and calculate the sum
-	sum := 0
-	; Clean and parse JSON content
-	jsonContent := StrReplace(jsonContent, "[", "") ; Remove starting bracket
-	jsonContent := StrReplace(jsonContent, "]", "") ; Remove ending bracket
-	Loop, Parse, jsonContent, {, }
-	{
-		; Match each variable value
-		if (RegExMatch(A_LoopField, """variable"":\s*(-?\d+)", match)) {
-			sum += match1
-		}
-	}
-
-	; Write the total sum to a file called "total.json"
-	totalFile := A_ScriptDir . "\json\total.json"
-	totalContent := "{""total_sum"": " sum "}"
-	FileDelete, %totalFile%
-	FileAppend, %totalContent%, %totalFile%
-
-	return sum
 }
 
 from_window(ByRef image) {
